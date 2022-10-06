@@ -56,6 +56,18 @@ func (l *Lexer) NextToken() token.Token {
 	case '|':
 		tok = newToken(token.PIPE, l.ch)
 
+	case '.':
+
+		if l.peekChar() == '.' {
+			tok.Literal = l.readVariadic()
+			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+
+		} else {
+
+			//number or anything else
+		}
+
 	case 0:
 		tok.Type = token.EOF
 		tok.Literal = ""
@@ -128,4 +140,21 @@ func isLetter(ch byte) bool {
 
 func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
+func (l *Lexer) readVariadic() string {
+
+	position := l.position
+	for l.ch == '.' {
+		l.readChar()
+	}
+	return l.input[position:l.position]
 }

@@ -18,7 +18,11 @@ func main() {
 		salary: Float!
 		length(unit: LengthUnit = METER): Float
 		appearsIn: [Episode]!
-	}`
+	}
+	
+	... on Droid {
+		primaryFunction
+	  }`
 
 	lex := lexer.New(input)
 

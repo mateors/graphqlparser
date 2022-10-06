@@ -20,13 +20,14 @@ const (
 	UNDERSCORE // _
 	PIPE       // |
 
-	IDENT   //VARIABLES,IDENTIFIER
-	INT     //IDENTIFIER
-	FLOAT   //Float
-	STRING  //String
-	BOOLEAN //Boolean
-	ID      //ID
-	NULL    //null
+	IDENT    //VARIABLES,IDENTIFIER
+	INT      //IDENTIFIER
+	FLOAT    //Float
+	STRING   //String
+	BOOLEAN  //Boolean
+	ID       //ID
+	NULL     //null
+	VARIADIC //...
 
 	TYPE         //KEYWORDS
 	RETURN       //KEYWORDS
@@ -74,6 +75,7 @@ var keywords = map[string]TokenType{
 	"Boolean":      BOOLEAN,
 	"ID":           ID,
 	"null":         NULL,
+	"...":          VARIADIC,
 }
 
 func LookupIdent(ident string) TokenType {
