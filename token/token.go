@@ -19,8 +19,12 @@ const (
 	RBRACKET   // ]
 	UNDERSCORE // _
 
-	IDENT //VARIABLES,IDENTIFIER
-	INT   //IDENTIFIER
+	IDENT   //VARIABLES,IDENTIFIER
+	INT     //IDENTIFIER
+	FLOAT   //Float
+	STRING  //String
+	BOOLEAN //Boolean
+	ID      //ID
 
 	TYPE         //KEYWORDS
 	RETURN       //KEYWORDS
@@ -60,6 +64,11 @@ var keywords = map[string]TokenType{
 	"interface":    INTERFACE,
 	"union":        UNION,
 	"on":           ON,
+	"Int":          INT,
+	"Float":        FLOAT,
+	"String":       STRING,
+	"Boolean":      BOOLEAN,
+	"ID":           ID,
 }
 
 func LookupIdent(ident string) TokenType {

@@ -8,7 +8,7 @@ GraphQL has been released only as a specification. This means that GraphQL is in
 
 
 ## Arguments
-Every field on a GraphQL object type can have zero or more arguments, for example the length field below:
+Every field on a GraphQL `object type` can have zero or more arguments, for example the length field below:
 ```
 type Starship {
   id: ID!

@@ -9,7 +9,15 @@ import (
 
 func main() {
 
-	input := `type Student{ }`
+	input := `
+	type Person {
+		id: ID!
+		adult: Boolean
+		name: String!
+		age: Int!
+		salary: Float!
+	}`
+
 	lex := lexer.New(input)
 
 	for {
@@ -19,7 +27,7 @@ func main() {
 		if tok.Type == token.EOF {
 			break
 		}
-		fmt.Println(tok, tok.Type, tok.Literal)
+		fmt.Println(tok.Type, tok.Literal)
 
 	}
 
