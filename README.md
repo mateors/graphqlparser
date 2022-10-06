@@ -1,11 +1,67 @@
-# GraphQL Parser
+# GraphQL Parser | A Query Language for APIs
 GraphQL has been released only as a specification. This means that GraphQL is in fact not more than a long document that describes in detail the behaviour of a GraphQL server.
+
+
+GraphQL is a query language for APIs - not databases.
+
+A more efficient Alternative to REST
+
+API defines how a client can load data from a server.
+
+GraphQL uses the concept of resolver functions to collect the data that's requested by a client.
+
+GraphQL APIs typically only expose a single endpoint
+
+One of the major advantages of GraphQL is that it allows for naturally querying nested information. 
+
+
+At its core, GraphQL enables declarative data fetching where a client can specify exactly what data it needs from an API. Instead of multiple endpoints that return fixed data structures, a GraphQL server only exposes a single endpoint and responds with precisely the data a client asked for.
+
+## Mutations
+> Making changes to the data that’s currently stored in the backend. With GraphQL, these changes are made using so-called mutations. There generally are three kinds of mutations:
+
+1. creating new data
+2. updating existing data
+3. deleting existing data
+
+Mutations follow the same `syntactical structure` as queries, but they always need to start with the `mutation keyword`.
+
+```
+mutation {
+  createPerson(name: "Mostain", age: 36) {
+    name
+    age
+  }
+}
+```
+
+## Schema
+It specifies the capabilities of the API and defines how clients can request the data. It is often seen as a contract between the server and client.
+
+Generally, a `schema is` simply a collection of `GraphQL types`. However, when writing the schema for an API, there are some special root types:
+
+```
+type Query { ... }
+type Mutation { ... }
+type Subscription { ... }
+```
+
+## Benefits of a Schema & Type System
+GraphQL uses a strong type system to define the capabilities of an API. All the types that are exposed in an API are written down in a schema using the GraphQL Schema Definition Language (SDL). This schema serves as the contract between the client and the server to define how a client can access the data.
+
+## SDL - Schema Definition Language
+GraphQL has its own type system that’s used to define the schema of an API. The syntax for writing schemas is called Schema Definition Language (SDL).
 
 ## Schema 
 > Schema contains all information about what a client can potentially do with a GraphQL API.
 
 > Every GraphQL service defines a set of types which completely describe the set of possible data you can query on that service. Then, when queries come in, they are validated and executed against that schema.
 
+* queries and mutations
+* schema 
+* query
+* type system
+* field
 
 ## Arguments
 Every field on a GraphQL `object type` can have zero or more arguments, for example the length field below:
