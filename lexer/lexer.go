@@ -68,13 +68,17 @@ func (l *Lexer) NextToken() token.Token {
 			//number or anything else
 		}
 
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
+
 	case 0:
 		tok.Type = token.EOF
 		tok.Literal = ""
 
 	default:
 
-		//fmt.Println(l.ch)
+		//fmt.Println("default::", l.ch)
 		if isLetter(l.ch) {
 
 			tok.Literal = l.readIdentifier()
@@ -155,6 +159,18 @@ func (l *Lexer) readVariadic() string {
 	position := l.position
 	for l.ch == '.' {
 		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
+func (l *Lexer) readString() string {
+
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' || l.ch == 0 {
+			break
+		}
 	}
 	return l.input[position:l.position]
 }

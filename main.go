@@ -22,7 +22,27 @@ func main() {
 	
 	... on Droid {
 		primaryFunction
-	  }`
+	  }
+	  
+	  union SearchResult = Human | Droid | Starship
+
+	  search(text: "an") {
+		__typename
+		... on Human {
+		  name
+		  height
+		}
+		... on Droid {
+		  name
+		  primaryFunction
+		}
+		... on Starship {
+		  name
+		  length
+		}
+	  }
+	}
+	`
 
 	lex := lexer.New(input)
 
