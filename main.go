@@ -12,10 +12,12 @@ func main() {
 	input := `
 	type Person {
 		id: ID!
-		adult: Boolean
+		adult: Boolean!
 		name: String!
 		age: Int!
 		salary: Float!
+		length(unit: LengthUnit = METER): Float
+		appearsIn: [Episode]!
 	}`
 
 	lex := lexer.New(input)

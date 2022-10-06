@@ -31,7 +31,15 @@ Arguments can be either required or optional. When an argument is optional, we c
 ## Lists and Non-Null
 Here, we're using a `String` type and marking it as Non-Null by adding an exclamation mark, `!` after the type name.
 
+```
+type Character {
+  name: String!
+  appearsIn: [Episode]!
+}
+```
+
 > `myField: [String!]`
+
 
 ### Object types, scalars, and enums are the only kinds of types you can define in GraphQL.
 

@@ -18,6 +18,7 @@ const (
 	LBRACKET   // [
 	RBRACKET   // ]
 	UNDERSCORE // _
+	PIPE       // |
 
 	IDENT   //VARIABLES,IDENTIFIER
 	INT     //IDENTIFIER
@@ -25,6 +26,7 @@ const (
 	STRING  //String
 	BOOLEAN //Boolean
 	ID      //ID
+	NULL    //null
 
 	TYPE         //KEYWORDS
 	RETURN       //KEYWORDS
@@ -39,6 +41,7 @@ const (
 	SCALAR       //KEYWORDS
 	ENUM         //KEYWORDS
 	INTERFACE    //KEYWORDS
+	IMPLEMENTS   //KEYWORDS
 	UNION        //KEYWORDS
 	DIRECTIVE    //@
 
@@ -62,6 +65,7 @@ var keywords = map[string]TokenType{
 	"scalar":       SCALAR,
 	"enum":         ENUM,
 	"interface":    INTERFACE,
+	"implements":   IMPLEMENTS,
 	"union":        UNION,
 	"on":           ON,
 	"Int":          INT,
@@ -69,6 +73,7 @@ var keywords = map[string]TokenType{
 	"String":       STRING,
 	"Boolean":      BOOLEAN,
 	"ID":           ID,
+	"null":         NULL,
 }
 
 func LookupIdent(ident string) TokenType {
