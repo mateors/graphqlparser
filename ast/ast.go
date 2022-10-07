@@ -4,7 +4,7 @@ type Node interface {
 	TokenLiteral() string
 }
 
-type Statement interface { //SchemaDefinition | TypeSystems | GraphQLObjectType
+type Statement interface { //Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
 	Node
 	statementNode()
 }
@@ -14,6 +14,6 @@ type Expression interface {
 	expressionNode()
 }
 
-type Program struct {
+type Program struct { //Document
 	Statements []Statement
 }

@@ -2,20 +2,30 @@
 GraphQL has been released only as a specification. This means that GraphQL is in fact not more than a long document that describes in detail the behaviour of a GraphQL server.
 
 
-GraphQL is a query language for APIs - not databases.
-
-A more efficient Alternative to REST
-
-API defines how a client can load data from a server.
-
-GraphQL uses the concept of resolver functions to collect the data that's requested by a client.
-
-GraphQL APIs typically only expose a single endpoint
+* GraphQL is a query language for APIs - not databases.
+* A more efficient Alternative to REST
+* API defines how a client can load data from a server.
+* GraphQL uses the concept of resolver functions to collect the data that's requested by a client.
+* GraphQL APIs typically only expose a single endpoint
 
 One of the major advantages of GraphQL is that it allows for naturally querying nested information. 
 
 
-At its core, GraphQL enables declarative data fetching where a client can specify exactly what data it needs from an API. Instead of multiple endpoints that return fixed data structures, a GraphQL server only exposes a single endpoint and responds with precisely the data a client asked for.
+> At its core, GraphQL enables `declarative data fetching` where a client can specify exactly what data it needs from an API. Instead of multiple endpoints that return fixed data structures, a GraphQL server only exposes a single endpoint and responds with precisely the data a client asked for.
+
+
+```
+QueryDocument()
+Operation
+Query
+Mutation
+Subscription
+
+parseField
+parseArguments
+parseFragment
+parseObject
+```
 
 ## Mutations
 > Making changes to the data that’s currently stored in the backend. With GraphQL, these changes are made using so-called mutations. There generally are three kinds of mutations:
