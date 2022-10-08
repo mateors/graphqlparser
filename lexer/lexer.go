@@ -96,11 +96,6 @@ func (l *Lexer) NextToken() token.Token {
 			return tok
 			//fmt.Println(">>", ch)
 
-		} else if isDigit(ch) {
-			tok.Type = token.INT
-			tok.Literal = l.readNumber()
-			return tok
-
 		} else if ch == '.' {
 
 			if l.peekChar() == '.' {
@@ -134,7 +129,7 @@ func (l *Lexer) digits(base int, invalid *int) (digsep int) {
 	return
 }
 
-func (l *Lexer) scanNumber() (token.TokenType, string) {
+func (l *Lexer) readNumber() (token.TokenType, string) {
 
 	position := l.position
 	tok := token.ILLEGAL
@@ -207,13 +202,13 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
-func (l *Lexer) readNumber() string {
-	position := l.position
-	for isDigit(l.ch) {
-		l.readChar()
-	}
-	return l.input[position:l.position]
-}
+// func (l *Lexer) readNumber() string {
+// 	position := l.position
+// 	for isDigit(l.ch) {
+// 		l.readChar()
+// 	}
+// 	return l.input[position:l.position]
+// }
 
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
@@ -253,7 +248,7 @@ func (l *Lexer) readString() string {
 }
 
 // returns lower-case ch iff ch is ASCII letter
-func lower(ch byte) byte { 
+func lower(ch byte) byte {
 	return ('a' - 'A') | ch
 }
 
