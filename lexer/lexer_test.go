@@ -37,6 +37,17 @@ func TestNextToken(t *testing.T) {
 	 type Query {
 		shop(owner: String!, name: String!, location: Location): Shop!
 	 }
+
+	 0.123
+	 123e4
+	 2.71828e-1000
+	 123E4
+	 123e-4
+	 123e+4
+	 100.500
+	 213
+	 07801234567.
+	 bar1
 	  `
 
 	tests := []struct {
@@ -153,6 +164,17 @@ func TestNextToken(t *testing.T) {
 		{token.IDENT, "Shop"},
 		{token.BANG, "!"},
 		{token.RBRACE, "}"},
+
+		{token.FLOAT, "0.123"},
+		{token.FLOAT, "123e4"},
+		{token.FLOAT, "2.71828e-1000"},
+		{token.FLOAT, "123E4"},
+		{token.FLOAT, "123e-4"},
+		{token.FLOAT, "123e+4"},
+		{token.FLOAT, "100.500"},
+		{token.INT, "213"},
+		{token.FLOAT, "07801234567."},
+		{token.IDENT, "bar1"},
 
 		{token.EOF, ""},
 	}
