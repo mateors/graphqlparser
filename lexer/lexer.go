@@ -26,7 +26,6 @@ func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 	l.skipWhitespace()
 
-	//switch ch := s.ch; {
 	switch l.ch {
 
 	case '=':
@@ -81,20 +80,15 @@ func (l *Lexer) NextToken() token.Token {
 
 	default:
 
-		//fmt.Println("default::", l.ch)
 		ch := l.ch
-
 		if isLetter(l.ch) {
-
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 
 		} else if isDigit(ch) || ch == '.' && isDigit(l.peekChar()) {
-
 			tok.Type, tok.Literal = l.readNumber()
 			return tok
-			//fmt.Println(">>", ch)
 
 		} else if ch == '.' {
 
@@ -108,7 +102,6 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.ILLEGAL, ch)
 		}
 	}
-
 	l.readChar()
 	return tok
 }
@@ -150,7 +143,7 @@ func (l *Lexer) readNumber() (token.TokenType, string) {
 		digsep |= l.digits(base, &invalid)
 	}
 
-	// exponent
+	//exponent
 	if e := lower(l.ch); e == 'e' {
 		l.readChar()
 		tok = token.FLOAT
@@ -179,7 +172,6 @@ func (l *Lexer) readChar() {
 
 	if len(l.input) <= l.readPosition {
 		l.ch = 0
-
 	} else {
 		l.ch = l.input[l.readPosition]
 	}
@@ -194,21 +186,12 @@ func (l *Lexer) skipWhitespace() {
 }
 
 func (l *Lexer) readIdentifier() string {
-
 	position := l.position
 	for isLetter(l.ch) || isDigit(l.ch) {
 		l.readChar()
 	}
 	return l.input[position:l.position]
 }
-
-// func (l *Lexer) readNumber() string {
-// 	position := l.position
-// 	for isDigit(l.ch) {
-// 		l.readChar()
-// 	}
-// 	return l.input[position:l.position]
-// }
 
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
@@ -219,7 +202,6 @@ func isDigit(ch byte) bool {
 }
 
 func (l *Lexer) peekChar() byte {
-
 	if len(l.input) > l.readPosition {
 		return l.input[l.readPosition]
 	}
@@ -227,7 +209,6 @@ func (l *Lexer) peekChar() byte {
 }
 
 func (l *Lexer) readVariadic() string {
-
 	position := l.position
 	for l.ch == '.' {
 		l.readChar()
@@ -236,7 +217,6 @@ func (l *Lexer) readVariadic() string {
 }
 
 func (l *Lexer) readString() string {
-
 	position := l.position + 1
 	for {
 		l.readChar()
