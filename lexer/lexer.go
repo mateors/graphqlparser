@@ -257,9 +257,10 @@ func (l *Lexer) readString() string {
 	return l.input[position:l.position]
 }
 
+// returns lower-case ch iff ch is ASCII letter
 func lower(ch byte) byte {
 	return ('a' - 'A') | ch
-} // returns lower-case ch iff ch is ASCII letter
+}
 
 func isHex(ch byte) bool {
 	return '0' <= ch && ch <= '9' || 'a' <= lower(ch) && lower(ch) <= 'f'
