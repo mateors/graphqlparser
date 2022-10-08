@@ -92,7 +92,7 @@ func (l *Lexer) NextToken() token.Token {
 
 		} else if isDigit(ch) || ch == '.' && isDigit(l.peekChar()) {
 
-			tok.Type, tok.Literal = l.scanNumber()
+			tok.Type, tok.Literal = l.readNumber()
 			return tok
 			//fmt.Println(">>", ch)
 
