@@ -225,11 +225,6 @@ func isDigit(ch byte) bool {
 
 func (l *Lexer) peekChar() byte {
 
-	// if l.readPosition >= len(l.input) {
-	// 	return 0
-	// } else {
-	// 	return l.input[l.readPosition]
-	// }
 	if len(l.input) > l.readPosition {
 		return l.input[l.readPosition]
 	}
@@ -258,7 +253,7 @@ func (l *Lexer) readString() string {
 }
 
 // returns lower-case ch iff ch is ASCII letter
-func lower(ch byte) byte {
+func lower(ch byte) byte { 
 	return ('a' - 'A') | ch
 }
 
