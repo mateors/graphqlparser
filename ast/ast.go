@@ -4,16 +4,24 @@ type Node interface {
 	TokenLiteral() string
 }
 
-type Statement interface { //Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
+type Definition interface { //Statement | Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
 	Node
-	statementNode()
+	defNode()
 }
 
 type Expression interface {
 	Node
-	expressionNode()
+	expNode()
 }
 
-type Program struct { //Document
-	Statements []Statement
+type Document struct { //Program | Document
+	Definitions []Definition
+}
+
+func (d *Document) TokenLiteral() string {
+
+	if len(d.Definitions) > 0 {
+		return d.Definitions[0].TokenLiteral()
+	}
+	return ""
 }

@@ -42,6 +42,18 @@ func main() {
 		}
 	  }
 	}
+
+	type Query {
+		shop(owner: String!, name: String!, location: Location): Shop!
+	}
+	
+	query FetchProduct($id: ID!, $format: PriceFormat!) {
+		product(id: $id) {
+		 price(format: $format) {
+		 	name
+		 }
+	    }
+	}
 	`
 
 	lex := lexer.New(input)

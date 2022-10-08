@@ -33,6 +33,10 @@ func TestNextToken(t *testing.T) {
 	   }
 
 	 }
+
+	 type Query {
+		shop(owner: String!, name: String!, location: Location): Shop!
+	 }
 	  `
 
 	tests := []struct {
@@ -120,6 +124,34 @@ func TestNextToken(t *testing.T) {
 		{token.IDENT, "height"},
 		{token.RBRACE, "}"},
 		{token.RBRACE, "}"},
+		{token.RBRACE, "}"},
+
+		// type Query {
+		// 	shop(owner: String!, name: String!, location: Location): Shop!
+		//  }
+
+		{token.TYPE, "type"},
+		{token.IDENT, "Query"},
+		{token.LBRACE, "{"},
+		{token.IDENT, "shop"},
+		{token.LPAREN, "("},
+		{token.IDENT, "owner"},
+		{token.COLON, ":"},
+		{token.STRING, "String"},
+		{token.BANG, "!"},
+		{token.COMMA, ","},
+		{token.IDENT, "name"},
+		{token.COLON, ":"},
+		{token.STRING, "String"},
+		{token.BANG, "!"},
+		{token.COMMA, ","},
+		{token.IDENT, "location"},
+		{token.COLON, ":"},
+		{token.IDENT, "Location"},
+		{token.RPAREN, ")"},
+		{token.COLON, ":"},
+		{token.IDENT, "Shop"},
+		{token.BANG, "!"},
 		{token.RBRACE, "}"},
 
 		{token.EOF, ""},

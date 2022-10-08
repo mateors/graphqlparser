@@ -10,6 +10,9 @@ const (
 	COMMA      // ,
 	COLON      // :
 	DOT        // .
+	DOLLAR     // $
+	AT         // @
+	AMP        // &
 	SEMICOLON  // ;
 	LPAREN     // (
 	RPAREN     // )
@@ -36,15 +39,17 @@ const (
 	ON           //
 	INPUT        //KEYWORDS
 	SUBSCRIPTION //KEYWORDS
+	SCHEMA       //KEYWORDS
 	ALIAS        //KEYWORDS
 	FRAGMENT     //KEYWORDS
 	OPERATION    //KEYWORDS
 	SCALAR       //KEYWORDS
 	ENUM         //KEYWORDS
+	EXTEND       //KEYWORDS
 	INTERFACE    //KEYWORDS
 	IMPLEMENTS   //KEYWORDS
 	UNION        //KEYWORDS
-	DIRECTIVE    //@
+	DIRECTIVE    //KEYWORDS @
 
 )
 
@@ -62,9 +67,12 @@ var keywords = map[string]TokenType{
 	"input":        INPUT,
 	"query":        QUERY,
 	"subscription": SUBSCRIPTION,
+	"schema":       SCHEMA,
 	"return":       RETURN,
 	"scalar":       SCALAR,
 	"enum":         ENUM,
+	"extend":       EXTEND,
+	"directive":    DIRECTIVE,
 	"interface":    INTERFACE,
 	"implements":   IMPLEMENTS,
 	"union":        UNION,
@@ -75,7 +83,7 @@ var keywords = map[string]TokenType{
 	"Boolean":      BOOLEAN,
 	"ID":           ID,
 	"null":         NULL,
-	"...":          VARIADIC,
+	"...":          VARIADIC, //SPREAD
 }
 
 func LookupIdent(ident string) TokenType {
