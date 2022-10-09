@@ -137,10 +137,6 @@ func TestNextToken(t *testing.T) {
 		{token.RBRACE, "}"},
 		{token.RBRACE, "}"},
 
-		// type Query {
-		// 	shop(owner: String!, name: String!, location: Location): Shop!
-		//  }
-
 		{token.TYPE, "type"},
 		{token.IDENT, "Query"},
 		{token.LBRACE, "{"},
