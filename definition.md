@@ -27,6 +27,9 @@ Selection:
     FragmentSpread
     InlineFragment
 
-## Optionality and Lists
-A subscript suffix Symbollist is shorthand for a list of one or more of that symbol, represented as an additional recursive production.
+
+## Grammar Notation
+
+### Optionality and Lists
+A subscript suffix Symbol ~list~ is shorthand for a list of one or more of that symbol, represented as an additional recursive production.
 
