@@ -7,22 +7,25 @@ cursor pagination is a good choice for GraphQL APIs. Today, most GraphQL APIs us
 
 ## Relay Connections
 
-```
+```go
 type ProductConnection {
-edges: [ProductEdge]
-pageInfo: PageInfo!
+    edges: [ProductEdge]
+    pageInfo: PageInfo!
 }
+
 type ProductEdge {
-cursor: String!
-node: Product!
+    cursor: String!
+    node: Product!
 }
+
 type PageInfo {
-endCursor: String
-hasNextPage: Boolean!
-hasPreviousPage: Boolean!
-startCursor: String
+    endCursor: String
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
 }
+
 type Product {
-name: String!
+    name: String!
 }
 ```
