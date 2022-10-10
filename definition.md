@@ -31,5 +31,5 @@ Selection:
 ## Grammar Notation
 
 ### Optionality and Lists
-A subscript suffix Symbol~list~ is shorthand for a list of one or more of that symbol, represented as an additional recursive production.
+A subscript suffix Symbol `list` is shorthand for a list of one or more of that symbol, represented as an additional recursive production.
 

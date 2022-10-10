@@ -40,6 +40,70 @@ If your use case can be supported by `cursor-based pagination`, I highly recomme
 
 
 
+A static query is a query that does not change based on any variable, condition, or state of the program.
+
+### What do we mean by transactions and GraphQL?
+the current best practice is to look at designing these errors as part of our schema rather than treating them as exceptions/query level errors
+
+A possibly better approach is for payload types to include something like a userErrors field:
+
+```go
+type SignUpPayload {
+    userErrors: [UserError!]!
+    account: Account
+}
+
+type UserError {
+    # The error message
+    message: String!
+    # Indicates which field cause the error, if any
+    #
+    # Field is an array that acts as a path to the error
+    #
+    # Example:
+    #
+    # ["accounts", "1", "email"]
+    #
+    field: [String!]
+    # An optional error code for clients to match on.
+    code: UserErrorCode
+}
+```
 
 
 
+## Union / Result Types
+> errors as data
+
+instead of using a specific field for errors, this approach uses union types to represent possible problematic states to the client. Let’s take the same `sign up` example, but design it using a result union:
+
+```go
+type Mutation {
+    signUp(email: string!, password: String!): SignUpPayload
+}
+union SignUpPayload =
+                        SignUpSuccess |
+                        UserNameTaken |
+                        PasswordTooWeak
+
+mutation {
+    signUp(
+        email: "marc@productionreadygraphql.com",
+        password: "P@ssword"
+    ){
+        ... on SignUpSuccess {
+            account{
+                id
+            }
+        }
+        ... on UserNameTaken {
+            message
+            suggestedUsername
+        }
+        ... on PasswordTooWeak {
+            message
+            passwordRules
+        }
+     }
+}
+```
