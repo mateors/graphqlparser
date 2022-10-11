@@ -31,7 +31,14 @@ func main() {
 	123e1
 	07801234567.
 	bar1
-	`
+	
+	"""
+	Hello Bangladesh
+	""" 
+	500.00
+	#comment`
+
+	//fmt.Println(input[5:14], len(input[5:14]))
 
 	lex := lexer.New(input)
 

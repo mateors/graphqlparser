@@ -12,6 +12,7 @@ const (
 	DOT        // .
 	DOLLAR     // $
 	AT         // @
+	HASH       //#
 	AMP        // &
 	SEMICOLON  // ;
 	LPAREN     // (
@@ -23,14 +24,15 @@ const (
 	UNDERSCORE // _
 	PIPE       // |
 
-	IDENT    //VARIABLES,IDENTIFIER
-	INT      //IDENTIFIER
-	FLOAT    //Float
-	STRING   //String
-	BOOLEAN  //Boolean
-	ID       //ID
-	NULL     //null
-	VARIADIC //...
+	IDENT        //VARIABLES,IDENTIFIER
+	INT          //IDENTIFIER
+	FLOAT        //Float
+	STRING       //String
+	BLOCK_STRING //string
+	BOOLEAN      //Boolean
+	ID           //ID
+	NULL         //null
+	VARIADIC     //...
 
 	TYPE         //KEYWORDS
 	RETURN       //KEYWORDS

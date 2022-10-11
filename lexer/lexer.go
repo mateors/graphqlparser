@@ -59,8 +59,28 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.PIPE, l.ch)
 
 	case '"':
-		tok.Type = token.STRING
-		tok.Literal = l.readString()
+
+		//position := l.position
+		ch := l.ch
+		nchar := l.input[l.readPosition+1]
+		if ch == '"' && l.peekChar() == '"' && nchar == '"' {
+
+			//fmt.Println(l.input[position:l.position])
+			//l.readChar()
+			//l.readChar()
+			//l.readChar()
+
+			bstr := l.blockString()
+			tok.Literal = bstr
+			tok.Type = token.BLOCK_STRING
+			//fmt.Println("BLOCK::", bstr)
+			l.readChar()
+			l.readChar()
+
+		} else {
+			tok.Type = token.STRING
+			tok.Literal = l.readString()
+		}
 
 	case ',':
 		tok = newToken(token.COMMA, l.ch)
@@ -73,6 +93,9 @@ func (l *Lexer) NextToken() token.Token {
 
 	case '@':
 		tok = newToken(token.AT, l.ch)
+
+	case '#':
+		tok = newToken(token.HASH, l.ch)
 
 	case 0:
 		tok.Type = token.EOF
@@ -103,6 +126,7 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 	l.readChar()
+	//fmt.Println("4??", l.position)
 	return tok
 }
 
@@ -120,6 +144,19 @@ func (l *Lexer) digits(base int, invalid *int) (digsep int) {
 		}
 	}
 	return
+}
+
+func (l *Lexer) blockString() string {
+
+	position := l.position + 3
+	for {
+		l.readChar()
+		nchar := l.input[l.readPosition+1]
+		if l.ch == '"' && l.peekChar() == '"' && nchar == '"' {
+			break
+		}
+	}
+	return l.input[position:l.position]
 }
 
 func (l *Lexer) readNumber() (token.TokenType, string) {
