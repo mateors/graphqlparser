@@ -48,6 +48,8 @@ func TestNextToken(t *testing.T) {
 	 213
 	 07801234567.
 	 bar1
+	 """Hello block""" 
+	 #comment
 	  `
 
 	tests := []struct {
@@ -171,6 +173,10 @@ func TestNextToken(t *testing.T) {
 		{token.INT, "213"},
 		{token.FLOAT, "07801234567."},
 		{token.IDENT, "bar1"},
+
+		{token.BLOCK_STRING, "Hello block"},
+		{token.HASH, "#"},
+		{token.IDENT, "comment"},
 
 		{token.EOF, ""},
 	}

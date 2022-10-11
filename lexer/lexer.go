@@ -65,11 +65,6 @@ func (l *Lexer) NextToken() token.Token {
 		nchar := l.input[l.readPosition+1]
 		if ch == '"' && l.peekChar() == '"' && nchar == '"' {
 
-			//fmt.Println(l.input[position:l.position])
-			//l.readChar()
-			//l.readChar()
-			//l.readChar()
-
 			bstr := l.blockString()
 			tok.Literal = bstr
 			tok.Type = token.BLOCK_STRING

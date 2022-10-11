@@ -31,7 +31,6 @@ func main() {
 	123e1
 	07801234567.
 	bar1
-	
 	"""
 	Hello Bangladesh
 	""" 
