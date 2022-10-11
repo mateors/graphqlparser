@@ -98,6 +98,20 @@ fragment typeFields on __Type {
   }
 }
 ```
+The redundancy of the preceding query has been reduced by using a fragment.
+
+
+## Abstract Syntax Trees - AST
+An abstract syntax tree, or AST, is a hierarchical object that represents our query. The AST is an object that contains nested fields that represent the details of a GraphQL query.
+
+An `object hierarchy` is a concept from computer programming. It references descendants of objects acting as properties of an object.
+
+
+A document contains at least one definition, but it can also contain a list of definitions.
+
+Definitions are only one of two types: OperationDefinition or FragmentDefinition. 
 
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
+* https://spec.graphql.org/October2016/#index
+* [GraphQL Document-Syntax](https://spec.graphql.org/draft/#sec-Document-Syntax)
