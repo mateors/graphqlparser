@@ -1,7 +1,8 @@
 # GraphQL Practice with Playground
 
 ## Playground API Endpoint
-* http://snowtooth.herokuapp.com/
+* http://snowtooth.herokuapp.com
+* http://snowtooth.moonhighway.com
 
 
 
