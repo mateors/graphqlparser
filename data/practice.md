@@ -40,5 +40,64 @@ mutation GiveAnyName{
 ```
 
 
+## Introspection
+One of the most powerful features of GraphQL is introspection. Introspection is the ability to query details about the current API's schema. Introspection is how those nifty ছিমছাম GraphQL documents are added to the GraphiQL Playground interface
+
+```
+query Introspection{
+  __schema {
+    types {
+    name
+    description
+    }
+  }
+}
+```
+When we run this query, we see every type available on the API, including root types, custom types, and even scalar types.
+
+
+If we want to see the details of a particular type, we can run the __type query and send the name of the type that
+we want to query as an argument:
+
+```js
+query liftDetails {
+  __type(name:"Lift") {
+    name
+    fields {
+      name
+      description
+      type {
+        name
+        description
+      }
+    }
+  }
+}
+```
+
+### What fields are available on the root types:
+```js
+query roots {
+  __schema {
+    queryType {
+      ...typeFields
+    }
+    mutationType {
+      ...typeFields
+    }
+    subscriptionType {
+      ...typeFields
+    }
+  }
+} 
+
+fragment typeFields on __Type {
+  name
+  fields {
+  	name
+  }
+}
+```
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
