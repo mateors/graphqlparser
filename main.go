@@ -18,24 +18,7 @@ func main() {
 	// fmt.Println(32 | 83)
 	// os.Exit(1)
 
-	input := `
-	-4.123
-	0.123
-	123e4
-	2.71828e-1000
-	123E4
-	123e-4
-	123e+4
-	100.500
-	213
-	123e1
-	07801234567.
-	bar1
-	"""
-	Hello Bangladesh
-	""" 
-	500.00
-	#comment`
+	input := `""""""`
 
 	//fmt.Println(input[5:14], len(input[5:14]))
 

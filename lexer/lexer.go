@@ -64,11 +64,10 @@ func (l *Lexer) NextToken() token.Token {
 		ch := l.ch
 		nchar := l.input[l.readPosition+1]
 		if ch == '"' && l.peekChar() == '"' && nchar == '"' {
-
-			bstr := l.blockString()
-			tok.Literal = bstr
+			l.readChar()
+			l.readChar()
+			tok.Literal = l.blockString()
 			tok.Type = token.BLOCK_STRING
-			//fmt.Println("BLOCK::", bstr)
 			l.readChar()
 			l.readChar()
 
@@ -143,11 +142,10 @@ func (l *Lexer) digits(base int, invalid *int) (digsep int) {
 
 func (l *Lexer) blockString() string {
 
-	position := l.position + 3
+	position := l.position + 1
 	for {
 		l.readChar()
-		nchar := l.input[l.readPosition+1]
-		if l.ch == '"' && l.peekChar() == '"' && nchar == '"' {
+		if l.ch == '"' && l.input[l.position+1] == '"' && l.input[l.position+2] == '"' {
 			break
 		}
 	}
