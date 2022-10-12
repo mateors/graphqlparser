@@ -279,6 +279,56 @@ query {
   }
 }
 ```
+
+### Sorting
+When querying a list of data, we might also want to define how the returned list of data should be sorted. We can use arguments for this, as well.
+
+```js
+enum SortDirection {
+ASCENDING
+DESCENDING
+} 
+
+enum SortablePhotoField {
+  name
+  description
+  category
+  created
+} 
+
+Query {
+  allPhotos(
+    sort: SortDirection = DESCENDING
+    sortBy: SortablePhotoField = created
+  ): [Photo!]!
+
+}
+```
+
+Clients can now control how their photos are sorted when they issue an allPhotos query:
+```js
+query {
+  allPhotos(sortBy: name)
+}
+```
+
+So far, we've added arguments only to fields of the Query type, but it is important to note that you can add arguments to any field.
+
+```js
+type User {
+  
+  postedPhotos(
+    first: Int = 25
+    start: Int = 0
+    sort: SortDirection = DESCENDING
+    sortBy: SortablePhotoField = created
+    category: PhotoCategory
+  ): [Photo!]
+
+}
+
+```
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
