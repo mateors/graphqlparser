@@ -199,6 +199,44 @@ Both union types and interfaces are tools that you can use to create fields that
 
 In general, if the objects contain completely different fields, it is a good idea to use union types. They are very effective. If an object type must contain specific fields in order to interface with another type of object, you will need to user an interface rather than a union type.
 
+
+
+### Arguments
+Arguments can be added to any field in GraphQL. They allow us to send data that can affect outcome of our GraphQL operations.
+
+
+```js
+type Query {
+  User(githubLogin: ID!): User!
+  Photo(id: ID!): Photo!
+}
+```
+Just like a field, an argument must have a type. That type can be defined using any of the scalar types or object types that are available in our schema.
+
+To select a specific user, we need to send that user’s unique githubLogin as an argument.
+```js
+query {
+  User(githubLogin: "Mostain") {
+    name
+    avatar
+  }
+}
+```
+
+To select details about an individual photo, we need to supply that photo’s ID:
+```js
+query {
+  Photo(id: "14TH5B6NS4KIG3H4S") {
+    name
+    description
+    url
+  }
+}
+```
+In both cases, arguments were required to query details about one specific record. Because these arguments are required, they are defined as non-nullable fields.
+
+> If we do not supply the id or githubLogin with these queries, the GraphQL parser will return an error.
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
