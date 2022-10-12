@@ -115,6 +115,47 @@ Definitions are only one of two types: OperationDefinition or FragmentDefinition
 ### Union Type
 In GraphQL, a union type is a type that we can use to return one of several different types.
 
+```js
+query schedule {
+
+ agenda {
+  ...on Workout {
+      name
+      reps
+  }
+  ...on StudyGroup {
+      name
+      subject
+      students
+  }
+ }
+}
+```
+we could handle this by creating a union type called AgendaItem:
+
+```js
+union AgendaItem = StudyGroup | Workout
+
+type StudyGroup {
+  name: String!
+  subject: String
+  students: [User!]!
+} 
+
+type Workout {
+  name: String!
+  reps: Int!
+} 
+
+type Query {
+  agenda: [AgendaItem!]!
+}
+```
+AgendaItem combines study groups and workouts under a single type. When we add the agenda field to our Query, we are defining it as a list of either workouts or study groups.
+
+It is possible to join as many types as we want under a single union. Simply separate each type with a pipe:
+> `union = StudyGroup | Workout | Class | Meal | Meeting | FreeTime`
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
