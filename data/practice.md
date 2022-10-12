@@ -379,6 +379,48 @@ mutation postPhoto(
 }
 ```
 
+### Input Types
+As you might have noticed, the arguments for a couple of our queries and mutations are getting quite lengthy. There is a better way to organize these arguments using input types. An input type is similar to the GraphQL object type except it is used only for input arguments.
+
+Let's improve the postPhoto mutation using an input type for our arguments:
+```js
+input PostPhotoInput {
+  name: String!
+  description: String
+  category: PhotoCategory=PORTRAIT
+} 
+
+type Mutation {
+  postPhoto(input: PostPhotoInput!): Photo!
+}
+```
+
+```js
+mutation newPhoto($input: PostPhotoInput!) {
+  postPhoto(input: $input) {
+      id
+      url
+      created
+  }
+}
+```
+
+When we send the mutation, we need to supply the new photo data in our query variables nested under the input field:
+```json
+{
+  "input": {
+  "name": "Hanging at the Arc",
+  "description": "Sunny on the deck of the Arc",
+  "category": "LANDSCAPE"
+  }
+}
+```
+Our input is grouped together in a JSON object and sent along with the mutation in the query variables under the “input” key. 
+
+Because the query variables are formatted as JSON, the category needs to be a string that matches one of the categories from the PhotoCategory type.
+
+Input types help us organize our schema and reuse arguments. They also improve the schema documentation that GraphiQL or GraphQL Playground automatically generates.
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
