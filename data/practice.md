@@ -435,6 +435,37 @@ type Mutation {
 ```
 You can use custom return types on any field for which we need more than simple payload data. 
 
+
+## Subscriptions
+Subscription types are no different than any other object type in the GraphQL schema definition language. Here, we define the available subscriptions as fields on a custom object type.
+
+> Subscriptions implement the PubSub design pattern along with some sort of real-time transport
+
+
+Just like queries or mutations, subscriptions can take advantage of arguments.
+```js
+type Subscription {
+  newPhoto(category: PhotoCategory): Photo!
+  newUser: User!
+}
+```
+
+clients could send the following operation to our
+GraphQL API:
+```js
+subscription {
+    newPhoto(category: "ACTION") {
+        id
+        name
+        url
+        postedBy {
+          name
+        }
+    }
+}
+```
+A subscription is a great solution when it’s important to handle data in real time.
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
