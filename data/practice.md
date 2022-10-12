@@ -111,6 +111,10 @@ A document contains at least one definition, but it can also contain a list of d
 
 Definitions are only one of two types: OperationDefinition or FragmentDefinition. 
 
+
+### Union Type
+In GraphQL, a union type is a type that we can use to return one of several different types.
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
