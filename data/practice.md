@@ -237,6 +237,28 @@ In both cases, arguments were required to query details about one specific recor
 
 > If we do not supply the id or githubLogin with these queries, the GraphQL parser will return an error.
 
+
+### Filtering Data
+Arguments do not need to be non-nullable. We can add optional arguments using nullable fields. This means that we can supply arguments as optional parameters when we execute query operations.
+
+```js
+type Query {
+  ...
+  allPhotos(category: PhotoCategory): [Photo!]!
+}
+```
+
+if a category is supplied, we should get a filtered list of photos in the same category:
+```js
+query {
+  allPhotos(category: "SELFIE") {
+    name
+    description
+    url
+  }
+}
+```
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
