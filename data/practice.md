@@ -156,6 +156,49 @@ AgendaItem combines study groups and workouts under a single type. When we add t
 It is possible to join as many types as we want under a single union. Simply separate each type with a pipe:
 > `union = StudyGroup | Workout | Class | Meal | Meeting | FreeTime`
 
+
+### Interfaces
+Another way of handling fields that could contain multiple types is to use an interface. Interfaces are abstract types that can be implemented by object types.
+
+An interface defines all of the fields that must be included in any object that implements it
+
+```js
+scalar DataTime
+
+interface AgendaItem {
+  name: String!
+  start: DateTime!
+  end: DateTime!
+} 
+
+type StudyGroup implements AgendaItem {
+  name: String!
+  start: DateTime!
+  end: DateTime!
+  participants: [User!]!
+  topic: String!
+} 
+
+type Workout implements AgendaItem {
+  name: String!
+  start: DateTime!
+  end: DateTime!
+  reps: Int!
+} 
+
+type Query {
+  agenda: [AgendaItem!]!
+}
+```
+
+In this example, we create an interface called AgendaItem. This interface is anabstract type that other types can implement. When another type implements an interface, it must contain the fields defined by the interface.
+
+
+### Which one should i use?
+Both union types and interfaces are tools that you can use to create fields that contain different object types. It’s up to you to decide when to use one or the other. 
+
+In general, if the objects contain completely different fields, it is a good idea to use union types. They are very effective. If an object type must contain specific fields in order to interface with another type of object, you will need to user an interface rather than a union type.
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
