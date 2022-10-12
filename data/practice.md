@@ -421,6 +421,20 @@ Because the query variables are formatted as JSON, the category needs to be a st
 
 Input types help us organize our schema and reuse arguments. They also improve the schema documentation that GraphiQL or GraphQL Playground automatically generates.
 
+### Return Types
+```
+type AuthPayload {
+  user: User!
+  token: String!
+} 
+
+type Mutation {
+  ...
+  githubAuth(code: String!): AuthPayload!
+}
+```
+You can use custom return types on any field for which we need more than simple payload data. 
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
