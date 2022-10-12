@@ -259,6 +259,26 @@ query {
 }
 ```
 
+### Data paging
+We can use GraphQL arguments to control the amount of data that is returned from our queries. This process is called data paging because a specific number of records are returned to represent one page of data.
+
+```js
+type Query {
+  ...
+  allUsers(first: Int=50 start: Int=0): [User!]!
+  allPhotos(first: Int=25 start: Int=0): [Photo!]!
+}
+```
+In the preceding example, we have added optional arguments for first and start. If the client does not supply these arguments with the query, we will use the default values provided. By default, the allUsers query returns only the first 50 users, and the allPhotos query returns only the first 25 photos.
+
+```js
+query {
+  allUsers(first: 10 start: 90) {
+    name
+    avatar
+  }
+}
+```
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
