@@ -316,7 +316,7 @@ So far, we've added arguments only to fields of the Query type, but it is import
 
 ```js
 type User {
-  
+
   postedPhotos(
     first: Int = 25
     start: Int = 0
@@ -327,6 +327,56 @@ type User {
 
 }
 
+```
+
+## Mutations
+Mutations must be defined in the schema. Just like queries, mutations also are defined in their own custom object type and added to the schema. Technically, there is no difference between how a mutation or query is defined in your schema. The difference is in intent. 
+
+> We should create mutations only when an action or event will change something about the state of our application.
+
+When designing your GraphQL service, make a list of all of the actions that a user can take with your application. Those are most likely your mutations.
+
+```js
+type Mutation {
+  postPhoto(
+  name: String!
+  description: String
+  category: PhotoCategory=PORTRAIT
+  ): Photo!
+} 
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+```
+
+a user can post a photo by sending the following mutation:
+```js
+mutation {
+  postPhoto(name: "Sending the Palisades") {
+      id
+      url
+      created
+      postedBy {
+        name
+      }
+  }
+}
+
+mutation postPhoto(
+  $name: String!
+  $description: String
+  $category: PhotoCategory
+) 
+
+{
+  postPhoto(name: $name,  description: $description,  category: $category) {
+    id
+    name
+    email
+  }
+}
 ```
 
 ## Resource
