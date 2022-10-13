@@ -466,6 +466,27 @@ subscription {
 ```
 A subscription is a great solution when it’s important to handle data in real time.
 
+
+## Chapter 5. Creating a GraphQL API
+
+### PhotoShare API
+* https://github.com/MoonHighway/learning-graphql/tree/master/chapter-05/photo-share-api/
+
+
+### Resolvers
+A schema defines the query operations that clients are allowed to make and also how different types are related. A schema describes the data requirements but doesn't perform the work of getting that data. That work is handled by resolvers.
+
+A resolver is a function that returns data for a particular field. Resolver functions return data in the type and shape specified by the schema. Resolvers can be asynchronous and can fetch or update data from a REST API, database, or any
+other service.
+
+It is also important to note that the resolver must be defined under an object with the same typename as the object in the schema.
+
+Resolvers are key to the implementation of GraphQL. Every field must have a corresponding resolver function. The resolver must follow the rules of the schema. It must have the same name as the field that was defined in the schema,
+and it must return the datatype defined by the schema.
+
+We are responsible for connecting the data with resolvers, but as soon as we are able to return that connected data, our clients can begin writing powerful queries.
+
+
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
 * https://spec.graphql.org/October2016/#index
