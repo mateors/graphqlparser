@@ -59,8 +59,9 @@ type TokenType int
 
 type Token struct {
 	Type    TokenType
-	Start   int
-	End     int
+	Line    int //row
+	Start   int //column
+	End     int //column
 	Literal string
 }
 
