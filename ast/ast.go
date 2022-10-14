@@ -15,6 +15,7 @@ type Expression interface {
 }
 
 type Document struct { //Program | Document
+	Kind        string
 	Definitions []Definition
 }
 
