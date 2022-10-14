@@ -486,6 +486,7 @@ and it must return the datatype defined by the schema.
 
 We are responsible for connecting the data with resolvers, but as soon as we are able to return that connected data, our clients can begin writing powerful queries.
 
+> Every field in our schema needs to map to a resolver. 
 
 ## Resource
 * [GraphQL Playground](https://www.youtube.com/watch?v=CHNAnGSmQeA)
