@@ -9,7 +9,10 @@ type Node interface {
 
 type Definition interface { //Statement | Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
 	Node
-	defNode()
+	//defNode()
+	GetOperation() string
+	GetVariableDefinitions() []*VariableDefinition
+	GetSelectionSet() *SelectionSet
 }
 
 type Expression interface {
@@ -37,7 +40,7 @@ func (d *Document) GetKind() string {
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
 	Kind                string
-	OperationType       string
+	OperationType       string //query | mutation | subscription
 	Name                *Name
 	VariablesDefinition []*VariableDefinition
 	Directives          []*Directive
@@ -61,16 +64,128 @@ type VariableDefinition struct {
 }
 
 type Directive struct {
+	Kind      string
+	Token     token.Token
+	Name      *Name
+	Arguments []*Argument
+}
+
+type Argument struct {
+	Kind  string
+	Token token.Token
+	Name  *Name
+	Value Value
 }
 
 type SelectionSet struct {
 }
 
-type Variable struct {
+type Type interface {
+	Name() string
+	String() string
+	Error() error
 }
 
-type Type interface {
+type TypeDefinition interface {
+	Node
+	GetOperation() string
+	GetVariableDefinitions() []*VariableDefinition
+	GetSelectionSet() *SelectionSet
+}
+
+//var _ TypeDefinition = (*ScalarDefinition)(nil)
+var _ TypeDefinition = (*ObjectDefinition)(nil)
+
+//var _ TypeDefinition = (*InterfaceDefinition)(nil)
+//var _ TypeDefinition = (*UnionDefinition)(nil)
+//var _ TypeDefinition = (*EnumDefinition)(nil)
+//var _ TypeDefinition = (*InputObjectDefinition)(nil)
+
+type ObjectDefinition struct {
+	//Description[opt] type Name ImplementsInterfaces[opt] Directives[opt] { FieldsDefinition }
+	Kind        string //OBJECT_DEFINITION
+	Token       token.Token
+	Description string
+	Name        *Name
+	Interfaces  []*Name //NAMED
+	Directives  []*Directive
+	Fields      []*FieldDefinition
+}
+
+func (ob *ObjectDefinition) TokenLiteral() string {
+	return ob.Token.Literal
+}
+
+func (ob *ObjectDefinition) GetKind() string {
+	return ob.Kind
+}
+
+func (ob *ObjectDefinition) GetOperation() string {
+	return ""
+}
+
+func (ob *ObjectDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+
+func (ob *ObjectDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+
+type FieldDefinition struct {
+	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
+	//ArgumentsDefinition: ( InputValueDefinition[list] )
+	Kind        string //FIELD_DEFINITION
+	Token       token.Token
+	Description string
+	Name        *Name
+	Arguments   []*InputValueDefinition
+	Type        Type
+	Directives  []*Directive
+}
+
+type InputValueDefinition struct {
+	//Description[opt] Name : Type DefaultValue[opt] Directives[opt]
+	Kind         string //INPUT_VALUE_DEFINITION
+	Token        token.Token
+	Description  string
+	Name         *Name
+	Type         Type
+	DefaultValue Value
+	Directives   []*Directive
 }
 
 type Value interface {
+	Node
+	GetValue() interface{}
+}
+
+// Ensure that all value types implements Value interface
+var _ Value = (*Variable)(nil)
+
+//var _ Value = (*IntValue)(nil)
+// var _ Value = (*FloatValue)(nil)
+// var _ Value = (*StringValue)(nil)
+// var _ Value = (*BooleanValue)(nil)
+// var _ Value = (*EnumValue)(nil)
+// var _ Value = (*ListValue)(nil)
+// var _ Value = (*ObjectValue)(nil)
+
+// Variable implements Node, Value
+type Variable struct {
+	Kind  string //VARIABLE
+	Token token.Token
+	Name  *Name
+}
+
+func (v *Variable) TokenLiteral() string {
+	return v.Token.Literal
+}
+
+func (v *Variable) GetKind() string {
+	return v.Kind
+}
+
+func (v *Variable) GetValue() interface{} {
+	return v.Name
 }

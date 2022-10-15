@@ -321,6 +321,99 @@ extend type Name ImplementsInterfaces[opt] Directives [Cons][opt] FieldsDefiniti
 
 ```
 
+### ObjectType
+
+* Document
+	* Definition
+		2. TypeSystemDefinitionOrExtension
+			1. TypeSystemDefinition
+
+### TypeSystemDefinition
+1. SchemaDefinition
+2. **TypeDefinition**
+3. DirectiveDefinition
+
+### TypeDefinition
+1. ScalarTypeDefinition
+2. **ObjectTypeDefinition**
+3. InterfaceTypeDefinition
+4. UnionTypeDefinition
+5. EnumTypeDefinition
+6. InputObjectTypeDefinition
+
+### 2. ObjectTypeDefinition
+1. Description`opt` **type** Name ImplementsInterfaces`opt` Directives`opt` FieldsDefinition
+2. Description`opt` **type** Name ImplementsInterfaces`opt` Directives`opt`
+
+
+### ImplementsInterfaces
+1. ImplementsInterfaces & NamedType
+2. **implements** &`opt` NamedType
+
+### FieldsDefinition
+`{` FieldDefinition`list` `}`
+
+### FieldDefinition
+Description`opt` Name ArgumentsDefinition `opt` `:` Type Directives`opt`
+
+### Type
+1. NamedType
+2. ListType
+3. NonNullType
+
+### NamedType
+* Name -> NameStart/Letter + NameContinue/Letter+Digit
+
+### ListType
+* `[` Type `]`
+
+### NonNullType
+* NamedType`!`
+* ListType`!`
+
+### ArgumentsDefinition
+> `(` InputValueDefinition`list` `)`
+
+### InputValueDefinition
+Description`opt` Name `:` Type DefaultValue`opt` Directives`opt`
+
+### Directives
+Directive`list`
+
+### Directive
+`@`Name Arguments`opt`
+
+### Arguments
+`(` Argument`list` `)`
+
+### Argument
+Name `:` Value
+
+### Value
+1. Variable
+2. IntValue
+3. FloatValue
+4. StringValue
+5. BooleanValue
+6. NullValue
+7. EnumValue
+8. ListValue
+9. **ObjectValue**
+
+### ObjectValue
+* `{` `}`
+* `{` ObjectField`list` `}`
+
+### ObjectField
+Name `:` Value
+
+```
+type Lift {
+  id: ID!
+  name: String!
+}
+```
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
