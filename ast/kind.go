@@ -11,4 +11,5 @@ const (
 	FIELD                  = "Field"
 	SELECTION_SET          = "SelectionSet"
 	FRAGMENT_SPREAD        = "FragmentSpread"
+	INLINE_FRAGMENT        = "InlineFragment"
 )
