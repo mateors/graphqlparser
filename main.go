@@ -41,7 +41,7 @@ func main() {
 			break
 		}
 		if tok.Literal == input[tok.Start:tok.End] {
-			//fmt.Println(tok.Line, tok.Literal, tok.Start, tok.End)
+			fmt.Println(tok.Line, tok.Literal, tok.Start, tok.End)
 		} else {
 			fmt.Println(tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
 		}

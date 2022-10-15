@@ -2,6 +2,7 @@ package ast
 
 type Node interface {
 	TokenLiteral() string
+	GetKind() string
 }
 
 type Definition interface { //Statement | Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
@@ -25,4 +26,8 @@ func (d *Document) TokenLiteral() string {
 		return d.Definitions[0].TokenLiteral()
 	}
 	return ""
+}
+
+func (d *Document) GetKind() string {
+	return d.Kind
 }
