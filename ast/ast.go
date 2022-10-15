@@ -77,7 +77,43 @@ type Argument struct {
 	Value Value
 }
 
+//Implements Node
 type SelectionSet struct {
+	Kind       string //
+	Token      token.Token
+	Selections []Selection
+}
+
+type Selection interface {
+	Node
+	GetSelectionSet() *SelectionSet
+}
+
+// Ensure that all definition types implements Selection interface
+var _ Selection = (*Field)(nil)
+
+//var _ Selection = (*FragmentSpread)(nil)
+//var _ Selection = (*InlineFragment)(nil)
+
+type Field struct {
+	//Alias[opt] Name Arguments[opt] Directives[opt] SelectionSet[opt]
+	Kind         string //FIELD
+	Token        token.Token
+	Alias        *Name
+	Name         *Name
+	Arguments    []*Argument
+	Directives   []*Directive
+	SelectionSet *SelectionSet
+}
+
+func (f *Field) TokenLiteral() string {
+	return f.Token.Literal
+}
+func (f *Field) GetKind() string {
+	return f.Kind
+}
+func (f *Field) GetSelectionSet() *SelectionSet {
+	return f.SelectionSet
 }
 
 type Type interface {

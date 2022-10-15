@@ -8,4 +8,6 @@ const (
 	INPUT_VALUE_DEFINITION = "InputValueDefinition"
 	VARIABLE               = "Variable"
 	NAME                   = "Name"
+	FIELD                  = "Field"
+	SELECTION_SET          = "SelectionSet"
 )
