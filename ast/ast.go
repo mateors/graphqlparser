@@ -165,8 +165,8 @@ type Type interface {
 
 // Name implements Node & Type
 var _ Type = (*NamedType)(nil)
+var _ Type = (*ListType)(nil)
 
-//var _ Type = (*ListType)(nil)
 //var _ Type = (*NonNullType)(nil)
 
 // Named implements Node, Type
@@ -185,6 +185,22 @@ func (n *NamedType) GetKind() string {
 }
 func (n *NamedType) String() string {
 	return n.GetKind()
+}
+
+type ListType struct {
+	Kind  string
+	Token token.Token
+	Type  Type
+}
+
+func (l *ListType) TokenLiteral() string {
+	return l.Token.Literal
+}
+func (l *ListType) GetKind() string {
+	return l.Kind
+}
+func (l *ListType) String() string {
+	return l.GetKind()
 }
 
 type TypeDefinition interface {
