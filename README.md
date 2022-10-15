@@ -118,6 +118,209 @@ GraphQL is particularly great for frontend developers since it completely elimin
 ## What is a resolver function?
 A function on a GraphQL server that's responsible for fetching the data for a single field
 
+## AST
+
+### Document Syntax
+Document Syntax listed using [GraphQL Spec](https://spec.graphql.org/October2021/#index)
+
+```
+Document::
+	Definition
+
+Definition::
+	OperationDefinition ->ExecutableDefinition
+	FragmentDefinition -> ExecutableDefinition
+
+	#TypeSystemDefinition -> TypeSystemDefinitionOrExtension
+	SchemaDefinition ->TypeSystemDefinition
+	TypeDefinition -> TypeSystemDefinition
+		ScalarTypeDefinition
+		ObjectTypeDefinition
+		InterfaceTypeDefinition
+		UnionTypeDefinition
+		EnumTypeDefinition
+		InputObjectTypeDefinition
+
+	DirectiveDefinition -> TypeSystemDefinition
+
+	#TypeSystemExtension -> TypeSystemDefinitionOrExtension
+	SchemaExtension -> TypeSystemExtension
+	TypeExtension -> TypeSystemExtension
+
+
+####################################################################################
+OperationDefinition::
+	OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
+	SelectionSet
+
+SelectionSet:
+{ Selection[list] }
+
+Selection:
+	Field
+	FragmentSpread
+	InlineFragment
+
+Field:
+Alias[opt] Name Arguments[opt] Directives[opt] SelectionSet[opt]
+
+Argument:
+Name : Value
+
+FragmentSpread:
+... FragmentName Directives[opt]
+
+InlineFragment:
+... TypeCondition[opt] Directives[opt] SelectionSet
+
+TypeCondition:
+on NamedType
+
+VariableDefinition:
+Variable : Type DefaultValue[opt] Directives[opt]
+
+DirectiveDefinition:
+Description[opt] directive @ Name ArgumentsDefinition[opt] repeatable[opt] on DirectiveLocations
+
+ArgumentsDefinition:
+( InputValueDefinition[list] )
+
+InputValueDefinition:
+Description[opt] Name : Type DefaultValue[opt] Directives[opt]
+
+
+Type:
+	NamedType
+	ListType
+	NonNullType
+-----------------------------------
+
+FragmentDefinition::
+	fragment FragmentName TypeCondition Directives[opt] SelectionSet
+
+SchemaDefinition::
+	Description[opt] schema Directives[opt] { RootOperationTypeDefinition[list] }
+
+RootOperationTypeDefinition: 
+    OperationTypeDefinition:
+OperationType : NamedType
+
+ScalarTypeDefinition::
+Description[opt] scalar Name Directives[opt]
+
+
+ObjectTypeDefinition::
+Description[opt] type Name ImplementsInterfaces[opt] Directives[opt] { FieldsDefinition }
+Description[opt] type Name ImplementsInterfaces[opt] Directives[opt]
+
+
+FieldDefinition::
+Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
+
+InterfaceTypeDefinition::
+Description[opt] interface Name ImplementsInterfaces[opt] Directives[opt] FieldsDefinition
+Description[opt] interface Name ImplementsInterfaces[opt] Directives[opt]
+
+
+UnionTypeDefinition::
+Description[opt] union Name Directives[opt] UnionMemberTypes[opt]
+
+example: union SearchResult = Lift | Trail
+
+EnumTypeDefinition::
+Description[opt] enum Name Directives[opt] EnumValuesDefinition
+Description[opt] enum Name Directives[opt]
+
+EnumValueDefinition:
+Description[opt] EnumValue Directives[opt]
+
+example:
+enum Direction {
+  NORTH
+  EAST
+  SOUTH
+  WEST
+}
+
+
+InputObjectTypeDefinition::
+Description[opt] input Name Directives[opt] InputFieldsDefinition
+Description[opt] input Name Directives[opt]
+
+
+Variable:
+$ Name
+
+DefaultValue:
+= Value
+
+
+Value:
+	Variable
+	IntValue
+	FloatValue
+	StringValue
+	BooleanValue
+	NullValue
+	EnumValue
+	ListValue
+	ObjectValue
+
+Name:
+ NameStart Letter Digit
+####################################################################################
+
+RootOperationTypeDefinition::
+ OperationType : NamedType
+
+
+Type::
+	1. NamedType
+	2. ListType
+	3. NonNullType
+
+NamedType
+	Name
+
+ListType
+	[Type]
+
+NonNullType
+	NamedType!
+	ListType!
+
+
+QUERY
+MUTATION
+SUBSCRIPTION
+FIELD
+FRAGMENT_DEFINITION
+FRAGMENT_SPREAD
+INLINE_FRAGMENT
+VARIABLE_DEFINITION
+
+SCHEMA
+SCALAR
+OBJECT
+FIELD_DEFINITION
+ARGUMENT_DEFINITION
+INTERFACE
+UNION
+ENUM
+ENUM_VALUE
+INPUT_OBJECT
+INPUT_FIELD_DEFINITION
+-
+
+OperationTypeDefinition
+ScalarDefinition
+
+extend scalar Name Directives
+
+extend type Name ImplementsInterfaces[opt] Directives [Cons][opt] FieldsDefinition
+
+```
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
