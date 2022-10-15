@@ -81,9 +81,22 @@ type SelectionSet struct {
 }
 
 type Type interface {
-	Name() string
+	Node
 	String() string
-	Error() error
+}
+
+// Name implements Node & Type
+var _ Type = (*Name)(nil)
+
+func (n *Name) TokenLiteral() string {
+	return n.Token.Literal
+}
+
+func (n *Name) GetKind() string {
+	return n.Kind
+}
+func (n *Name) String() string {
+	return n.Value
 }
 
 type TypeDefinition interface {
