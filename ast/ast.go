@@ -170,7 +170,7 @@ var _ Type = (*NonNullType)(nil)
 
 // Named implements Node, Type
 type NamedType struct {
-	Kind  string
+	Kind  string //NAMED_TYPE
 	Token token.Token
 	Name  *Name
 }
@@ -187,7 +187,7 @@ func (n *NamedType) String() string {
 }
 
 type ListType struct {
-	Kind  string
+	Kind  string //LIST_TYPE
 	Token token.Token
 	Type  Type
 }
@@ -203,7 +203,7 @@ func (l *ListType) String() string {
 }
 
 type NonNullType struct {
-	Kind  string
+	Kind  string //NONNULL_TYPE
 	Token token.Token
 	Type  Type
 }

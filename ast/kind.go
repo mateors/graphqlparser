@@ -12,4 +12,7 @@ const (
 	SELECTION_SET          = "SelectionSet"
 	FRAGMENT_SPREAD        = "FragmentSpread"
 	INLINE_FRAGMENT        = "InlineFragment"
+	NAMED_TYPE             = "NamedType"
+	LIST_TYPE              = "ListType"
+	NONNULL_TYPE           = "NonNullType"
 )
