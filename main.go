@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/mateors/graphqlparser/lexer"
 	"github.com/mateors/graphqlparser/token"
@@ -16,7 +18,17 @@ func main() {
 
 	// fmt.Println(lower('S'))
 	// fmt.Println(32 | 83)
-	// os.Exit(1)
+
+	vals := []string{"NamedEntity", "ValuedEntity"}
+	var infcs string
+	for _, iname := range vals {
+		//iname := inf.Value
+		infcs += fmt.Sprintf("%s & ", iname)
+	}
+	infcs = strings.TrimRight(infcs, " & ")
+	fmt.Println(infcs)
+
+	os.Exit(1)
 
 	input := `type Person {
 		id: ID!

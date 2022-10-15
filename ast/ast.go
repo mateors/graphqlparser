@@ -1,6 +1,12 @@
 package ast
 
-import "github.com/mateors/graphqlparser/token"
+import (
+	"bytes"
+	"fmt"
+	"strings"
+
+	"github.com/mateors/graphqlparser/token"
+)
 
 type Node interface {
 	TokenLiteral() string
@@ -77,7 +83,7 @@ type Argument struct {
 	Value Value
 }
 
-//Implements Node
+// Implements Node
 type SelectionSet struct {
 	Kind       string //
 	Token      token.Token
@@ -158,17 +164,27 @@ type Type interface {
 }
 
 // Name implements Node & Type
-var _ Type = (*Name)(nil)
+var _ Type = (*NamedType)(nil)
 
-func (n *Name) TokenLiteral() string {
-	return n.Token.Literal
+//var _ Type = (*ListType)(nil)
+//var _ Type = (*NonNullType)(nil)
+
+// Named implements Node, Type
+type NamedType struct {
+	Kind  string
+	Token token.Token
+	Name  *Name
 }
 
-func (n *Name) GetKind() string {
+func (n *NamedType) TokenLiteral() string {
+	return n.Name.Token.Literal
+}
+
+func (n *NamedType) GetKind() string {
 	return n.Kind
 }
-func (n *Name) String() string {
-	return n.Value
+func (n *NamedType) String() string {
+	return n.GetKind()
 }
 
 type TypeDefinition interface {
@@ -178,7 +194,7 @@ type TypeDefinition interface {
 	GetSelectionSet() *SelectionSet
 }
 
-//var _ TypeDefinition = (*ScalarDefinition)(nil)
+// var _ TypeDefinition = (*ScalarDefinition)(nil)
 var _ TypeDefinition = (*ObjectDefinition)(nil)
 
 //var _ TypeDefinition = (*InterfaceDefinition)(nil)
@@ -217,6 +233,33 @@ func (ob *ObjectDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 
+func (ob *ObjectDefinition) String() string {
+	var out bytes.Buffer
+
+	name := ob.Name.Value
+	out.WriteString("type" + " ")
+	out.WriteString(name + " " + "implements" + " ")
+
+	var infcs string
+	for _, inf := range ob.Interfaces {
+		iname := inf.Value
+		infcs += fmt.Sprintf("%s & ", iname)
+	}
+	infcs = strings.TrimRight(infcs, " & ")
+	out.WriteString(infcs + " ")
+	out.WriteString("{")
+
+	//ob.Fields.String()
+	for _, field := range ob.Fields {
+		field.String()
+	}
+
+	out.WriteString("}")
+	return out.String()
+}
+
+var _ Node = (*FieldDefinition)(nil)
+
 type FieldDefinition struct {
 	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
 	//ArgumentsDefinition: ( InputValueDefinition[list] )
@@ -227,6 +270,23 @@ type FieldDefinition struct {
 	Arguments   []*InputValueDefinition
 	Type        Type
 	Directives  []*Directive
+}
+
+func (fd *FieldDefinition) TokenLiteral() string {
+	return fd.Token.Literal
+}
+func (fd *FieldDefinition) GetKind() string {
+	return fd.Kind
+}
+
+// printer
+func (fd *FieldDefinition) String() string {
+	var out bytes.Buffer
+	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
+	//name: String
+	//name: String!
+
+	return out.String()
 }
 
 type InputValueDefinition struct {
