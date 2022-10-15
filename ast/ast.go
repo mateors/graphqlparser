@@ -91,8 +91,8 @@ type Selection interface {
 
 // Ensure that all definition types implements Selection interface
 var _ Selection = (*Field)(nil)
+var _ Selection = (*FragmentSpread)(nil)
 
-//var _ Selection = (*FragmentSpread)(nil)
 //var _ Selection = (*InlineFragment)(nil)
 
 type Field struct {
@@ -114,6 +114,24 @@ func (f *Field) GetKind() string {
 }
 func (f *Field) GetSelectionSet() *SelectionSet {
 	return f.SelectionSet
+}
+
+type FragmentSpread struct {
+	//...FragmentName Directives[opt]
+	Kind         string //FRAGMENT_SPREAD
+	Token        token.Token
+	FragmentName *Name
+	Directives   []*Directive
+}
+
+func (fs *FragmentSpread) TokenLiteral() string {
+	return fs.Token.Literal
+}
+func (fs *FragmentSpread) GetKind() string {
+	return fs.Kind
+}
+func (fs *FragmentSpread) GetSelectionSet() *SelectionSet {
+	return nil
 }
 
 type Type interface {
