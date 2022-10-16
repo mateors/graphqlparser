@@ -115,6 +115,7 @@ func (a *Argument) String() string {
 	var out bytes.Buffer
 	//Arguments->( Argument[list] )
 	//Argument->Name:Value
+	//aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
 	aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
 	out.WriteString(aval)
 	return out.String()
@@ -473,5 +474,14 @@ func (s *StringValue) GetKind() string {
 }
 
 func (s *StringValue) GetValue() interface{} {
+	fmt.Println("kind:", s.Kind)
+	if s.Kind == STRING_VALUE {
+		return s.String()
+	}
 	return s.Value
+}
+func (s *StringValue) String() string {
+	var out bytes.Buffer
+	out.WriteString("\"" + s.Value + "\"")
+	return out.String()
 }

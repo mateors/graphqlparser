@@ -18,4 +18,5 @@ const (
 	STRING_VALUE           = "StringValue"
 	DIRECTIVE              = "Directive"
 	ARGUMENT               = "Argument"
+	ENUM_VALUE             = "EnumValue"
 )

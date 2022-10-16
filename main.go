@@ -66,7 +66,7 @@ func main() {
 	iv1 := &ast.InputValueDefinition{
 		Name:         &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "unit"},
 		Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "LengthUnit"}},
-		DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "METER"},
+		DefaultValue: &ast.StringValue{Kind: ast.ENUM_VALUE, Token: token.Token{}, Value: "METER"},
 		Directives:   directives,
 	}
 	ivd = append(ivd, iv1)
