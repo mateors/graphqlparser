@@ -364,9 +364,10 @@ type Value interface {
 // Ensure that all value types implements Value interface
 var _ Value = (*Variable)(nil)
 
-//var _ Value = (*IntValue)(nil)
+// var _ Value = (*IntValue)(nil)
 // var _ Value = (*FloatValue)(nil)
-// var _ Value = (*StringValue)(nil)
+var _ Value = (*StringValue)(nil)
+
 // var _ Value = (*BooleanValue)(nil)
 // var _ Value = (*EnumValue)(nil)
 // var _ Value = (*ListValue)(nil)
@@ -389,4 +390,22 @@ func (v *Variable) GetKind() string {
 
 func (v *Variable) GetValue() interface{} {
 	return v.Name
+}
+
+type StringValue struct {
+	Kind  string //VARIABLE
+	Token token.Token
+	Value string
+}
+
+func (s *StringValue) TokenLiteral() string {
+	return s.Token.Literal
+}
+
+func (s *StringValue) GetKind() string {
+	return s.Kind
+}
+
+func (s *StringValue) GetValue() interface{} {
+	return s.Value
 }

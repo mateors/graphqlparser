@@ -15,4 +15,5 @@ const (
 	NAMED_TYPE             = "NamedType"
 	LIST_TYPE              = "ListType"
 	NONNULL_TYPE           = "NonNullType"
+	STRING_VALUE           = "StringValue"
 )

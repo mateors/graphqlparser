@@ -36,7 +36,8 @@ func main() {
 	var ttype ast.Type
 	fd := ast.InputValueDefinition{}
 	fd.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
-	fd.Type = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: ttype}
+	fd.Type = ttype // &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "test"}
+	//ast.NonNullType
 	fmt.Println(fd.String())
 
 	os.Exit(1)
