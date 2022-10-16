@@ -200,7 +200,8 @@ func (l *ListType) GetKind() string {
 	return l.Kind
 }
 func (l *ListType) String() string {
-	return l.GetKind()
+	//return l.GetKind()
+	return fmt.Sprintf("[%s]", l.Type.String())
 }
 
 type NonNullType struct {

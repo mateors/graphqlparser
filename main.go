@@ -37,7 +37,10 @@ func main() {
 	fd := ast.InputValueDefinition{}
 	fd.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
 	//aa := &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}
-	aa := &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}
+	//aa := &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}
+	//aa := &ast.ListType{Kind: ast.LIST_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}
+	aa := &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.ListType{Kind: ast.LIST_TYPE, Token: token.Token{}, Type: &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}}}
+
 	fd.Type = aa // &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "test"}
 	//ast.NonNullType
 
