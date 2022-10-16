@@ -16,4 +16,6 @@ const (
 	LIST_TYPE              = "ListType"
 	NONNULL_TYPE           = "NonNullType"
 	STRING_VALUE           = "StringValue"
+	DIRECTIVE              = "Directive"
+	ARGUMENT               = "Argument"
 )

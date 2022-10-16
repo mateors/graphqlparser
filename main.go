@@ -53,10 +53,21 @@ func main() {
 	fd.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "Float"}}
 	ivd := []*ast.InputValueDefinition{}
 
+	args := []*ast.Argument{}
+	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
+
+	directives := []*ast.Directive{}
+	directives = append(directives, &ast.Directive{
+		Kind:      ast.DIRECTIVE,
+		Name:      &ast.Name{Kind: ast.NAME, Value: "excludeField"},
+		Arguments: args,
+	})
+
 	iv1 := &ast.InputValueDefinition{
 		Name:         &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "unit"},
 		Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "LengthUnit"}},
 		DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "METER"},
+		Directives:   directives,
 	}
 	ivd = append(ivd, iv1)
 	fd.Arguments = ivd

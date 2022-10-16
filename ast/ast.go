@@ -69,6 +69,8 @@ type VariableDefinition struct {
 	Directives   []*Directive
 }
 
+var _ Node = (*Directive)(nil)
+
 type Directive struct {
 	Kind      string
 	Token     token.Token
@@ -76,11 +78,46 @@ type Directive struct {
 	Arguments []*Argument
 }
 
+func (d *Directive) TokenLiteral() string {
+	return d.Token.Literal
+}
+func (d *Directive) GetKind() string {
+	return d.Kind
+}
+func (d *Directive) String() string {
+	var out bytes.Buffer
+	//@Name Arguments[opt]
+	var args string
+	for _, arg := range d.Arguments {
+		args += fmt.Sprintf("%s, ", arg.String())
+	}
+	args = strings.TrimRight(args, ", ")
+	out.WriteString(" @" + d.Name.Value + "(" + args + ")")
+	return out.String()
+}
+
+var _ Node = (*Argument)(nil)
+
 type Argument struct {
 	Kind  string
 	Token token.Token
 	Name  *Name
 	Value Value
+}
+
+func (a *Argument) TokenLiteral() string {
+	return a.Token.Literal
+}
+func (a *Argument) GetKind() string {
+	return a.Kind
+}
+func (a *Argument) String() string {
+	var out bytes.Buffer
+	//Arguments->( Argument[list] )
+	//Argument->Name:Value
+	aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
+	out.WriteString(aval)
+	return out.String()
 }
 
 // Implements Node
@@ -365,6 +402,20 @@ func (iv *InputValueDefinition) String() string {
 		if len(defaultValue) > 0 {
 			out.WriteString(fmt.Sprintf(" = %s", defaultValue))
 		}
+	}
+
+	directives := []string{}
+	for _, directive := range iv.Directives {
+		directives = append(directives, fmt.Sprintf("%v", directive.String()))
+	}
+
+	if len(directives) > 0 {
+		var dstr string
+		for _, str := range directives {
+			dstr += fmt.Sprintf("%s ", str)
+		}
+		dstr = strings.TrimRight(dstr, " ")
+		out.WriteString(dstr)
 	}
 	return out.String()
 }
