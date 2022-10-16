@@ -282,7 +282,7 @@ func (ob *ObjectDefinition) String() string {
 
 	//ob.Fields.String()
 	for _, field := range ob.Fields {
-		field.String()
+		field.String() //??
 	}
 
 	out.WriteString("}")
@@ -316,7 +316,17 @@ func (fd *FieldDefinition) String() string {
 	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
 	//name: String
 	//name: String!
-
+	out.WriteString(fd.Name.Value)
+	if len(fd.Arguments) > 0 {
+		out.WriteString("(")
+		var vals string
+		for _, arg := range fd.Arguments {
+			vals += fmt.Sprintf("%s, ", arg.String())
+		}
+		vals = strings.TrimRight(vals, ", ")
+		out.WriteString(vals)
+		out.WriteString(")")
+	}
 	return out.String()
 }
 
@@ -329,6 +339,21 @@ type InputValueDefinition struct {
 	Type         Type
 	DefaultValue Value
 	Directives   []*Directive
+}
+
+func (iv *InputValueDefinition) TokenLiteral() string {
+	return iv.Token.Literal
+}
+func (iv *InputValueDefinition) GetKind() string {
+	return iv.Kind
+}
+func (iv *InputValueDefinition) String() string {
+	var out bytes.Buffer
+	name := fmt.Sprintf("%v", iv.Name.Value)
+	ttype := fmt.Sprintf("%v", iv.Type)
+
+	out.WriteString(name + ": " + ttype)
+	return out.String()
 }
 
 type Value interface {

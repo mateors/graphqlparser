@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
+	"github.com/mateors/graphqlparser/ast"
 	"github.com/mateors/graphqlparser/lexer"
 	"github.com/mateors/graphqlparser/token"
 )
@@ -14,19 +14,30 @@ func lower(ch byte) byte {
 	return ('a' - 'A') | ch
 }
 
+type Lift struct {
+	Name string
+	Size int
+}
+
 func main() {
 
 	// fmt.Println(lower('S'))
 	// fmt.Println(32 | 83)
 
-	vals := []string{"NamedEntity", "ValuedEntity"}
-	var infcs string
-	for _, iname := range vals {
-		//iname := inf.Value
-		infcs += fmt.Sprintf("%s & ", iname)
-	}
-	infcs = strings.TrimRight(infcs, " & ")
-	fmt.Println(infcs)
+	// vals := []string{"NamedEntity", "ValuedEntity"}
+	// var infcs string
+	// for _, iname := range vals {
+	// 	//iname := inf.Value
+	// 	infcs += fmt.Sprintf("%s & ", iname)
+	// }
+	// infcs = strings.TrimRight(infcs, " & ")
+	// fmt.Println(infcs)
+
+	var ttype ast.Type
+	fd := ast.InputValueDefinition{}
+	fd.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
+	fd.Type = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: ttype}
+	fmt.Println(fd.String())
 
 	os.Exit(1)
 
