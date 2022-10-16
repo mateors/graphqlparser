@@ -34,18 +34,34 @@ func main() {
 	// fmt.Println(infcs)
 
 	//var ttype ast.Type
-	fd := ast.InputValueDefinition{}
-	fd.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
+	iv := ast.InputValueDefinition{}
+	iv.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
 	//aa := &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}
 	//aa := &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}
 	//aa := &ast.ListType{Kind: ast.LIST_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}
 	aa := &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.ListType{Kind: ast.LIST_TYPE, Token: token.Token{}, Type: &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: token.Token{}, Type: &ast.NamedType{Kind: "Name", Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}}}
 
-	fd.Type = aa // &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "test"}
+	iv.Type = aa // &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "test"}
 	//ast.NonNullType
 
-	fmt.Println(fd.String())
+	//fmt.Println(iv.String())
 
+	fd := ast.FieldDefinition{}
+	fd.Kind = ast.FIELD_DEFINITION
+	fd.Token = token.Token{}
+	fd.Name = &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "length"}
+	fd.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "Float"}}
+	ivd := []*ast.InputValueDefinition{}
+
+	iv1 := &ast.InputValueDefinition{
+		Name:         &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "unit"},
+		Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "LengthUnit"}},
+		DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Token: token.Token{}, Value: "METER"},
+	}
+	ivd = append(ivd, iv1)
+	fd.Arguments = ivd
+
+	fmt.Println(">>", fd.String())
 	os.Exit(1)
 
 	input := `type Person {

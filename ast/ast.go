@@ -331,6 +331,8 @@ func (fd *FieldDefinition) String() string {
 		vals = strings.TrimRight(vals, ", ")
 		out.WriteString(vals)
 		out.WriteString(")")
+
+		out.WriteString(": " + fd.Type.String())
 	}
 	return out.String()
 }
@@ -356,8 +358,14 @@ func (iv *InputValueDefinition) String() string {
 	var out bytes.Buffer
 	name := fmt.Sprintf("%v", iv.Name.Value)
 	ttype := fmt.Sprintf("%v", iv.Type)
-
 	out.WriteString(name + ": " + ttype)
+
+	if iv.DefaultValue != nil {
+		defaultValue := fmt.Sprintf("%v", iv.DefaultValue.GetValue())
+		if len(defaultValue) > 0 {
+			out.WriteString(fmt.Sprintf(" = %s", defaultValue))
+		}
+	}
 	return out.String()
 }
 
