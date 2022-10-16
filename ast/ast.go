@@ -183,7 +183,8 @@ func (n *NamedType) GetKind() string {
 	return n.Kind
 }
 func (n *NamedType) String() string {
-	return n.GetKind()
+	//n.Name.Value n.GetKind()
+	return n.Name.Value
 }
 
 type ListType struct {
@@ -215,7 +216,10 @@ func (n *NonNullType) GetKind() string {
 	return n.Kind
 }
 func (n *NonNullType) String() string {
-	return n.GetKind()
+
+	//n.Type.String()
+	//return n.GetKind()
+	return fmt.Sprintf("%s!", n.Type.String())
 }
 
 type TypeDefinition interface {
@@ -391,6 +395,8 @@ func (v *Variable) GetKind() string {
 func (v *Variable) GetValue() interface{} {
 	return v.Name
 }
+
+var _ Node = (*StringValue)(nil)
 
 type StringValue struct {
 	Kind  string //VARIABLE
