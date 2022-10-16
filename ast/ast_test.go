@@ -44,20 +44,24 @@ func TestInputValueDefinition2(t *testing.T) {
 		expectedOutput string
 	}{
 		{
-			InputValueDefinition{Name: &Name{Kind: "Name", Token: token.Token{}, Value: "name"}, Type: &NamedType{Kind: NAMED_TYPE, Token: token.Token{}, Name: &Name{Kind: "Name", Token: token.Token{}, Value: "String"}}},
+			InputValueDefinition{Name: &Name{Kind: NAME, Token: token.Token{}, Value: "name"}, Type: &NamedType{Kind: NAMED_TYPE, Token: token.Token{}, Name: &Name{Kind: NAME, Token: token.Token{}, Value: "String"}}},
 			"name: String",
 		},
 		{
-			InputValueDefinition{Name: &Name{Kind: "Name", Token: token.Token{}, Value: "name"}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &NamedType{Kind: "Name", Token: token.Token{}, Name: &Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}},
+			InputValueDefinition{Name: &Name{Kind: NAME, Token: token.Token{}, Value: "name"}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &NamedType{Kind: NAME, Token: token.Token{}, Name: &Name{Kind: NAME, Token: token.Token{}, Value: "String"}}}},
 			"name: String!",
 		},
 
 		{
-			InputValueDefinition{Name: &Name{Kind: "Name", Token: token.Token{}, Value: "name"}, Type: &ListType{Kind: LIST_TYPE, Token: token.Token{}, Type: &NamedType{Kind: "Name", Token: token.Token{}, Name: &Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}},
+			InputValueDefinition{Name: &Name{Kind: NAME, Token: token.Token{}, Value: "name"}, Type: &ListType{Kind: LIST_TYPE, Token: token.Token{}, Type: &NamedType{Kind: NAME, Token: token.Token{}, Name: &Name{Kind: NAME, Token: token.Token{}, Value: "String"}}}},
 			"name: [String]",
 		},
 		{
-			InputValueDefinition{Name: &Name{Kind: "Name", Token: token.Token{}, Value: "name"}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &ListType{Kind: LIST_TYPE, Token: token.Token{}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &NamedType{Kind: "Name", Token: token.Token{}, Name: &Name{Kind: "Name", Token: token.Token{}, Value: "String"}}}}}},
+			InputValueDefinition{Name: &Name{Kind: NAME, Token: token.Token{}, Value: "name"}, Type: &ListType{Kind: LIST_TYPE, Token: token.Token{}, Type: &NonNullType{Kind: NAME, Token: token.Token{}, Type: &NamedType{Kind: NAME, Token: token.Token{}, Name: &Name{Kind: NAME, Token: token.Token{}, Value: "String"}}}}},
+			"name: [String!]",
+		},
+		{
+			InputValueDefinition{Name: &Name{Kind: NAME, Token: token.Token{}, Value: "name"}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &ListType{Kind: LIST_TYPE, Token: token.Token{}, Type: &NonNullType{Kind: NONNULL_TYPE, Token: token.Token{}, Type: &NamedType{Kind: NAME, Token: token.Token{}, Name: &Name{Kind: NAME, Token: token.Token{}, Value: "String"}}}}}},
 			"name: [String!]!",
 		},
 	}
