@@ -55,11 +55,18 @@ func main() {
 
 	args := []*ast.Argument{}
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
+	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
 
 	directives := []*ast.Directive{}
 	directives = append(directives, &ast.Directive{
 		Kind:      ast.DIRECTIVE,
 		Name:      &ast.Name{Kind: ast.NAME, Value: "excludeField"},
+		Arguments: args,
+	})
+
+	directives = append(directives, &ast.Directive{
+		Kind:      ast.DIRECTIVE,
+		Name:      &ast.Name{Kind: ast.NAME, Value: "skip"},
 		Arguments: args,
 	})
 
