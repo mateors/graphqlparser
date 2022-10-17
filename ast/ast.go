@@ -431,9 +431,9 @@ var _ Value = (*Variable)(nil)
 var _ Value = (*IntValue)(nil)
 var _ Value = (*FloatValue)(nil)
 var _ Value = (*StringValue)(nil)
+var _ Value = (*BooleanValue)(nil)
+var _ Value = (*EnumValue)(nil)
 
-// var _ Value = (*BooleanValue)(nil)
-// var _ Value = (*EnumValue)(nil)
 // var _ Value = (*ListValue)(nil)
 // var _ Value = (*ObjectValue)(nil)
 
@@ -551,5 +551,27 @@ func (v *FloatValue) GetValue() interface{} {
 	return v.Value
 }
 func (v *FloatValue) String() string {
+	return fmt.Sprint(v.Value)
+}
+
+var _ Node = (*EnumValue)(nil)
+var _ Value = (*EnumValue)(nil)
+
+type EnumValue struct {
+	Kind  string //ENUM_VALUE
+	Token token.Token
+	Value string
+}
+
+func (v *EnumValue) TokenLiteral() string {
+	return v.Token.Literal
+}
+func (v *EnumValue) GetKind() string {
+	return v.Kind
+}
+func (v *EnumValue) GetValue() interface{} {
+	return v.Value
+}
+func (v *EnumValue) String() string {
 	return fmt.Sprint(v.Value)
 }
