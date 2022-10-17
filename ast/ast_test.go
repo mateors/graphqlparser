@@ -77,13 +77,36 @@ func TestInputValueDefinition2(t *testing.T) {
 
 func TestFieldDefinition(t *testing.T) {
 
+	ivd := []*InputValueDefinition{}
+	args := []*Argument{}
+	args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "name"}, Value: &StringValue{Kind: STRING_VALUE, Value: "photo"}})
+
+	// directives := []*Directive{}
+	// directives = append(directives, &Directive{
+	// 	Kind:      DIRECTIVE,
+	// 	Name:      &Name{Kind: NAME, Value: "excludeField"},
+	// 	Arguments: args,
+	// })
+
+	iv1 := &InputValueDefinition{
+		Name:         &Name{Kind: NAME, Token: token.Token{}, Value: "unit"},
+		Type:         &NamedType{Kind: NAMED_TYPE, Token: token.Token{}, Name: &Name{Kind: "Name", Token: token.Token{}, Value: "LengthUnit"}},
+		DefaultValue: &StringValue{Kind: ENUM_VALUE, Token: token.Token{}, Value: "METER"},
+		Directives:   nil,
+	}
+	ivd = append(ivd, iv1)
+
 	field := FieldDefinition{}
 	field.Kind = FIELD_DEFINITION
 	field.Name = &Name{Kind: NAME, Value: "name"}
+	field.Arguments = ivd
 	field.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}
 
-	expectedString := "name: String"
-	if field.String() != "name: String" {
+	//fmt.Println(field.String())
+	//expectedString := `name(unit: LengthUnit = METER @excludeField(name: "photo")): String`
+	expectedString := `name(unit: LengthUnit = METER): String`
+
+	if field.String() != expectedString {
 		t.Errorf("wrong output,expected=%q, got=%q", expectedString, field.String())
 	}
 
