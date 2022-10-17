@@ -460,7 +460,7 @@ func (v *Variable) GetValue() interface{} {
 var _ Node = (*StringValue)(nil)
 
 type StringValue struct {
-	Kind  string //VARIABLE
+	Kind  string //STRING_VALUE
 	Token token.Token
 	Value string
 }
@@ -484,4 +484,27 @@ func (s *StringValue) String() string {
 	var out bytes.Buffer
 	out.WriteString("\"" + s.Value + "\"")
 	return out.String()
+}
+
+var _ Node = (*BooleanValue)(nil)
+
+type BooleanValue struct {
+	Kind  string //BOOLEAN_VALUE
+	Token token.Token
+	Value bool
+}
+
+func (b *BooleanValue) TokenLiteral() string {
+	return b.Token.Literal
+}
+
+func (b *BooleanValue) GetKind() string {
+	return b.Kind
+}
+
+func (b *BooleanValue) GetValue() interface{} {
+	return b.Value
+}
+func (s *BooleanValue) String() string {
+	return fmt.Sprint(s.Value)
 }

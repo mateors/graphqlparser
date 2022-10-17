@@ -19,4 +19,5 @@ const (
 	DIRECTIVE              = "Directive"
 	ARGUMENT               = "Argument"
 	ENUM_VALUE             = "EnumValue"
+	BOOLEAN_VALUE          = "BooleanValue"
 )

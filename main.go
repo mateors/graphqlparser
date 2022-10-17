@@ -55,7 +55,7 @@ func main() {
 
 	args := []*ast.Argument{}
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
-	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
+	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.STRING_VALUE, Value: true}})
 
 	directives := []*ast.Directive{}
 	directives = append(directives, &ast.Directive{
@@ -63,12 +63,11 @@ func main() {
 		Name:      &ast.Name{Kind: ast.NAME, Value: "excludeField"},
 		Arguments: args,
 	})
-
-	directives = append(directives, &ast.Directive{
-		Kind:      ast.DIRECTIVE,
-		Name:      &ast.Name{Kind: ast.NAME, Value: "skip"},
-		Arguments: args,
-	})
+	// directives = append(directives, &ast.Directive{
+	// 	Kind:      ast.DIRECTIVE,
+	// 	Name:      &ast.Name{Kind: ast.NAME, Value: "skip"},
+	// 	Arguments: args,
+	// })
 
 	iv1 := &ast.InputValueDefinition{
 		Name:         &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "unit"},
