@@ -22,4 +22,5 @@ const (
 	BOOLEAN_VALUE          = "BooleanValue"
 	INT_VALUE              = "IntValue"
 	FLOAT_VALUE            = "FloatValue"
+	LIST_VALUE             = "ListValue"
 )

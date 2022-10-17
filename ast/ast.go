@@ -480,9 +480,12 @@ func (s *StringValue) GetValue() interface{} {
 	return s.Value
 }
 func (s *StringValue) String() string {
-	var out bytes.Buffer
-	out.WriteString("\"" + s.Value + "\"")
-	return out.String()
+	//var out bytes.Buffer
+	//fmt.Println("sKind:", s.Kind)
+	//out.WriteString("\"" + s.Value + "\"")
+	var vals string = fmt.Sprintf(`"%s"`, s.Value)
+	//vals = strings.TrimRight(vals, ", ")
+	return vals
 }
 
 var _ Node = (*BooleanValue)(nil)
@@ -575,3 +578,40 @@ func (v *EnumValue) GetValue() interface{} {
 func (v *EnumValue) String() string {
 	return fmt.Sprint(v.Value)
 }
+
+var _ Node = (*ListValue)(nil)
+var _ Value = (*ListValue)(nil)
+
+type ListValue struct {
+	Kind   string //LIST_VALUE
+	Token  token.Token
+	Values []Value
+}
+
+func (v *ListValue) TokenLiteral() string {
+	return v.Token.Literal
+}
+func (v *ListValue) GetKind() string {
+	return v.Kind
+}
+func (v *ListValue) GetValue() interface{} {
+
+	//fmt.Println("listGet", v.Kind, v.Values)
+	var vals string
+	for _, val := range v.Values {
+		//sval := val.(*StringValue)
+		vals += fmt.Sprintf("%v, ", val)
+	}
+	vals = strings.TrimRight(vals, ", ")
+	return fmt.Sprintf("[%s]", vals) //v.Values
+}
+
+// func (v *ListValue) String() string {
+// 	var vals string
+// 	for _, val := range v.Values {
+// 		vals += fmt.Sprintf("%v, ", val)
+// 		fmt.Println("****")
+// 	}
+// 	vals = strings.TrimRight(vals, ", ")
+// 	return fmt.Sprintf("[%s]*", vals)
+// }
