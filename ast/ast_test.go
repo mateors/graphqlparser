@@ -109,3 +109,34 @@ func TestFieldDefinition(t *testing.T) {
 	}
 
 }
+
+func TestObjectDefinition(t *testing.T) {
+
+	field := &FieldDefinition{}
+	field.Kind = FIELD_DEFINITION
+	field.Name = &Name{Kind: NAME, Value: "name"}
+	field.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}
+
+	dfields := []*FieldDefinition{}
+	dfields = append(dfields, field)
+
+	field2 := &FieldDefinition{}
+	field2.Kind = FIELD_DEFINITION
+	field2.Name = &Name{Kind: NAME, Value: "age"}
+	//field2.Type = &ast.NonNullType{Kind: ast.NAMED_TYPE, Type: &ast.Name{Kind: ast.NAME, Value: "Int"} }
+	field2.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}}
+	dfields = append(dfields, field2)
+
+	var obj ObjectDefinition
+	obj.Kind = OBJECT_DEFINITION
+	obj.Name = &Name{Kind: NAME, Value: "Lift"}
+	obj.Fields = dfields
+
+	expectedOutput := `type Lift {
+name: String
+age: Int!
+}`
+	if obj.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, obj.String(), len(expectedOutput), len(obj.String()))
+	}
+}
