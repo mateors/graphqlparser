@@ -124,12 +124,6 @@ func (a *Argument) GetKind() string {
 	return a.Kind
 }
 func (a *Argument) String() string {
-	//var out bytes.Buffer
-	//Arguments->( Argument[list] )
-	//Argument->Name:Value
-	//aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
-	//aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value)
-	//out.WriteString(aval)
 	return fmt.Sprintf("%s: %v", a.Name.Value, a.Value)
 }
 
@@ -228,7 +222,6 @@ type NamedType struct {
 func (n *NamedType) TokenLiteral() string {
 	return n.Name.Token.Literal
 }
-
 func (n *NamedType) GetKind() string {
 	return n.Kind
 }
@@ -297,23 +290,18 @@ type ObjectDefinition struct {
 func (ob *ObjectDefinition) TokenLiteral() string {
 	return ob.Token.Literal
 }
-
 func (ob *ObjectDefinition) GetKind() string {
 	return ob.Kind
 }
-
 func (ob *ObjectDefinition) GetOperation() string {
 	return ""
 }
-
 func (ob *ObjectDefinition) GetVariableDefinitions() []*VariableDefinition {
 	return []*VariableDefinition{}
 }
-
 func (ob *ObjectDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
-
 func (ob *ObjectDefinition) String() string {
 	var out bytes.Buffer
 
@@ -641,7 +629,7 @@ var _ Node = (*ObjectField)(nil)
 var _ Value = (*ObjectField)(nil)
 
 type ObjectField struct {
-	Kind  string //
+	Kind  string //OBJECT_FIELD
 	Token token.Token
 	Name  *Name
 	Value Value
