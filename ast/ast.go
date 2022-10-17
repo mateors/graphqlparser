@@ -480,7 +480,7 @@ func (s *StringValue) GetKind() string {
 }
 
 func (s *StringValue) GetValue() interface{} {
-	fmt.Println("kind:", s.Kind)
+	//fmt.Println("kind:", s.Kind)
 	if s.Kind == STRING_VALUE {
 		return s.String()
 	}
@@ -598,15 +598,6 @@ func (v *ListValue) GetKind() string {
 	return v.Kind
 }
 func (v *ListValue) GetValue() interface{} {
-
-	// fmt.Println("listGet", v.Kind, v.Values)
-	// var vals string
-	// for _, val := range v.Values {
-	// 	//sval := val.(*StringValue)
-	// 	vals += fmt.Sprintf("%v, ", val)
-	// }
-	// vals = strings.TrimRight(vals, ", ")
-	// return fmt.Sprintf("[%s]", vals) //v.Values
 	return v.Values
 }
 
@@ -635,13 +626,6 @@ func (v *ObjectValue) GetKind() string {
 	return v.Kind
 }
 func (v *ObjectValue) GetValue() interface{} {
-	// var vals string
-	// for _, val := range v.Fields {
-	// 	//sval := val.(*StringValue)
-	// 	vals += fmt.Sprintf("%v, ", val.GetValue())
-	// }
-	// vals = strings.TrimRight(vals, ", ")
-	// return fmt.Sprintf("{%s}", vals) //v.Values
 	return v.Fields
 }
 func (v *ObjectValue) String() string {
@@ -674,25 +658,5 @@ func (o *ObjectField) GetValue() interface{} {
 }
 
 func (o *ObjectField) String() string {
-
-	// switch objType := o.Value.(type) {
-	// case *FloatValue:
-	// 	//fv := objType.(*FloatValue)
-	// 	return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
-
-	// case *StringValue:
-	// 	//sv := o.Value.(*StringValue)
-	// 	return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
-
-	// case *IntValue:
-	// 	return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
-
-	// case *ListValue:
-	// 	return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
-
-	// default:
-	// 	fmt.Println("notready yet", objType)
-	// }
-	// return ""
 	return fmt.Sprintf("%s: %s", o.Name.String(), o.Value)
 }
