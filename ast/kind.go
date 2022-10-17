@@ -15,9 +15,10 @@ const (
 	NAMED_TYPE             = "NamedType"
 	LIST_TYPE              = "ListType"
 	NONNULL_TYPE           = "NonNullType"
-	STRING_VALUE           = "StringValue"
 	DIRECTIVE              = "Directive"
 	ARGUMENT               = "Argument"
+	STRING_VALUE           = "StringValue"
 	ENUM_VALUE             = "EnumValue"
 	BOOLEAN_VALUE          = "BooleanValue"
+	INT_VALUE              = "IntValue"
 )

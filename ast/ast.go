@@ -508,3 +508,26 @@ func (b *BooleanValue) GetValue() interface{} {
 func (s *BooleanValue) String() string {
 	return fmt.Sprint(s.Value)
 }
+
+var _ Node = (*IntValue)(nil)
+
+type IntValue struct {
+	Kind  string //BOOLEAN_VALUE
+	Token token.Token
+	Value string
+}
+
+func (iv *IntValue) TokenLiteral() string {
+	return iv.Token.Literal
+}
+
+func (iv *IntValue) GetKind() string {
+	return iv.Kind
+}
+
+func (iv *IntValue) GetValue() interface{} {
+	return iv.Value
+}
+func (iv *IntValue) String() string {
+	return fmt.Sprint(iv.Value)
+}
