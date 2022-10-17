@@ -124,13 +124,13 @@ func (a *Argument) GetKind() string {
 	return a.Kind
 }
 func (a *Argument) String() string {
-	var out bytes.Buffer
+	//var out bytes.Buffer
 	//Arguments->( Argument[list] )
 	//Argument->Name:Value
 	//aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
-	aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value.GetValue())
-	out.WriteString(aval)
-	return out.String()
+	//aval := fmt.Sprintf("%s: %v", a.Name.Value, a.Value)
+	//out.WriteString(aval)
+	return fmt.Sprintf("%s: %v", a.Name.Value, a.Value)
 }
 
 // Implements Node
@@ -233,7 +233,6 @@ func (n *NamedType) GetKind() string {
 	return n.Kind
 }
 func (n *NamedType) String() string {
-	//n.Name.Value n.GetKind()
 	return n.Name.Value
 }
 
@@ -250,7 +249,6 @@ func (l *ListType) GetKind() string {
 	return l.Kind
 }
 func (l *ListType) String() string {
-	//return l.GetKind()
 	return fmt.Sprintf("[%s]", l.Type.String())
 }
 
@@ -267,9 +265,6 @@ func (n *NonNullType) GetKind() string {
 	return n.Kind
 }
 func (n *NonNullType) String() string {
-
-	//n.Type.String()
-	//return n.GetKind()
 	return fmt.Sprintf("%s!", n.Type.String())
 }
 
@@ -445,9 +440,8 @@ var _ Value = (*FloatValue)(nil)
 var _ Value = (*StringValue)(nil)
 var _ Value = (*BooleanValue)(nil)
 var _ Value = (*EnumValue)(nil)
-
-// var _ Value = (*ListValue)(nil)
-// var _ Value = (*ObjectValue)(nil)
+var _ Value = (*ListValue)(nil)
+var _ Value = (*ObjectValue)(nil)
 
 // Variable implements Node, Value
 type Variable struct {
@@ -459,13 +453,14 @@ type Variable struct {
 func (v *Variable) TokenLiteral() string {
 	return v.Token.Literal
 }
-
 func (v *Variable) GetKind() string {
 	return v.Kind
 }
-
 func (v *Variable) GetValue() interface{} {
-	return v.Name
+	return v.Name.Value
+}
+func (v *Variable) String() string {
+	return fmt.Sprintf("$%s", v.GetValue())
 }
 
 var _ Node = (*StringValue)(nil)
@@ -492,11 +487,7 @@ func (s *StringValue) GetValue() interface{} {
 	return s.Value
 }
 func (s *StringValue) String() string {
-	//var out bytes.Buffer
-	//fmt.Println("sKind:", s.Kind)
-	//out.WriteString("\"" + s.Value + "\"")
 	var vals string = fmt.Sprintf(`"%s"`, s.Value)
-	//vals = strings.TrimRight(vals, ", ")
 	return vals
 }
 
@@ -645,7 +636,6 @@ func (v *ObjectValue) GetKind() string {
 }
 func (v *ObjectValue) GetValue() interface{} {
 
-	//fmt.Println("listGet", v.Kind, v.Values)
 	var vals string
 	for _, val := range v.Fields {
 		//sval := val.(*StringValue)

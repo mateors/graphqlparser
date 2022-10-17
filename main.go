@@ -55,7 +55,9 @@ func main() {
 
 	args := []*ast.Argument{}
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
+
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.STRING_VALUE, Value: true}})
+	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "isCaching"}}})
 
 	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "age"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "50"}})
 	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "point"}, Value: &ast.FloatValue{Kind: ast.FLOAT_VALUE, Value: "500.45"}})
