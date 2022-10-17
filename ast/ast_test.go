@@ -74,3 +74,17 @@ func TestInputValueDefinition2(t *testing.T) {
 	}
 
 }
+
+func TestFieldDefinition(t *testing.T) {
+
+	field := FieldDefinition{}
+	field.Kind = FIELD_DEFINITION
+	field.Name = &Name{Kind: NAME, Value: "name"}
+	field.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}
+
+	expectedString := "name: String"
+	if field.String() != "name: String" {
+		t.Errorf("wrong output,expected=%q, got=%q", expectedString, field.String())
+	}
+
+}

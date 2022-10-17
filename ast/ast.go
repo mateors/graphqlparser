@@ -364,9 +364,9 @@ func (fd *FieldDefinition) String() string {
 		vals = strings.TrimRight(vals, ", ")
 		out.WriteString(vals)
 		out.WriteString(")")
-
 		out.WriteString(": " + fd.Type.String())
 	}
+	out.WriteString(": " + fd.Type.String())
 	return out.String()
 }
 

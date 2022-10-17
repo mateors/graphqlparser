@@ -33,6 +33,14 @@ func main() {
 	// infcs = strings.TrimRight(infcs, " & ")
 	// fmt.Println(infcs)
 
+	field := ast.FieldDefinition{}
+	field.Kind = ast.FIELD_DEFINITION
+	field.Name = &ast.Name{Kind: ast.NAME, Value: "name"}
+	field.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}
+
+	fmt.Println(field.String())
+	os.Exit(1)
+
 	//var ttype ast.Type
 	iv := ast.InputValueDefinition{}
 	iv.Name = &ast.Name{Kind: "Name", Token: token.Token{}, Value: "name"}
