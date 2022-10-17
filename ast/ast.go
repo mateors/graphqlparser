@@ -428,9 +428,8 @@ type Value interface {
 
 // Ensure that all value types implements Value interface
 var _ Value = (*Variable)(nil)
-
-// var _ Value = (*IntValue)(nil)
-// var _ Value = (*FloatValue)(nil)
+var _ Value = (*IntValue)(nil)
+var _ Value = (*FloatValue)(nil)
 var _ Value = (*StringValue)(nil)
 
 // var _ Value = (*BooleanValue)(nil)
@@ -510,9 +509,10 @@ func (s *BooleanValue) String() string {
 }
 
 var _ Node = (*IntValue)(nil)
+var _ Value = (*IntValue)(nil)
 
 type IntValue struct {
-	Kind  string //BOOLEAN_VALUE
+	Kind  string //IntValue
 	Token token.Token
 	Value string
 }
@@ -530,4 +530,26 @@ func (iv *IntValue) GetValue() interface{} {
 }
 func (iv *IntValue) String() string {
 	return fmt.Sprint(iv.Value)
+}
+
+var _ Node = (*FloatValue)(nil)
+var _ Value = (*FloatValue)(nil)
+
+type FloatValue struct {
+	Kind  string //FLOAT_VALUE
+	Token token.Token
+	Value string
+}
+
+func (v *FloatValue) TokenLiteral() string {
+	return v.Token.Literal
+}
+func (v *FloatValue) GetKind() string {
+	return v.Kind
+}
+func (v *FloatValue) GetValue() interface{} {
+	return v.Value
+}
+func (v *FloatValue) String() string {
+	return fmt.Sprint(v.Value)
 }

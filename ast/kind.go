@@ -21,4 +21,5 @@ const (
 	ENUM_VALUE             = "EnumValue"
 	BOOLEAN_VALUE          = "BooleanValue"
 	INT_VALUE              = "IntValue"
+	FLOAT_VALUE            = "FloatValue"
 )
