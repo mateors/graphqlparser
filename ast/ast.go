@@ -53,10 +53,22 @@ type OperationDefinition struct {
 	SelectionSet        *SelectionSet
 }
 
+var _ Node = (*Name)(nil)
+
 type Name struct {
 	Kind  string
 	Token token.Token
 	Value string
+}
+
+func (n *Name) TokenLiteral() string {
+	return n.Token.Literal
+}
+func (n *Name) GetKind() string {
+	return n.Kind
+}
+func (n *Name) String() string {
+	return n.Value
 }
 
 type VariableDefinition struct {
@@ -596,7 +608,7 @@ func (v *ListValue) GetKind() string {
 }
 func (v *ListValue) GetValue() interface{} {
 
-	//fmt.Println("listGet", v.Kind, v.Values)
+	fmt.Println("listGet", v.Kind, v.Values)
 	var vals string
 	for _, val := range v.Values {
 		//sval := val.(*StringValue)
@@ -637,11 +649,14 @@ func (v *ObjectValue) GetValue() interface{} {
 	var vals string
 	for _, val := range v.Fields {
 		//sval := val.(*StringValue)
-		vals += fmt.Sprintf("%v, ", val)
+		vals += fmt.Sprintf("%v, ", val.GetValue())
 	}
 	vals = strings.TrimRight(vals, ", ")
-	return fmt.Sprintf("[%s]", vals) //v.Values
+	return fmt.Sprintf("{%s}", vals) //v.Values
 }
+
+var _ Node = (*ObjectField)(nil)
+var _ Value = (*ObjectField)(nil)
 
 type ObjectField struct {
 	Kind  string //
@@ -649,3 +664,38 @@ type ObjectField struct {
 	Name  *Name
 	Value Value
 }
+
+func (o *ObjectField) TokenLiteral() string {
+	return o.Token.Literal
+}
+func (o *ObjectField) GetKind() string {
+	return o.Kind
+}
+func (o *ObjectField) GetValue() interface{} {
+
+	switch objType := o.Value.(type) {
+	case *FloatValue:
+		//fv := objType.(*FloatValue)
+		return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
+
+	case *StringValue:
+		//sv := o.Value.(*StringValue)
+		return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
+
+	case *IntValue:
+		return fmt.Sprintf("%s: %s", o.Name.String(), objType.String())
+
+	case *ListValue:
+		return fmt.Sprintf("%s: %s", o.Name.String(), objType.GetValue())
+
+	default:
+		fmt.Println("notready yet", objType)
+	}
+
+	return nil //fmt.Sprintf("%s: %s", o.Name.String(), fv.String())
+}
+
+// func (o *ObjectField) String() string {
+// 	//o.Value.GetValue()
+// 	return fmt.Sprintf("%s: %v", o.Name.String(), o.GetValue())
+// }

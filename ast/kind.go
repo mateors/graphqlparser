@@ -24,4 +24,5 @@ const (
 	FLOAT_VALUE            = "FloatValue"
 	LIST_VALUE             = "ListValue"
 	OBJECT_VALUE           = "ObjectValue"
+	OBJECT_FIELD           = "ObjectField"
 )

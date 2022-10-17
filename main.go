@@ -56,17 +56,23 @@ func main() {
 	args := []*ast.Argument{}
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"}})
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.STRING_VALUE, Value: true}})
+
 	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "age"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "50"}})
 	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "point"}, Value: &ast.FloatValue{Kind: ast.FLOAT_VALUE, Value: "500.45"}})
 
 	vals := []ast.Value{}
 	vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Wania"})
-
-	//vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Arisha"})
-	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "siblings"}, Value: &ast.ListValue{Kind: ast.LIST_VALUE, Values: vals}})
-	
-	vals = append(vals, &ast.ObjectValue{Kind: ast.OBJECT_VALUE, Value: "Wania"})
+	vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Arisha"})
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "siblings"}, Value: &ast.ListValue{Kind: ast.LIST_VALUE, Values: vals}})
+
+	fields := []*ast.ObjectField{}
+	fields = append(fields, &ast.ObjectField{Kind: ast.OBJECT_FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "lat"}, Value: &ast.FloatValue{Kind: ast.FLOAT_VALUE, Value: "12.43"}})
+	fields = append(fields, &ast.ObjectField{Kind: ast.OBJECT_FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "long"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "212"}})
+
+	//vals = append(vals, &ast.ObjectValue{Kind: ast.OBJECT_VALUE, Fields: fields})
+
+	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "siblings"}, Value: &ast.ListValue{Kind: ast.LIST_VALUE, Values: vals}})
+	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "location"}, Value: &ast.ObjectValue{Kind: ast.OBJECT_VALUE, Fields: fields}})
 
 	directives := []*ast.Directive{}
 	directives = append(directives, &ast.Directive{
