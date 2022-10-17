@@ -615,3 +615,37 @@ func (v *ListValue) GetValue() interface{} {
 // 	vals = strings.TrimRight(vals, ", ")
 // 	return fmt.Sprintf("[%s]*", vals)
 // }
+
+var _ Node = (*ObjectValue)(nil)
+var _ Value = (*ObjectValue)(nil)
+
+type ObjectValue struct {
+	Kind   string //OBJECT_VALUE
+	Token  token.Token
+	Fields []*ObjectField
+}
+
+func (v *ObjectValue) TokenLiteral() string {
+	return v.Token.Literal
+}
+func (v *ObjectValue) GetKind() string {
+	return v.Kind
+}
+func (v *ObjectValue) GetValue() interface{} {
+
+	//fmt.Println("listGet", v.Kind, v.Values)
+	var vals string
+	for _, val := range v.Fields {
+		//sval := val.(*StringValue)
+		vals += fmt.Sprintf("%v, ", val)
+	}
+	vals = strings.TrimRight(vals, ", ")
+	return fmt.Sprintf("[%s]", vals) //v.Values
+}
+
+type ObjectField struct {
+	Kind  string //
+	Token token.Token
+	Name  *Name
+	Value Value
+}

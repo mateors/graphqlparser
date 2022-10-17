@@ -23,4 +23,5 @@ const (
 	INT_VALUE              = "IntValue"
 	FLOAT_VALUE            = "FloatValue"
 	LIST_VALUE             = "ListValue"
+	OBJECT_VALUE           = "ObjectValue"
 )

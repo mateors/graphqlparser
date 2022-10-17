@@ -61,8 +61,11 @@ func main() {
 
 	vals := []ast.Value{}
 	vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Wania"})
-	vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Arisha"})
 
+	//vals = append(vals, &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Arisha"})
+	//args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "siblings"}, Value: &ast.ListValue{Kind: ast.LIST_VALUE, Values: vals}})
+	
+	vals = append(vals, &ast.ObjectValue{Kind: ast.OBJECT_VALUE, Value: "Wania"})
 	args = append(args, &ast.Argument{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "siblings"}, Value: &ast.ListValue{Kind: ast.LIST_VALUE, Values: vals}})
 
 	directives := []*ast.Directive{}
