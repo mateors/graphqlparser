@@ -33,12 +33,26 @@ func main() {
 	// infcs = strings.TrimRight(infcs, " & ")
 	// fmt.Println(infcs)
 
-	field := ast.FieldDefinition{}
+	field := &ast.FieldDefinition{}
 	field.Kind = ast.FIELD_DEFINITION
 	field.Name = &ast.Name{Kind: ast.NAME, Value: "name"}
 	field.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}
 
-	fmt.Println(field.String())
+	dfields := []*ast.FieldDefinition{}
+	dfields = append(dfields, field)
+
+	field2 := &ast.FieldDefinition{}
+	field2.Kind = ast.FIELD_DEFINITION
+	field2.Name = &ast.Name{Kind: ast.NAME, Value: "age"}
+	//field2.Type = &ast.NonNullType{Kind: ast.NAMED_TYPE, Type: &ast.Name{Kind: ast.NAME, Value: "Int"} }
+	field2.Type = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}}}
+	dfields = append(dfields, field2)
+
+	var obj ast.ObjectDefinition
+	obj.Kind = ast.OBJECT_DEFINITION
+	obj.Name = &ast.Name{Kind: ast.NAME, Value: "Lift"}
+	obj.Fields = dfields
+	fmt.Println(">>", obj.String())
 	os.Exit(1)
 
 	//var ttype ast.Type

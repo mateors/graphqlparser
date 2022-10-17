@@ -54,6 +54,7 @@ type OperationDefinition struct {
 }
 
 var _ Node = (*Name)(nil)
+var _ Type = (*Name)(nil)
 
 type Name struct {
 	Kind  string
@@ -282,7 +283,7 @@ type ObjectDefinition struct {
 	Token       token.Token
 	Description string
 	Name        *Name
-	Interfaces  []*Name //NAMED
+	Interfaces  []*NamedType //NAMED
 	Directives  []*Directive
 	Fields      []*FieldDefinition
 }
@@ -304,26 +305,26 @@ func (ob *ObjectDefinition) GetSelectionSet() *SelectionSet {
 }
 func (ob *ObjectDefinition) String() string {
 	var out bytes.Buffer
-
 	name := ob.Name.Value
-	out.WriteString("type" + " ")
-	out.WriteString(name + " " + "implements" + " ")
+	out.WriteString("type" + " " + name + " ")
 
-	var infcs string
-	for _, inf := range ob.Interfaces {
-		iname := inf.Value
-		infcs += fmt.Sprintf("%s & ", iname)
+	if len(ob.Interfaces) > 0 {
+		out.WriteString("implements" + " ")
+		var infcs string
+		for _, inf := range ob.Interfaces {
+			//iname := inf.Value
+			infcs += fmt.Sprintf("%s & ", inf)
+		}
+		infcs = strings.TrimRight(infcs, " & ")
+		out.WriteString(infcs + " ")
 	}
-	infcs = strings.TrimRight(infcs, " & ")
-	out.WriteString(infcs + " ")
 	out.WriteString("{")
 
-	//ob.Fields.String()
 	for _, field := range ob.Fields {
-		field.String() //??
+		out.WriteString("\n" + field.String())
 	}
 
-	out.WriteString("}")
+	out.WriteString("\n}")
 	return out.String()
 }
 

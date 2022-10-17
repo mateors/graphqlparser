@@ -78,9 +78,8 @@ func TestInputValueDefinition2(t *testing.T) {
 func TestFieldDefinition(t *testing.T) {
 
 	ivd := []*InputValueDefinition{}
-	args := []*Argument{}
-	args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "name"}, Value: &StringValue{Kind: STRING_VALUE, Value: "photo"}})
-
+	//args := []*Argument{}
+	//args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "name"}, Value: &StringValue{Kind: STRING_VALUE, Value: "photo"}})
 	// directives := []*Directive{}
 	// directives = append(directives, &Directive{
 	// 	Kind:      DIRECTIVE,
@@ -102,7 +101,6 @@ func TestFieldDefinition(t *testing.T) {
 	field.Arguments = ivd
 	field.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}
 
-	//fmt.Println(field.String())
 	//expectedString := `name(unit: LengthUnit = METER @excludeField(name: "photo")): String`
 	expectedString := `name(unit: LengthUnit = METER): String`
 
