@@ -127,12 +127,17 @@ func TestObjectDefinition(t *testing.T) {
 	field2.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}}
 	dfields = append(dfields, field2)
 
+	infcs := []*NamedType{}
+	infcs = append(infcs, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Abs"}})
+	infcs = append(infcs, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Book"}})
+
 	var obj ObjectDefinition
 	obj.Kind = OBJECT_DEFINITION
 	obj.Name = &Name{Kind: NAME, Value: "Lift"}
+	obj.Interfaces = infcs
 	obj.Fields = dfields
 
-	expectedOutput := `type Lift {
+	expectedOutput := `type Lift implements Abs & Book {
 name: String
 age: Int!
 }`

@@ -48,10 +48,15 @@ func main() {
 	field2.Type = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}}}
 	dfields = append(dfields, field2)
 
+	infcs := []*ast.NamedType{}
+	infcs = append(infcs, &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Abs"}})
+	infcs = append(infcs, &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Book"}})
+
 	var obj ast.ObjectDefinition
 	obj.Kind = ast.OBJECT_DEFINITION
 	obj.Name = &ast.Name{Kind: ast.NAME, Value: "Lift"}
 	obj.Fields = dfields
+	obj.Interfaces = infcs
 	fmt.Println(">>", obj.String())
 	os.Exit(1)
 
@@ -130,6 +135,17 @@ func main() {
 		salary: Float!
 		length(unit: LengthUnit = METER): Float
 		appearsIn: [Episode]!
+	}
+
+	interface Book {
+		title: String!
+		author: Author!
+	}
+	  
+	type Textbook implements Book {
+		title: String! # Must be present
+		author: Author! # Must be present
+		courses: [Course!]!
 	}
 	`
 
