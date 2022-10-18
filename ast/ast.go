@@ -382,6 +382,19 @@ func (fd *FieldDefinition) String() string {
 		//out.WriteString(": " + fd.Type.String())
 	}
 	out.WriteString(": " + fd.Type.String())
+
+	directives := []string{}
+	for _, directive := range fd.Directives {
+		directives = append(directives, fmt.Sprintf("%v", directive.String()))
+	}
+	if len(directives) > 0 {
+		var dstr string
+		for _, str := range directives {
+			dstr += fmt.Sprintf("%s ", str)
+		}
+		dstr = strings.TrimRight(dstr, " ")
+		out.WriteString(dstr)
+	}
 	return out.String()
 }
 
