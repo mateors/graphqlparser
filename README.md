@@ -414,6 +414,7 @@ type Lift {
 }
 ```
 
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
@@ -421,3 +422,5 @@ type Lift {
 * https://www.howtographql.com
 * https://www.howtographql.com/basics/2-core-concepts
 * https://www.howtographql.com/basics/3-big-picture
+* https://www.apollographql.com/docs/apollo-server/schema/directives
+* http://snowtooth.herokuapp.com
