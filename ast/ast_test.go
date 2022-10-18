@@ -115,7 +115,8 @@ func TestObjectDefinition(t *testing.T) {
 	field := &FieldDefinition{}
 	field.Kind = FIELD_DEFINITION
 	field.Name = &Name{Kind: NAME, Value: "name"}
-	field.Type = &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}
+	//field.Type = &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}
+	field.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}}
 
 	dfields := []*FieldDefinition{}
 	dfields = append(dfields, field)
@@ -138,7 +139,7 @@ func TestObjectDefinition(t *testing.T) {
 	obj.Fields = dfields
 
 	expectedOutput := `type Lift implements Abs & Book {
-name: [String!]
+name: [String!]!
 age: Int!
 }`
 	if obj.String() != expectedOutput {
