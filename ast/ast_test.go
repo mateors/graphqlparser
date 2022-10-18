@@ -186,7 +186,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 	field.Kind = FIELD_DEFINITION
 	field.Name = &Name{Kind: NAME, Value: "name"}
 	field.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}}
-	field.Directives = directives
+	field.Directives = nil
 
 	dfields := []*FieldDefinition{}
 	dfields = append(dfields, field)
@@ -195,6 +195,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 	field2.Kind = FIELD_DEFINITION
 	field2.Name = &Name{Kind: NAME, Value: "age"}
 	field2.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}}
+	field2.Directives = directives
 	dfields = append(dfields, field2)
 
 	infcs := []*NamedType{}
@@ -209,8 +210,8 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 	obj.Fields = dfields
 
 	expectedOutput := `type Lift implements Abs & Book {
-name: [String!]! @excludeField(name: "photo", caching: true, location: {lat: 12.43, long: 212})
-age: Int!
+name: [String!]!
+age: Int! @excludeField(name: "photo", caching: true, location: {lat: 12.43, long: 212})
 }`
 	if obj.String() != expectedOutput {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, obj.String(), len(expectedOutput), len(obj.String()))
