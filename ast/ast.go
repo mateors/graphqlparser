@@ -316,9 +316,23 @@ func (ob *ObjectDefinition) String() string {
 			infcs += fmt.Sprintf("%s & ", inf)
 		}
 		infcs = strings.TrimRight(infcs, " & ")
-		out.WriteString(infcs + " ")
+		out.WriteString(infcs)
 	}
-	out.WriteString("{")
+
+	directives := []string{}
+	for _, directive := range ob.Directives {
+		directives = append(directives, fmt.Sprintf("%v", directive.String()))
+	}
+	if len(directives) > 0 {
+		var dstr string
+		for _, str := range directives {
+			dstr += fmt.Sprintf("%s ", str)
+		}
+		dstr = strings.TrimRight(dstr, " ")
+		out.WriteString(dstr)
+	}
+
+	out.WriteString(" {")
 
 	for _, field := range ob.Fields {
 		out.WriteString("\n" + field.String())

@@ -132,13 +132,30 @@ func TestObjectDefinition(t *testing.T) {
 	infcs = append(infcs, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Abs"}})
 	infcs = append(infcs, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Book"}})
 
+	args := []*Argument{}
+	args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "name"}, Value: &StringValue{Kind: STRING_VALUE, Value: "photo"}})
+	args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: STRING_VALUE, Value: true}})
+
+	fields := []*ObjectField{}
+	fields = append(fields, &ObjectField{Kind: OBJECT_FIELD, Name: &Name{Kind: NAME, Value: "lat"}, Value: &FloatValue{Kind: FLOAT_VALUE, Value: "12.43"}})
+	fields = append(fields, &ObjectField{Kind: OBJECT_FIELD, Name: &Name{Kind: NAME, Value: "long"}, Value: &IntValue{Kind: INT_VALUE, Value: "212"}})
+	args = append(args, &Argument{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "location"}, Value: &ObjectValue{Kind: OBJECT_VALUE, Fields: fields}})
+
+	directives := []*Directive{}
+	directives = append(directives, &Directive{
+		Kind:      DIRECTIVE,
+		Name:      &Name{Kind: NAME, Value: "excludeField"},
+		Arguments: args,
+	})
+
 	var obj ObjectDefinition
 	obj.Kind = OBJECT_DEFINITION
 	obj.Name = &Name{Kind: NAME, Value: "Lift"}
 	obj.Interfaces = infcs
+	obj.Directives = directives
 	obj.Fields = dfields
 
-	expectedOutput := `type Lift implements Abs & Book {
+	expectedOutput := `type Lift implements Abs & Book @excludeField(name: "photo", caching: true, location: {lat: 12.43, long: 212}) {
 name: [String!]!
 age: Int!
 }`
