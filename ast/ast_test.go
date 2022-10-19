@@ -204,12 +204,16 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 
 	var obj ObjectDefinition
 	obj.Kind = OBJECT_DEFINITION
+	obj.Description = "Description for the type"
 	obj.Name = &Name{Kind: NAME, Value: "Lift"}
 	obj.Interfaces = infcs
 	obj.Directives = nil
 	obj.Fields = dfields
 
-	expectedOutput := `type Lift implements Abs & Book {
+	expectedOutput := `"""
+Description for the type
+"""
+type Lift implements Abs & Book {
 name: [String!]!
 age: Int! @excludeField(name: "photo", caching: true, location: {lat: 12.43, long: 212})
 }`
