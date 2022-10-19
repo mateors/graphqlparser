@@ -25,4 +25,5 @@ const (
 	LIST_VALUE             = "ListValue"
 	OBJECT_VALUE           = "ObjectValue"
 	OBJECT_FIELD           = "ObjectField"
+	INTERFACE_DEFINITION   = "InterfaceDefinition"
 )

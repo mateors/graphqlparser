@@ -271,8 +271,8 @@ type TypeDefinition interface {
 
 // var _ TypeDefinition = (*ScalarDefinition)(nil)
 var _ TypeDefinition = (*ObjectDefinition)(nil)
+var _ TypeDefinition = (*InterfaceDefinition)(nil)
 
-//var _ TypeDefinition = (*InterfaceDefinition)(nil)
 //var _ TypeDefinition = (*UnionDefinition)(nil)
 //var _ TypeDefinition = (*EnumDefinition)(nil)
 //var _ TypeDefinition = (*InputObjectDefinition)(nil)
@@ -488,6 +488,7 @@ func (v *Variable) String() string {
 }
 
 var _ Node = (*StringValue)(nil)
+var _ Type = (*StringValue)(nil)
 
 type StringValue struct {
 	Kind  string //STRING_VALUE
