@@ -124,7 +124,7 @@ func TestObjectDefinition(t *testing.T) {
 	field2 := &FieldDefinition{}
 	field2.Kind = FIELD_DEFINITION
 	field2.Name = &Name{Kind: NAME, Value: "age"}
-	//field2.Type = &ast.NonNullType{Kind: ast.NAMED_TYPE, Type: &ast.Name{Kind: ast.NAME, Value: "Int"} }
+	//field2.Type = &NonNullType{Kind: NAMED_TYPE, Type: &Name{Kind: NAME, Value: "Int"} }
 	field2.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}}
 	dfields = append(dfields, field2)
 
@@ -222,4 +222,63 @@ age: Int! @excludeField(name: "photo", caching: true, location: {lat: 12.43, lon
 	if obj.String() != expectedOutput {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, obj.String(), len(expectedOutput), len(obj.String()))
 	}
+}
+
+func TestInterfaceDefinition(t *testing.T) {
+
+	id := &InterfaceDefinition{}
+	id.Description = &StringValue{Kind: STRING_VALUE, Value: ""}
+	id.Name = &Name{Kind: NAME, Value: "Image"}
+
+	infcs1 := []*NamedType{}
+	infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}})
+	infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}})
+	id.Interfaces = infcs1
+
+	// idirectives := []*Directive{}
+	// idirectives = append(idirectives, &Directive{
+	// 	Kind:  DIRECTIVE,
+	// 	Token: token.Token{},
+	// 	Name:  &Name{Kind: NAME, Value: "addExternalFields"},
+	// 	Arguments: []*Argument{
+	// 		{
+	// 			Kind:  ARGUMENT,
+	// 			Token: token.Token{},
+	// 			Name:  &Name{Kind: NAME, Value: "name"},
+	// 			Value: &StringValue{Kind: STRING_VALUE, Value: "photo"},
+	// 		}, {
+	// 			Kind:  ARGUMENT,
+	// 			Token: token.Token{},
+	// 			Name:  &Name{Kind: NAME, Value: "cache"},
+	// 			Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
+	// 		}},
+	// })
+	id.Directives = nil
+
+	fieldi := &FieldDefinition{}
+	fieldi.Kind = FIELD_DEFINITION
+	fieldi.Name = &Name{Kind: NAME, Value: "name"}
+	fieldi.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}
+
+	fieldi2 := &FieldDefinition{}
+	fieldi2.Kind = FIELD_DEFINITION
+	fieldi2.Name = &Name{Kind: NAME, Value: "value"}
+	fieldi2.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}
+
+	id.Fields = []*FieldDefinition{
+		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "id"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "ID"}}, Directives: nil},
+		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "url"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
+		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "thumbnail"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
+	}
+
+	expectedOutput := `interface Image implements Resource & Node {
+id: ID
+url: String
+thumbnail: String
+}`
+
+	if id.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, id.String(), len(expectedOutput), len(id.String()))
+	}
+
 }
