@@ -307,7 +307,6 @@ func (ob *ObjectDefinition) String() string {
 	var out bytes.Buffer
 
 	if len(ob.Description) > 0 {
-
 		//desc := join([]string{`"""`, desc, `"""`}, sep)
 		out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", ob.Description) + "\n")
 	}
