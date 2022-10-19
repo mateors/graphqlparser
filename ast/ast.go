@@ -311,10 +311,10 @@ func (ob *ObjectDefinition) String() string {
 		out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", ob.Description) + "\n")
 	}
 	name := ob.Name.Value
-	out.WriteString("type" + " " + name + " ")
+	out.WriteString("type" + " " + name)
 
 	if len(ob.Interfaces) > 0 {
-		out.WriteString("implements" + " ")
+		out.WriteString(" implements" + " ")
 		var infcs string
 		for _, inf := range ob.Interfaces {
 			//iname := inf.Value

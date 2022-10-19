@@ -33,6 +33,57 @@ func main() {
 	// infcs = strings.TrimRight(infcs, " & ")
 	// fmt.Println(infcs)
 
+	// maps := map[string]string{
+	// 	{"key": "name"},
+	// }
+
+	id := &ast.InterfaceDefinition{}
+	id.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Description test"}
+	id.Name = &ast.Name{Kind: ast.NAME, Value: "NamedEntity"}
+
+	infcs1 := []*ast.NamedType{}
+	infcs1 = append(infcs1, &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Abs"}})
+	infcs1 = append(infcs1, &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Book"}})
+	id.Interfaces = nil
+
+	idirectives := []*ast.Directive{}
+	idirectives = append(idirectives, &ast.Directive{
+		Kind:  ast.DIRECTIVE,
+		Token: token.Token{},
+		Name:  &ast.Name{Kind: ast.NAME, Value: "addExternalFields"},
+		Arguments: []*ast.Argument{
+			{
+				Kind:  ast.ARGUMENT,
+				Token: token.Token{},
+				Name:  &ast.Name{Kind: ast.NAME, Value: "name"},
+				Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "photo"},
+			}, {
+				Kind:  ast.ARGUMENT,
+				Token: token.Token{},
+				Name:  &ast.Name{Kind: ast.NAME, Value: "cache"},
+				Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true},
+			}},
+	})
+	id.Directives = idirectives
+
+	fieldi := &ast.FieldDefinition{}
+	fieldi.Kind = ast.FIELD_DEFINITION
+	fieldi.Name = &ast.Name{Kind: ast.NAME, Value: "name"}
+	fieldi.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}
+
+	fieldi2 := &ast.FieldDefinition{}
+	fieldi2.Kind = ast.FIELD_DEFINITION
+	fieldi2.Name = &ast.Name{Kind: ast.NAME, Value: "value"}
+	fieldi2.Type = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}}
+
+	ifields := []*ast.FieldDefinition{}
+	ifields = append(ifields, fieldi)
+	ifields = append(ifields, fieldi2)
+
+	id.Fields = ifields
+	fmt.Println(id.String())
+	os.Exit(1)
+
 	field := &ast.FieldDefinition{}
 	field.Kind = ast.FIELD_DEFINITION
 	field.Name = &ast.Name{Kind: ast.NAME, Value: "name"}
