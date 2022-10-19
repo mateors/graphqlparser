@@ -375,6 +375,9 @@ func (fd *FieldDefinition) String() string {
 	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
 	//name: String
 	//name: String!
+	if len(fd.Description) > 0 {
+		out.WriteString(fmt.Sprintf("\"%s\"\n", fd.Description))
+	}
 	out.WriteString(fd.Name.Value)
 	if len(fd.Arguments) > 0 {
 		out.WriteString("(")

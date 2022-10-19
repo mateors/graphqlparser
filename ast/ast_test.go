@@ -184,6 +184,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 
 	field := &FieldDefinition{}
 	field.Kind = FIELD_DEFINITION
+	field.Description = "Field comments or description"
 	field.Name = &Name{Kind: NAME, Value: "name"}
 	field.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}}
 	field.Directives = nil
@@ -214,6 +215,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 Description for the type
 """
 type Lift implements Abs & Book {
+"Field comments or description"
 name: [String!]!
 age: Int! @excludeField(name: "photo", caching: true, location: {lat: 12.43, long: 212})
 }`
