@@ -274,9 +274,61 @@ type TypeDefinition interface {
 var _ TypeDefinition = (*ObjectDefinition)(nil)
 var _ TypeDefinition = (*InterfaceDefinition)(nil)
 var _ TypeDefinition = (*UnionDefinition)(nil)
+var _ TypeDefinition = (*EnumDefinition)(nil)
 
-//var _ TypeDefinition = (*EnumDefinition)(nil)
 //var _ TypeDefinition = (*InputObjectDefinition)(nil)
+
+type EnumDefinition struct {
+	//Description[opt] enum Name Directives[opt] EnumValuesDefinition
+	//Description[opt] enum Name Directives[opt]
+	Kind        string //ENUM_DEFINITION
+	Token       token.Token
+	Description *StringValue
+	Name        *Name
+	Directives  []*Directive
+	Values      []*EnumValueDefinition
+}
+
+type EnumValueDefinition struct {
+}
+
+func (ed *EnumDefinition) TokenLiteral() string {
+	return ed.Token.Literal
+}
+func (ed *EnumDefinition) GetKind() string {
+	return ed.Kind
+}
+func (ed *EnumDefinition) GetOperation() string {
+	return ""
+}
+func (ed *EnumDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (ed *EnumDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (ed *EnumDefinition) String() string {
+
+	name := fmt.Sprintf("%v", ed.Name)
+	types := toSliceString(ed.Values) //?
+
+	directives := toSliceString(ed.Directives)
+	str := join([]string{
+		"union",
+		name,
+		join(directives, " "),
+		"= " + join(types, " | "),
+	}, " ")
+
+	if ed.Description != nil {
+		desc := ed.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
+}
 
 type UnionDefinition struct {
 	//Description[opt] union Name Directives[opt] UnionMemberTypes[opt]
