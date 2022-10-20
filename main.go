@@ -37,6 +37,29 @@ func main() {
 	// 	{"key": "name"},
 	// }
 
+	// evd := ast.EnumValueDefinition{}
+	// evd.Kind = ast.ENUMVALUE_DEFINITION
+	// evd.Description = nil
+	// evd.Name = &ast.Name{Kind: ast.NAME, Value: "NORTH"}
+	// evd.Directives = nil
+	// fmt.Println(evd.String())
+
+	ed := ast.EnumDefinition{}
+	ed.Kind = ast.ENUM_DEFINITION
+	ed.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: ""}
+	ed.Name = &ast.Name{Kind: ast.NAME, Value: "Country"}
+	ed.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+		}},
+	}
+	ed.Values = []*ast.EnumValueDefinition{
+		{Kind: ast.ENUMVALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "BANGLADESH"}},
+		{Kind: ast.ENUMVALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "INDIA"}},
+	}
+	fmt.Println(ed.String())
+	os.Exit(1)
+
 	ud := ast.UnionDefinition{}
 	ud.Kind = ast.UNION_DEFINITION
 	ud.Description = nil //&ast.StringValue{Kind: ast.STRING_VALUE, Value: "Test des"}

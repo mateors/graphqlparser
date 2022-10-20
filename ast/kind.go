@@ -28,4 +28,5 @@ const (
 	INTERFACE_DEFINITION   = "InterfaceDefinition"
 	UNION_DEFINITION       = "UnionDefinition"
 	ENUM_DEFINITION        = "EnumDefinition"
+	ENUMVALUE_DEFINITION   = "EnumValueDefinition"
 )

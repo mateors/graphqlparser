@@ -289,7 +289,49 @@ type EnumDefinition struct {
 	Values      []*EnumValueDefinition
 }
 
+//var _ Value = (*EnumValueDefinition)(nil)
+
 type EnumValueDefinition struct {
+	//Description[opt] EnumValue Directives[opt]
+	Kind        string //ENUMVALUE_DEFINITION
+	Token       token.Token
+	Description *StringValue
+	Name        *Name
+	Directives  []*Directive
+}
+
+func (evd *EnumValueDefinition) TokenLiteral() string {
+	return evd.Token.Literal
+}
+func (evd *EnumValueDefinition) GetKind() string {
+	return evd.Kind
+}
+func (evd *EnumValueDefinition) String() string {
+
+	name := fmt.Sprintf("%v", evd.Name)
+	// directives := []string{}
+	// for _, directive := range evd.Directives {
+	// 	directives = append(directives, fmt.Sprintf("%v", directive.Name))
+	// }
+	directives := toSliceString(evd.Directives)
+
+	str := join([]string{
+		name,
+		join(directives, " "),
+	}, " ")
+
+	// if desc := getDescription(node); desc != "" {
+	// 	str = fmt.Sprintf("\n%s\n%s", desc, str)
+	// }
+
+	if evd.Description != nil {
+		desc := evd.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
 }
 
 func (ed *EnumDefinition) TokenLiteral() string {
@@ -310,14 +352,14 @@ func (ed *EnumDefinition) GetSelectionSet() *SelectionSet {
 func (ed *EnumDefinition) String() string {
 
 	name := fmt.Sprintf("%v", ed.Name)
-	types := toSliceString(ed.Values) //?
+	values := toSliceString(ed.Values) //?
 
 	directives := toSliceString(ed.Directives)
 	str := join([]string{
-		"union",
+		"enum",
 		name,
 		join(directives, " "),
-		"= " + join(types, " | "),
+		block(values),
 	}, " ")
 
 	if ed.Description != nil {
@@ -328,6 +370,24 @@ func (ed *EnumDefinition) String() string {
 		}
 	}
 	return str
+}
+
+func block(Slice interface{}) string {
+	s := toSliceString(Slice)
+	if len(s) == 0 {
+		return "{}"
+	}
+	return indent("{\n"+join(s, "\n")) + "\n}"
+}
+func indent(istring interface{}) string {
+	if istring == nil {
+		return ""
+	}
+	switch str := istring.(type) {
+	case string:
+		return strings.Replace(str, "\n", "\n  ", -1)
+	}
+	return ""
 }
 
 type UnionDefinition struct {
