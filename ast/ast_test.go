@@ -235,43 +235,10 @@ func TestInterfaceDefinition(t *testing.T) {
 		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}},
 		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}},
 	}
-	//infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}})
-	//infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}})
 	id.Interfaces = infcs1
 
-	idirectives := []*Directive{
-		{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "addExternalFields"}, Arguments: []*Argument{
-			{
-				Kind:  ARGUMENT,
-				Token: token.Token{},
-				Name:  &Name{Kind: NAME, Value: "name"},
-				Value: &StringValue{Kind: STRING_VALUE, Value: "photo"},
-			}, {
-				Kind:  ARGUMENT,
-				Token: token.Token{},
-				Name:  &Name{Kind: NAME, Value: "cache"},
-				Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
-			}}},
-
-		{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
-			{
-				Kind:  ARGUMENT,
-				Token: token.Token{},
-				Name:  &Name{Kind: NAME, Value: "name"},
-				Value: &StringValue{Kind: ENUM_VALUE, Value: "id"},
-			}, {
-				Kind:  ARGUMENT,
-				Token: token.Token{},
-				Name:  &Name{Kind: NAME, Value: "cache"},
-				Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
-			}}},
-	}
-
-	// idirectives = append(idirectives, &Directive{
-	// 	Kind:  DIRECTIVE,
-	// 	Token: token.Token{},
-	// 	Name:  &Name{Kind: NAME, Value: "addExternalFields"},
-	// 	Arguments: []*Argument{
+	// idirectives := []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "addExternalFields"}, Arguments: []*Argument{
 	// 		{
 	// 			Kind:  ARGUMENT,
 	// 			Token: token.Token{},
@@ -282,9 +249,22 @@ func TestInterfaceDefinition(t *testing.T) {
 	// 			Token: token.Token{},
 	// 			Name:  &Name{Kind: NAME, Value: "cache"},
 	// 			Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
-	// 		}},
-	// })
-	id.Directives = idirectives
+	// 		}}},
+
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+	// 		{
+	// 			Kind:  ARGUMENT,
+	// 			Token: token.Token{},
+	// 			Name:  &Name{Kind: NAME, Value: "name"},
+	// 			Value: &StringValue{Kind: ENUM_VALUE, Value: "id"},
+	// 		}, {
+	// 			Kind:  ARGUMENT,
+	// 			Token: token.Token{},
+	// 			Name:  &Name{Kind: NAME, Value: "cache"},
+	// 			Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
+	// 		}}},
+	// }
+	// id.Directives = idirectives
 
 	fieldi := &FieldDefinition{}
 	fieldi.Kind = FIELD_DEFINITION
