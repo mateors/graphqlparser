@@ -293,3 +293,24 @@ thumbnail: String
 	}
 
 }
+
+func TestUnionDefinition(t *testing.T) {
+
+	ud := UnionDefinition{}
+	ud.Kind = UNION_DEFINITION
+	ud.Description = nil //&StringValue{Kind: STRING_VALUE, Value: "Test des"}
+	ud.Name = &Name{Kind: NAME, Value: "SearchResult"}
+	// ud.Directives = nil []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+	// 		{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+	// 	}},
+	// }
+	ud.UnionMemberTypes = []*NamedType{
+		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Photo"}},
+		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Person"}},
+	}
+	expectedOutput := `union SearchResult = Photo | Person`
+	if ud.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, ud.String(), len(expectedOutput), len(ud.String()))
+	}
+}
