@@ -39,7 +39,7 @@ func main() {
 
 	ud := ast.UnionDefinition{}
 	ud.Kind = ast.UNION_DEFINITION
-	//ud.Description = nil //&ast.StringValue{}
+	ud.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Test des"}
 	ud.Name = &ast.Name{Kind: ast.NAME, Value: "SearchResult"}
 	ud.Directives = []*ast.Directive{
 		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{

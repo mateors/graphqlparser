@@ -308,11 +308,7 @@ func (ud *UnionDefinition) String() string {
 	name := fmt.Sprintf("%v", ud.Name)
 	types := toSliceString(ud.UnionMemberTypes)
 
-	directives := toSliceString(ud.Directives) //[]string{}
-	// for _, directive := range ud.Directives {
-	// 	directives = append(directives, fmt.Sprintf("%v", directive.String()))
-	// }
-
+	directives := toSliceString(ud.Directives)
 	str := join([]string{
 		"union",
 		name,
@@ -321,8 +317,9 @@ func (ud *UnionDefinition) String() string {
 	}, " ")
 
 	if ud.Description != nil {
-		desc := ud.Description.String()
+		desc := ud.Description.Value
 		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)
 		}
 	}
@@ -330,15 +327,14 @@ func (ud *UnionDefinition) String() string {
 }
 
 func join(str []string, sep string) string {
-	ss := []string{}
-	// filter out empty strings
+	slc := []string{}
 	for _, s := range str {
 		if s == "" {
 			continue
 		}
-		ss = append(ss, s)
+		slc = append(slc, s)
 	}
-	return strings.Join(ss, sep)
+	return strings.Join(slc, sep)
 }
 
 func toSliceString(slice interface{}) []string {
@@ -350,7 +346,6 @@ func toSliceString(slice interface{}) []string {
 	case reflect.Slice:
 		s := reflect.ValueOf(slice)
 		for i := 0; i < s.Len(); i++ {
-
 			elem := s.Index(i)
 			reflect.ValueOf(&elem).MethodByName("String").Call([]reflect.Value{})
 			elemv := fmt.Sprintf("%v", elem)
