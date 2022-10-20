@@ -377,6 +377,7 @@ func block(Slice interface{}) string {
 	if len(s) == 0 {
 		return "{}"
 	}
+	//return "{\n" + join(s, "\n") + "\n}"
 	return indent("{\n"+join(s, "\n")) + "\n}"
 }
 func indent(istring interface{}) string {

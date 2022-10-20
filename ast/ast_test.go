@@ -314,3 +314,27 @@ func TestUnionDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, ud.String(), len(expectedOutput), len(ud.String()))
 	}
 }
+
+func TestEnumDefinition(t *testing.T) {
+
+	ed := EnumDefinition{}
+	ed.Kind = ENUM_DEFINITION
+	ed.Description = &StringValue{Kind: STRING_VALUE, Value: ""}
+	ed.Name = &Name{Kind: NAME, Value: "Country"}
+	// ed.Directives = []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+	// 		{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+	// 	}},
+	// }
+	ed.Values = []*EnumValueDefinition{
+		{Kind: ENUMVALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "BANGLADESH"}},
+		{Kind: ENUMVALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "INDIA"}},
+	}
+	expectedOutput := `enum Country {
+  BANGLADESH
+  INDIA
+}`
+	if ed.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, ed.String(), len(expectedOutput), len(ed.String()))
+	}
+}
