@@ -37,6 +37,26 @@ func main() {
 	// 	{"key": "name"},
 	// }
 
+	ud := ast.UnionDefinition{}
+	ud.Kind = ast.UNION_DEFINITION
+	//ud.Description = nil //&ast.StringValue{}
+	ud.Name = &ast.Name{Kind: ast.NAME, Value: "SearchResult"}
+	ud.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+		}},
+	}
+	ud.UnionMemberTypes = []*ast.NamedType{
+		{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Photo"}},
+		{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Person"}},
+	}
+
+	//union SearchResult = Photo | Person
+
+	fmt.Println(ud.String())
+
+	os.Exit(1)
+
 	id := &ast.InterfaceDefinition{}
 	id.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Description test"}
 	id.Name = &ast.Name{Kind: ast.NAME, Value: "NamedEntity"}

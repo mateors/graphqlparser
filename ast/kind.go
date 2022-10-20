@@ -26,4 +26,5 @@ const (
 	OBJECT_VALUE           = "ObjectValue"
 	OBJECT_FIELD           = "ObjectField"
 	INTERFACE_DEFINITION   = "InterfaceDefinition"
+	UNION_DEFINITION       = "UnionDefinition"
 )

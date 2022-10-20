@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/mateors/graphqlparser/token"
@@ -272,10 +273,94 @@ type TypeDefinition interface {
 // var _ TypeDefinition = (*ScalarDefinition)(nil)
 var _ TypeDefinition = (*ObjectDefinition)(nil)
 var _ TypeDefinition = (*InterfaceDefinition)(nil)
+var _ TypeDefinition = (*UnionDefinition)(nil)
 
-//var _ TypeDefinition = (*UnionDefinition)(nil)
 //var _ TypeDefinition = (*EnumDefinition)(nil)
 //var _ TypeDefinition = (*InputObjectDefinition)(nil)
+
+type UnionDefinition struct {
+	//Description[opt] union Name Directives[opt] UnionMemberTypes[opt]
+	Kind             string //UNION_DEFINITION
+	Token            token.Token
+	Description      *StringValue
+	Name             *Name
+	Directives       []*Directive
+	UnionMemberTypes []*NamedType
+}
+
+func (ud *UnionDefinition) TokenLiteral() string {
+	return ud.Token.Literal
+}
+func (ud *UnionDefinition) GetKind() string {
+	return ud.Kind
+}
+func (ud *UnionDefinition) GetOperation() string {
+	return ""
+}
+func (ud *UnionDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (ud *UnionDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (ud *UnionDefinition) String() string {
+
+	name := fmt.Sprintf("%v", ud.Name)
+	types := toSliceString(ud.UnionMemberTypes)
+
+	directives := toSliceString(ud.Directives) //[]string{}
+	// for _, directive := range ud.Directives {
+	// 	directives = append(directives, fmt.Sprintf("%v", directive.String()))
+	// }
+
+	str := join([]string{
+		"union",
+		name,
+		join(directives, " "),
+		"= " + join(types, " | "),
+	}, " ")
+
+	if ud.Description != nil {
+		desc := ud.Description.String()
+		if desc != "" {
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
+}
+
+func join(str []string, sep string) string {
+	ss := []string{}
+	// filter out empty strings
+	for _, s := range str {
+		if s == "" {
+			continue
+		}
+		ss = append(ss, s)
+	}
+	return strings.Join(ss, sep)
+}
+
+func toSliceString(slice interface{}) []string {
+	if slice == nil {
+		return []string{}
+	}
+	res := []string{}
+	switch reflect.TypeOf(slice).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(slice)
+		for i := 0; i < s.Len(); i++ {
+
+			elem := s.Index(i)
+			reflect.ValueOf(&elem).MethodByName("String").Call([]reflect.Value{})
+			elemv := fmt.Sprintf("%v", elem)
+			res = append(res, elemv)
+		}
+		return res
+	default:
+		return res
+	}
+}
 
 type ObjectDefinition struct {
 	//Description[opt] type Name ImplementsInterfaces[opt] Directives[opt] { FieldsDefinition }
