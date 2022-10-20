@@ -306,10 +306,7 @@ func (iod *InputObjectDefinition) GetSelectionSet() *SelectionSet {
 func (iod *InputObjectDefinition) String() string {
 	name := fmt.Sprintf("%v", iod.Name)
 	fields := iod.Fields
-	directives := []string{}
-	for _, directive := range iod.Directives {
-		directives = append(directives, fmt.Sprintf("%v", directive.Name))
-	}
+	directives := toSliceString(iod.Directives)
 	str := join([]string{
 		"input",
 		name,

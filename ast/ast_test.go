@@ -338,3 +338,28 @@ func TestEnumDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, ed.String(), len(expectedOutput), len(ed.String()))
 	}
 }
+
+func TestInputObjectDefinition(t *testing.T) {
+
+	iod := InputObjectDefinition{}
+	iod.Kind = INPUT_OBJECT_DEFINITION
+	//iod.Description = &StringValue{Kind: STRING_VALUE, Value: "test"}
+	iod.Name = &Name{Kind: NAME, Value: "Client"}
+	// iod.Directives = []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+	// 		{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+	// 	}},
+	// }
+	iod.Fields = []*InputValueDefinition{
+		{Kind: INPUT_VALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "name"}, Type: &NonNullType{Kind: STRING_VALUE, Type: &Name{Kind: NAME, Value: "String"}}},
+		{DefaultValue: &IntValue{Kind: INT_VALUE, Value: "10"}, Kind: INPUT_VALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "age"}, Type: &NamedType{Kind: STRING_VALUE, Name: &Name{Kind: NAME, Value: "Int"}}},
+	}
+
+	expectedOutput := `input Client {
+  name: String!
+  age: Int = 10
+}`
+	if iod.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, iod.String(), len(expectedOutput), len(iod.String()))
+	}
+}

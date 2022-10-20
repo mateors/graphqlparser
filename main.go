@@ -44,6 +44,23 @@ func main() {
 	// evd.Directives = nil
 	// fmt.Println(evd.String())
 
+	iod := ast.InputObjectDefinition{}
+	iod.Kind = ast.INPUT_OBJECT_DEFINITION
+	//iod.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
+	iod.Name = &ast.Name{Kind: ast.NAME, Value: "Client"}
+	iod.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+		}},
+	}
+	iod.Fields = []*ast.InputValueDefinition{
+		{Kind: ast.INPUT_VALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "name"}, Type: &ast.NonNullType{Kind: ast.STRING_VALUE, Type: &ast.Name{Kind: ast.NAME, Value: "String"}}},
+		{DefaultValue: &ast.IntValue{Kind: ast.INT_VALUE, Value: "10"}, Kind: ast.INPUT_VALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "age"}, Type: &ast.NamedType{Kind: ast.STRING_VALUE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}}},
+	}
+
+	fmt.Println(iod.String())
+	os.Exit(1)
+
 	ed := ast.EnumDefinition{}
 	ed.Kind = ast.ENUM_DEFINITION
 	ed.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: ""}
