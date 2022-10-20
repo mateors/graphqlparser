@@ -105,7 +105,7 @@ func (d *Directive) String() string {
 		args += fmt.Sprintf("%s, ", arg.String())
 	}
 	args = strings.TrimRight(args, ", ")
-	out.WriteString(" @" + d.Name.Value + "(" + args + ")")
+	out.WriteString(" @" + d.Name.String() + "(" + args + ")")
 	return out.String()
 }
 

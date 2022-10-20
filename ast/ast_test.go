@@ -227,15 +227,46 @@ age: Int! @excludeField(name: "photo", caching: true, location: {lat: 12.43, lon
 func TestInterfaceDefinition(t *testing.T) {
 
 	id := &InterfaceDefinition{}
+	id.Kind = INTERFACE_DEFINITION
 	id.Description = &StringValue{Kind: STRING_VALUE, Value: ""}
 	id.Name = &Name{Kind: NAME, Value: "Image"}
 
-	infcs1 := []*NamedType{}
-	infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}})
-	infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}})
+	infcs1 := []*NamedType{
+		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}},
+		{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}},
+	}
+	//infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Resource"}})
+	//infcs1 = append(infcs1, &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Node"}})
 	id.Interfaces = infcs1
 
-	// idirectives := []*Directive{}
+	idirectives := []*Directive{
+		{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "addExternalFields"}, Arguments: []*Argument{
+			{
+				Kind:  ARGUMENT,
+				Token: token.Token{},
+				Name:  &Name{Kind: NAME, Value: "name"},
+				Value: &StringValue{Kind: STRING_VALUE, Value: "photo"},
+			}, {
+				Kind:  ARGUMENT,
+				Token: token.Token{},
+				Name:  &Name{Kind: NAME, Value: "cache"},
+				Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
+			}}},
+
+		{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+			{
+				Kind:  ARGUMENT,
+				Token: token.Token{},
+				Name:  &Name{Kind: NAME, Value: "name"},
+				Value: &StringValue{Kind: ENUM_VALUE, Value: "id"},
+			}, {
+				Kind:  ARGUMENT,
+				Token: token.Token{},
+				Name:  &Name{Kind: NAME, Value: "cache"},
+				Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
+			}}},
+	}
+
 	// idirectives = append(idirectives, &Directive{
 	// 	Kind:  DIRECTIVE,
 	// 	Token: token.Token{},
@@ -253,7 +284,7 @@ func TestInterfaceDefinition(t *testing.T) {
 	// 			Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true},
 	// 		}},
 	// })
-	id.Directives = nil
+	id.Directives = idirectives
 
 	fieldi := &FieldDefinition{}
 	fieldi.Kind = FIELD_DEFINITION
