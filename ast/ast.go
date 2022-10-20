@@ -275,8 +275,57 @@ var _ TypeDefinition = (*ObjectDefinition)(nil)
 var _ TypeDefinition = (*InterfaceDefinition)(nil)
 var _ TypeDefinition = (*UnionDefinition)(nil)
 var _ TypeDefinition = (*EnumDefinition)(nil)
+var _ TypeDefinition = (*InputObjectDefinition)(nil)
 
-//var _ TypeDefinition = (*InputObjectDefinition)(nil)
+type InputObjectDefinition struct {
+	//Description[opt] input Name Directives[opt] InputFieldsDefinition
+	//Description[opt] input Name Directives[opt]
+	Kind        string //INPUT_OBJECT_DEFINITION
+	Token       token.Token
+	Description *StringValue
+	Name        *Name
+	Directives  []*Directive
+	Fields      []*InputValueDefinition
+}
+
+func (iod *InputObjectDefinition) TokenLiteral() string {
+	return iod.Token.Literal
+}
+func (iod *InputObjectDefinition) GetKind() string {
+	return iod.Kind
+}
+func (iod *InputObjectDefinition) GetOperation() string {
+	return ""
+}
+func (iod *InputObjectDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (iod *InputObjectDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (iod *InputObjectDefinition) String() string {
+	name := fmt.Sprintf("%v", iod.Name)
+	fields := iod.Fields
+	directives := []string{}
+	for _, directive := range iod.Directives {
+		directives = append(directives, fmt.Sprintf("%v", directive.Name))
+	}
+	str := join([]string{
+		"input",
+		name,
+		join(directives, " "),
+		block(fields),
+	}, " ")
+
+	if iod.Description != nil {
+		desc := iod.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
+}
 
 type EnumDefinition struct {
 	//Description[opt] enum Name Directives[opt] EnumValuesDefinition
