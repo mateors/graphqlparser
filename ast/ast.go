@@ -302,7 +302,23 @@ func (sd *ScalarDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 func (sd *ScalarDefinition) String() string {
-	return ""
+
+	name := sd.Name.String()
+	directives := toSliceString(sd.Directives)
+	str := join([]string{
+		"scalar",
+		name,
+		join(directives, " "),
+	}, " ")
+
+	if sd.Description != nil {
+		desc := sd.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
 }
 
 type InputObjectDefinition struct {

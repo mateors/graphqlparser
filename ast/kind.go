@@ -30,4 +30,5 @@ const (
 	ENUM_DEFINITION         = "EnumDefinition"
 	ENUMVALUE_DEFINITION    = "EnumValueDefinition"
 	INPUT_OBJECT_DEFINITION = "InputObjectDefinition"
+	SCALAR_DEFINITION       = "ScalarDefinition"
 )

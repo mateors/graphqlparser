@@ -363,3 +363,19 @@ func TestInputObjectDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, iod.String(), len(expectedOutput), len(iod.String()))
 	}
 }
+
+func TestScalarDefiniton(t *testing.T) {
+
+	scd := ScalarDefinition{Kind: SCALAR_DEFINITION}
+	//scd.Description = &StringValue{Kind: STRING_VALUE, Value: "test"}
+	scd.Name = &Name{Kind: NAME, Value: "Upload"}
+	// scd.Directives = []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{
+	// 		{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+	// 	}},
+	// }
+	expectedOutput := `scalar Upload`
+	if scd.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, scd.String(), len(expectedOutput), len(scd.String()))
+	}
+}

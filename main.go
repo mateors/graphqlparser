@@ -44,6 +44,18 @@ func main() {
 	// evd.Directives = nil
 	// fmt.Println(evd.String())
 
+	scd := ast.ScalarDefinition{Kind: ast.SCALAR_DEFINITION}
+	scd.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
+	scd.Name = &ast.Name{Kind: ast.NAME, Value: "Upload"}
+	scd.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+		}},
+	}
+
+	fmt.Println(scd.String())
+	os.Exit(1)
+
 	iod := ast.InputObjectDefinition{}
 	iod.Kind = ast.INPUT_OBJECT_DEFINITION
 	//iod.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
