@@ -270,12 +270,40 @@ type TypeDefinition interface {
 	GetSelectionSet() *SelectionSet
 }
 
-// var _ TypeDefinition = (*ScalarDefinition)(nil)
+var _ TypeDefinition = (*ScalarDefinition)(nil)
 var _ TypeDefinition = (*ObjectDefinition)(nil)
 var _ TypeDefinition = (*InterfaceDefinition)(nil)
 var _ TypeDefinition = (*UnionDefinition)(nil)
 var _ TypeDefinition = (*EnumDefinition)(nil)
 var _ TypeDefinition = (*InputObjectDefinition)(nil)
+
+type ScalarDefinition struct {
+	//Description[opt] scalar Name Directives[opt]
+	Kind        string //INPUT_OBJECT_DEFINITION
+	Token       token.Token
+	Description *StringValue
+	Name        *Name
+	Directives  []*Directive
+}
+
+func (sd *ScalarDefinition) TokenLiteral() string {
+	return sd.Token.Literal
+}
+func (sd *ScalarDefinition) GetKind() string {
+	return sd.Kind
+}
+func (sd *ScalarDefinition) GetOperation() string {
+	return ""
+}
+func (sd *ScalarDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (sd *ScalarDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (sd *ScalarDefinition) String() string {
+	return ""
+}
 
 type InputObjectDefinition struct {
 	//Description[opt] input Name Directives[opt] InputFieldsDefinition
