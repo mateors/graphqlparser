@@ -44,6 +44,29 @@ func main() {
 	// evd.Directives = nil
 	// fmt.Println(evd.String())
 
+	dd := ast.DirectiveDefinition{}
+	dd.Kind = ast.DIRECTIVE_DEFINITION
+	dd.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
+	dd.Name = &ast.Name{Kind: ast.NAME, Value: "cacheControl"}
+	dd.Arguments = []*ast.InputValueDefinition{
+		{Kind: ast.INPUT_VALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "maxAge"}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}}},
+		{Kind: ast.INPUT_VALUE_DEFINITION, Name: &ast.Name{Kind: ast.NAME, Value: "scope"}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "CacheControlScope"}}},
+	}
+	dd.Locations = []*ast.Name{
+		{Kind: ast.NAME, Value: "FIELD_DEFINITION"},
+		{Kind: ast.NAME, Value: "OBJECT"},
+		{Kind: ast.NAME, Value: "INTERFACE"},
+	}
+
+	// &ast.InputValueDefinition{
+	// 	Name:         &ast.Name{Kind: ast.NAME, Token: token.Token{}, Value: "unit"},
+	// 	Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Token: token.Token{}, Name: &ast.Name{Kind: "Name", Token: token.Token{}, Value: "LengthUnit"}},
+	// 	DefaultValue: &ast.StringValue{Kind: ast.ENUM_VALUE, Token: token.Token{}, Value: "METER"},
+	// 	Directives:   directives,
+	// }
+	fmt.Println(dd.String())
+	os.Exit(1)
+
 	scd := ast.ScalarDefinition{Kind: ast.SCALAR_DEFINITION}
 	scd.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
 	scd.Name = &ast.Name{Kind: ast.NAME, Value: "Upload"}

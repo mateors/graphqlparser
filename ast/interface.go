@@ -32,8 +32,61 @@ type TypeSystemDefinition interface {
 // var _ TypeSystemDefinition = (*SchemaDefinition)(nil)
 var _ TypeSystemDefinition = (TypeDefinition)(nil)
 
-//var _ TypeSystemDefinition = (*TypeExtensionDefinition)(nil)
-//var _ TypeSystemDefinition = (*DirectiveDefinition)(nil)
+// var _ TypeSystemDefinition = (*TypeExtensionDefinition)(nil)
+var _ TypeSystemDefinition = (*DirectiveDefinition)(nil)
+
+type DirectiveDefinition struct {
+	//Description[opt] directive @Name ArgumentsDefinition[opt] repeatable[opt] on DirectiveLocations
+	Kind        string //DIRECTIVE_DEFINITION
+	Token       token.Token
+	Description *StringValue
+	Name        *Name
+	Arguments   []*InputValueDefinition
+	Locations   []*Name
+}
+
+func (dd *DirectiveDefinition) TokenLiteral() string {
+	return dd.Token.Literal
+}
+func (dd *DirectiveDefinition) GetKind() string {
+	return dd.Kind
+}
+func (dd *DirectiveDefinition) GetOperation() string {
+	return ""
+}
+func (dd *DirectiveDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (dd *DirectiveDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (dd *DirectiveDefinition) String() string {
+
+	args := toSliceString(dd.Arguments)
+	hasArgDesc := false
+	for _, arg := range dd.Arguments {
+		if arg.Description != "" {
+			hasArgDesc = true
+			break
+		}
+	}
+	var argsStr string
+	if hasArgDesc {
+		argsStr = wrap("(", indent("\n"+join(args, "\n")), "\n)")
+	} else {
+		argsStr = wrap("(", join(args, ", "), ")")
+	}
+	str := fmt.Sprintf("directive @%v%v on %v", dd.Name, argsStr, join(toSliceString(dd.Locations), " | "))
+
+	if dd.Description != nil {
+		desc := dd.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
+}
 
 func (i *InterfaceDefinition) TokenLiteral() string {
 	return i.Token.Literal
@@ -91,4 +144,11 @@ func (i *InterfaceDefinition) String() string {
 	out.WriteString("\n}")
 
 	return out.String()
+}
+
+func wrap(start, maybeString, end string) string {
+	if maybeString == "" {
+		return maybeString
+	}
+	return start + maybeString + end
 }
