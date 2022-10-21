@@ -379,3 +379,25 @@ func TestScalarDefiniton(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, scd.String(), len(expectedOutput), len(scd.String()))
 	}
 }
+
+func TestDirectiveDefinition(t *testing.T) {
+
+	dd := DirectiveDefinition{}
+	dd.Kind = DIRECTIVE_DEFINITION
+	//dd.Description = &StringValue{Kind: STRING_VALUE, Value: "test"}
+	dd.Name = &Name{Kind: NAME, Value: "cacheControl"}
+	dd.Arguments = []*InputValueDefinition{
+		{Kind: INPUT_VALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "maxAge"}, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}},
+		{Kind: INPUT_VALUE_DEFINITION, Name: &Name{Kind: NAME, Value: "scope"}, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "CacheControlScope"}}},
+	}
+	dd.Locations = []*Name{
+		{Kind: NAME, Value: "FIELD_DEFINITION"},
+		{Kind: NAME, Value: "OBJECT"},
+		{Kind: NAME, Value: "INTERFACE"},
+	}
+
+	expectedOutput := `directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE`
+	if dd.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, dd.String(), len(expectedOutput), len(dd.String()))
+	}
+}
