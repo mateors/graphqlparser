@@ -44,14 +44,39 @@ func (d *Document) GetKind() string {
 	return d.Kind
 }
 
+// Ensure that all definition types implements Definition interface
+var _ Definition = (*OperationDefinition)(nil)
+var _ Definition = (*FragmentDefinition)(nil)
+var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition.
+
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
 	Kind                string
+	Token               token.Token
 	OperationType       string //query | mutation | subscription
 	Name                *Name
 	VariablesDefinition []*VariableDefinition
 	Directives          []*Directive
 	SelectionSet        *SelectionSet
+}
+
+func (od *OperationDefinition) TokenLiteral() string {
+	return od.Token.Literal
+}
+func (dd *OperationDefinition) GetKind() string {
+	return dd.Kind
+}
+func (dd *OperationDefinition) GetOperation() string {
+	return ""
+}
+func (dd *OperationDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (dd *OperationDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (dd *OperationDefinition) String() string {
+	return ""
 }
 
 var _ Node = (*Name)(nil)
