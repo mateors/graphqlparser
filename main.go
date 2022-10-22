@@ -44,10 +44,36 @@ func main() {
 	// evd.Directives = nil
 	// fmt.Println(evd.String())
 
+	ss := ast.SelectionSet{}
+	ss.Kind = ast.SELECTION_SET
+	ss.Selections = []ast.Selection{
+		&ast.Field{
+			Kind:  ast.FIELD,
+			Alias: &ast.Name{Kind: ast.NAME, Value: "test1"},
+			Name:  &ast.Name{Kind: ast.NAME, Value: "Test"},
+			Arguments: []*ast.Argument{
+				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "cache"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+			},
+			Directives: []*ast.Directive{
+				{
+					Kind: ast.DIRECTIVE,
+					Name: &ast.Name{Kind: ast.NAME, Value: "skip"},
+					Arguments: []*ast.Argument{
+						{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}},
+					},
+				},
+			},
+		},
+	}
+
+	fmt.Println(ss.String())
+	os.Exit(1)
+
 	od := ast.OperationDefinition{}
 	od.Kind = ast.OPERATION_DEFINITION
 	od.OperationType = ast.OperationTypeQuery
 	od.Name = &ast.Name{Kind: ast.NAME, Value: "Test"}
+	//od.VariablesDefinition = nil
 	// od.VariablesDefinition = []*ast.VariableDefinition{
 	// 	{},
 	// }

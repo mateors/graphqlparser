@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
 
@@ -58,13 +59,13 @@ var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition
 
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
-	Kind                string //OPERATION_DEFINITION
-	Token               token.Token
-	OperationType       string //query | mutation | subscription
-	Name                *Name
+	Kind          string //OPERATION_DEFINITION
+	Token         token.Token
+	OperationType string //query | mutation | subscription
+	Name          *Name
 	VariablesDefinition []*VariableDefinition
-	Directives          []*Directive
-	SelectionSet        *SelectionSet
+	Directives   []*Directive
+	SelectionSet *SelectionSet
 }
 
 func (od *OperationDefinition) TokenLiteral() string {
@@ -86,7 +87,7 @@ func (dd *OperationDefinition) String() string {
 
 	op := dd.OperationType
 	name := fmt.Sprintf("%v", dd.Name)
-	varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
+	varDefs := "" //wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
 	directives := join(toSliceString(dd.Directives), " ")
 	selectionSet := fmt.Sprintf("%v", dd.SelectionSet)
 	// Anonymous queries with no directives or variable definitions can use
@@ -124,6 +125,8 @@ func (n *Name) String() string {
 	return n.Value
 }
 
+var _ Node = (*VariableDefinition)(nil)
+
 type VariableDefinition struct {
 	//Variable : Type DefaultValue[opt] Directives[opt]
 	Kind         string
@@ -132,6 +135,17 @@ type VariableDefinition struct {
 	Type         Type
 	DefaultValue Value
 	Directives   []*Directive
+}
+
+func (vd *VariableDefinition) TokenLiteral() string {
+	return vd.Token.Literal
+}
+func (vd *VariableDefinition) GetKind() string {
+	return vd.Kind
+}
+
+func (vd *VariableDefinition) String() string {
+	return "vd.Token.Literal"
 }
 
 var _ Node = (*Directive)(nil)
@@ -196,7 +210,9 @@ func (ss *SelectionSet) GetKind() string {
 	return ss.Kind
 }
 func (ss *SelectionSet) String() string {
-	return ""
+
+	//fmt.Println(len(ss.Selections), ss.Selections)
+	return block(ss.Selections)
 }
 
 type Selection interface {
@@ -229,6 +245,31 @@ func (f *Field) GetKind() string {
 func (f *Field) GetSelectionSet() *SelectionSet {
 	return f.SelectionSet
 }
+func (f *Field) String() string {
+
+	var alias, name, selectionSet string
+	name = f.Name.String()
+	if f.Alias != nil {
+		alias = f.Alias.String()
+	}
+	args := toSliceString(f.Arguments)
+	directives := toSliceString(f.Directives)
+
+	if f.SelectionSet != nil {
+		selectionSet = f.SelectionSet.String()
+	}
+
+	str := join(
+		[]string{
+			wrap("", alias, ": ") + name + wrap("(", join(args, ", "), ")"),
+			join(directives, " "),
+			selectionSet,
+		},
+		" ",
+	)
+
+	return str
+}
 
 type FragmentSpread struct {
 	//...FragmentName Directives[opt]
@@ -246,6 +287,9 @@ func (fs *FragmentSpread) GetKind() string {
 }
 func (fs *FragmentSpread) GetSelectionSet() *SelectionSet {
 	return nil
+}
+func (fs *FragmentSpread) String() string {
+	return ""
 }
 
 type InlineFragment struct {
@@ -604,6 +648,13 @@ func join(str []string, sep string) string {
 }
 
 func toSliceString(slice interface{}) []string {
+
+	defer func() {
+		if rec := recover(); rec != nil {
+			log.Println("activity panicking with value >>", rec)
+		}
+	}()
+
 	if slice == nil {
 		return []string{}
 	}
