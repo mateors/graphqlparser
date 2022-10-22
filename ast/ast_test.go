@@ -401,3 +401,37 @@ func TestDirectiveDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, dd.String(), len(expectedOutput), len(dd.String()))
 	}
 }
+
+func TestSelectionSet(t *testing.T) {
+
+	ss := SelectionSet{}
+	ss.Kind = SELECTION_SET
+	ss.Selections = []Selection{
+		&Field{
+			Kind:  FIELD,
+			Alias: &Name{Kind: NAME, Value: "test1"},
+			Name:  &Name{Kind: NAME, Value: "Test"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "cache"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+			},
+			Directives: []*Directive{
+				{
+					Kind: DIRECTIVE,
+					Name: &Name{Kind: NAME, Value: "skip"},
+					Arguments: []*Argument{
+						{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}},
+					},
+				},
+			},
+		},
+	}
+
+	expectedOutput := `{
+  test1: Test(cache: true)  @skip(caching: true)
+}`
+
+	if ss.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, ss.String(), len(expectedOutput), len(ss.String()))
+	}
+
+}
