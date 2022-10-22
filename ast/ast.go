@@ -187,7 +187,17 @@ type SelectionSet struct {
 	Selections []Selection
 }
 
-//var _ Node = (*SelectionSet)(nil)
+var _ Node = (*SelectionSet)(nil)
+
+func (ss *SelectionSet) TokenLiteral() string {
+	return ss.Token.Literal
+}
+func (ss *SelectionSet) GetKind() string {
+	return ss.Kind
+}
+func (ss *SelectionSet) String() string {
+	return ""
+}
 
 type Selection interface {
 	Node
