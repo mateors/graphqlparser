@@ -44,6 +44,28 @@ func main() {
 	// evd.Directives = nil
 	// fmt.Println(evd.String())
 
+	od := ast.OperationDefinition{}
+	od.Kind = ast.OPERATION_DEFINITION
+	od.OperationType = ast.OperationTypeQuery
+	od.Name = &ast.Name{Kind: ast.NAME, Value: "Test"}
+	// od.VariablesDefinition = []*ast.VariableDefinition{
+	// 	{},
+	// }
+	od.Directives = nil
+	od.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+		&ast.Field{
+			Kind: ast.FIELD,
+			Name: &ast.Name{Kind: ast.NAME, Value: "status"},
+			Arguments: []*ast.Argument{
+				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "status"}, Value: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "LiftStatus"}},
+			},
+		},
+	}}
+
+	fmt.Println(od.String())
+
+	os.Exit(1)
+
 	dd := ast.DirectiveDefinition{}
 	dd.Kind = ast.DIRECTIVE_DEFINITION
 	dd.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}

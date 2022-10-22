@@ -9,6 +9,12 @@ import (
 	"github.com/mateors/graphqlparser/token"
 )
 
+const (
+	OperationTypeQuery        = "query"
+	OperationTypeMutation     = "mutation"
+	OperationTypeSubscription = "subscription"
+)
+
 type Node interface {
 	TokenLiteral() string
 	GetKind() string
@@ -46,12 +52,13 @@ func (d *Document) GetKind() string {
 
 // Ensure that all definition types implements Definition interface
 var _ Definition = (*OperationDefinition)(nil)
-var _ Definition = (*FragmentDefinition)(nil)
+
+// var _ Definition = (*FragmentDefinition)(nil)
 var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition.
 
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
-	Kind                string
+	Kind                string //OPERATION_DEFINITION
 	Token               token.Token
 	OperationType       string //query | mutation | subscription
 	Name                *Name
@@ -76,7 +83,26 @@ func (dd *OperationDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 func (dd *OperationDefinition) String() string {
-	return ""
+
+	op := dd.OperationType
+	name := fmt.Sprintf("%v", dd.Name)
+	varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
+	directives := join(toSliceString(dd.Directives), " ")
+	selectionSet := fmt.Sprintf("%v", dd.SelectionSet)
+	// Anonymous queries with no directives or variable definitions can use
+	// the query short form.
+	str := ""
+	if name == "" && directives == "" && varDefs == "" && op == OperationTypeQuery {
+		str = selectionSet
+	} else {
+		str = join([]string{
+			op,
+			join([]string{name, varDefs}, ""),
+			directives,
+			selectionSet,
+		}, " ")
+	}
+	return str
 }
 
 var _ Node = (*Name)(nil)
@@ -160,6 +186,8 @@ type SelectionSet struct {
 	Token      token.Token
 	Selections []Selection
 }
+
+//var _ Node = (*SelectionSet)(nil)
 
 type Selection interface {
 	Node
