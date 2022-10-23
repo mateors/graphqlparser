@@ -73,6 +73,25 @@ type RootOperationTypeDefinition struct {
 	NamedType     *NamedType
 }
 
+func (rotd *RootOperationTypeDefinition) TokenLiteral() string {
+	return rotd.Token.Literal
+}
+func (rotd *RootOperationTypeDefinition) GetKind() string {
+	return rotd.Kind
+}
+func (rotd *RootOperationTypeDefinition) GetOperation() string {
+	return ""
+}
+func (rotd *RootOperationTypeDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (rotd *RootOperationTypeDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (rotd *RootOperationTypeDefinition) String() string {
+	return rotd.Token.Literal
+}
+
 type DirectiveDefinition struct {
 	//Description[opt] directive @Name ArgumentsDefinition[opt] repeatable[opt] on DirectiveLocations
 	Kind        string //DIRECTIVE_DEFINITION
