@@ -539,8 +539,6 @@ type EnumDefinition struct {
 	Values      []*EnumValueDefinition
 }
 
-//var _ Value = (*EnumValueDefinition)(nil)
-
 type EnumValueDefinition struct {
 	//Description[opt] EnumValue Directives[opt]
 	Kind        string //ENUMVALUE_DEFINITION
@@ -559,20 +557,12 @@ func (evd *EnumValueDefinition) GetKind() string {
 func (evd *EnumValueDefinition) String() string {
 
 	name := fmt.Sprintf("%v", evd.Name)
-	// directives := []string{}
-	// for _, directive := range evd.Directives {
-	// 	directives = append(directives, fmt.Sprintf("%v", directive.Name))
-	// }
 	directives := toSliceString(evd.Directives)
 
 	str := join([]string{
 		name,
 		join(directives, " "),
 	}, " ")
-
-	// if desc := getDescription(node); desc != "" {
-	// 	str = fmt.Sprintf("\n%s\n%s", desc, str)
-	// }
 
 	if evd.Description != nil {
 		desc := evd.Description.Value
