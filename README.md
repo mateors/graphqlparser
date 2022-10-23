@@ -428,28 +428,28 @@ type Lift {
 5. EnumTypeExtension
 6. InputObjectTypeExtension
 
-1. ScalarTypeExtension:
+### 1. ScalarTypeExtension:
 > `extend scalar Name Directives`
 
-2. ObjectTypeExtension:
+### 2. ObjectTypeExtension:
 * `extend type Name ImplementsInterfaces[opt] Directives[opt] FieldsDefinition`
 * `extend type Name ImplementsInterfaces[opt] Directives`
 * `extend type Name ImplementsInterfaces`
 
-3. InterfaceTypeExtension:
+### 3. InterfaceTypeExtension:
 * `extend interface Name ImplementsInterfaces[opt] Directives[opt] FieldsDefinition`
 * `extend interface Name ImplementsInterfaces[opt] Directives`
 * `extend interface Name ImplementsInterfaces`
 
-4. UnionTypeExtension:
+### 4. UnionTypeExtension:
 * `extend union Name Directives[opt] UnionMemberTypes`
 * `extend union Name Directives`
 
-5. EnumTypeExtension:
+### 5. EnumTypeExtension:
 * `extend enum Name Directives[opt] EnumValuesDefinition`
 * `extend enum Name Directives`
 
-6. InputObjectTypeExtension:
+### 6. InputObjectTypeExtension:
 * `extend input Name Directives[opt] InputFieldsDefinition`
 * `extend input Name Directives`
 
