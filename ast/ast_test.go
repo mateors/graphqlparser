@@ -475,3 +475,35 @@ func TestOperationDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
 	}
 }
+
+func TestFragmentDefinition(t *testing.T) {
+
+	frgd := FragmentDefinition{}
+	frgd.Kind = FRAGMENT_DEFINITION
+	frgd.Operation = ""
+	frgd.FragmentName = &Name{Kind: NAME, Value: "friendFields"}
+	frgd.TypeCondition = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "User"}}
+	// frgd.Directives = []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}}}},
+	// }
+	frgd.SelectionSet = &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+		&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "id"}},
+		&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "name"}},
+		&Field{
+			Kind: FIELD,
+			Name: &Name{Kind: NAME, Value: "profilePic"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "size"}, Value: &IntValue{Kind: INT_VALUE, Value: "50"}},
+			},
+		},
+	}}
+	expectedOutput := `fragment friendFields on User {
+  id
+  name
+  profilePic(size: 50)
+}`
+
+	if frgd.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, frgd.String(), len(expectedOutput), len(frgd.String()))
+	}
+}
