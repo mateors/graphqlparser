@@ -420,13 +420,13 @@ type Lift {
 1. SchemaExtension
 2. TypeExtension
 
-2. TypeExtension::
-	1. ScalarTypeExtension
-	2. ObjectTypeExtension
-	3. InterfaceTypeExtension
-	4. UnionTypeExtension
-	5. EnumTypeExtension
-	6. InputObjectTypeExtension
+### TypeExtension::
+1. ScalarTypeExtension
+2. ObjectTypeExtension
+3. InterfaceTypeExtension
+4. UnionTypeExtension
+5. EnumTypeExtension
+6. InputObjectTypeExtension
 
 1. ScalarTypeExtension:
 > `extend scalar Name Directives`
