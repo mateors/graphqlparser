@@ -89,6 +89,28 @@ func main() {
 	// fmt.Println(frgd.String())
 	// os.Exit(1)
 
+	inf := ast.InlineFragment{}
+	inf.Kind = ast.INLINE_FRAGMENT
+	//inf.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}
+	inf.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "include"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "if"}, Value: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "expandedInfo"}}},
+		}},
+	}
+	inf.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+		&ast.Field{
+			Kind:      ast.FIELD,
+			Name:      &ast.Name{Kind: ast.NAME, Value: "friends"},
+			Arguments: nil,
+			SelectionSet: &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+				&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "count"}}},
+			}},
+	},
+	}
+
+	fmt.Println(inf.String())
+	os.Exit(1)
+
 	od := ast.OperationDefinition{}
 	od.Kind = ast.OPERATION_DEFINITION
 	od.OperationType = ast.OperationTypeQuery

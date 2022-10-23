@@ -339,7 +339,7 @@ type InlineFragment struct {
 	//...TypeCondition[opt] Directives[opt] SelectionSet
 	Kind          string //INLINE_FRAGMENT
 	Token         token.Token
-	TypeCondition *Name //on NamedType
+	TypeCondition *NamedType //on NamedType
 	Directives    []*Directive
 	SelectionSet  *SelectionSet
 }
@@ -352,6 +352,16 @@ func (f *InlineFragment) GetKind() string {
 }
 func (f *InlineFragment) GetSelectionSet() *SelectionSet {
 	return f.SelectionSet
+}
+func (f *InlineFragment) String() string {
+
+	var typeCondition string
+	if f.TypeCondition != nil {
+		typeCondition = " on " + f.TypeCondition.String()
+	}
+	directives := toSliceString(f.Directives)
+	selectionSet := f.SelectionSet.String()
+	return "..." + typeCondition + " " + wrap("", join(directives, " "), " ") + selectionSet
 }
 
 type Type interface {
