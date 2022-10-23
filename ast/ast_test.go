@@ -438,6 +438,40 @@ func TestSelectionSet(t *testing.T) {
 
 func TestOperationDefinition(t *testing.T) {
 
-	
+	od := OperationDefinition{}
+	od.Kind = OPERATION_DEFINITION
+	od.OperationType = OperationTypeQuery
+	od.Name = &Name{Kind: NAME, Value: "Test"}
+	od.VariablesDefinition = nil
+	od.VariablesDefinition = []*VariableDefinition{
+		{Kind: VARIABLE, Variable: &Variable{Kind: VARIABLE, Name: &Name{Kind: NAME, Value: "status"}}, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, DefaultValue: &StringValue{Kind: STRING_VALUE, Value: "Active"}},
+		{
+			Kind:         VARIABLE,
+			Variable:     &Variable{Kind: VARIABLE, Name: &Name{Kind: NAME, Value: "point"}},
+			Type:         &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}},
+			DefaultValue: &IntValue{Kind: STRING_VALUE, Value: "0"},
+			//Directives:   []*Directive{{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}}}}},
+		},
+	}
 
+	od.Directives = []*Directive{
+		{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "skip"}, Arguments: []*Argument{{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "caching"}, Value: &BooleanValue{Kind: BOOLEAN_VALUE, Value: true}}}},
+	}
+	od.SelectionSet = &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+		&Field{
+			Kind: FIELD,
+			Name: &Name{Kind: NAME, Value: "status"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "status"}, Value: &StringValue{Kind: NAME, Value: "LiftStatus"}},
+			},
+		},
+	}}
+
+	expectedOutput := `query Test($status: String = "Active", $point: Int = 0)  @skip(caching: true) {
+  status(status: LiftStatus)
+}`
+
+	if od.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
+	}
 }
