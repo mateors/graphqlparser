@@ -710,3 +710,28 @@ func TestOperationInlineFragmentSpread2(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
 	}
 }
+
+func TestSchemaDefinition(t *testing.T) {
+
+	scmd := SchemaDefinition{}
+	scmd.Kind = SCHEMA_DEFINITION
+	scmd.Description = nil //&StringValue{Kind: STRING_VALUE, Value: "test"}
+	// scmd.Directives = []*Directive{
+	// 	{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "include"}, Arguments: []*Argument{
+	// 		{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "if"}, Value: &Variable{Kind: VARIABLE, Name: &Name{Kind: NAME, Value: "expandedInfo"}}},
+	// 	}},
+	// }
+	scmd.OperationTypes = []*RootOperationTypeDefinition{
+		{Kind: ROOT_OPERATION_TYPE_DEFINITION, OperationType: OperationTypeQuery, NamedType: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "MyQueryRootType"}}},
+		{Kind: ROOT_OPERATION_TYPE_DEFINITION, OperationType: OperationTypeMutation, NamedType: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "MyMutationRootType"}}},
+	}
+
+	expectedOutput := `schema {
+  query: MyQueryRootType
+  mutation: MyMutationRootType
+}`
+
+	if scmd.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, scmd.String(), len(expectedOutput), len(scmd.String()))
+	}
+}

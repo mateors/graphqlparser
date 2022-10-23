@@ -89,6 +89,21 @@ func main() {
 	// fmt.Println(frgd.String())
 	// os.Exit(1)
 
+	scmd := ast.SchemaDefinition{}
+	scmd.Kind = ast.SCHEMA_DEFINITION
+	scmd.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"}
+	scmd.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "include"}, Arguments: []*ast.Argument{
+			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "if"}, Value: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "expandedInfo"}}},
+		}},
+	}
+	scmd.OperationTypes = []*ast.RootOperationTypeDefinition{
+		{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION, OperationType: ast.OperationTypeQuery, NamedType: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "MyQueryRootType"}}},
+		{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION, OperationType: ast.OperationTypeMutation, NamedType: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "MyMutationRootType"}}},
+	}
+	fmt.Println(scmd.String())
+	os.Exit(1)
+
 	inf := ast.InlineFragment{}
 	inf.Kind = ast.INLINE_FRAGMENT
 	//inf.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}

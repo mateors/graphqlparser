@@ -61,7 +61,22 @@ func (sd *SchemaDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 func (sd *SchemaDefinition) String() string {
-	return sd.Token.Literal
+
+	directives := toSliceString(sd.Directives)
+	str := join([]string{
+		"schema",
+		join(directives, " "),
+		block(sd.OperationTypes),
+	}, " ")
+
+	if sd.Description != nil {
+		desc := sd.Description.Value
+		if desc != "" {
+			desc = join([]string{`"""`, desc, `"""`}, "\n")
+			str = fmt.Sprintf("%s\n%s", desc, str)
+		}
+	}
+	return str
 }
 
 // OperationTypeDefinition implements Node, Definition
@@ -89,7 +104,8 @@ func (rotd *RootOperationTypeDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 func (rotd *RootOperationTypeDefinition) String() string {
-	return rotd.Token.Literal
+	str := fmt.Sprintf("%v: %v", rotd.OperationType, rotd.NamedType.String())
+	return str
 }
 
 type DirectiveDefinition struct {
