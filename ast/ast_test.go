@@ -631,3 +631,82 @@ func TestOperationInlineFragmentSpread(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
 	}
 }
+
+func TestOperationInlineFragmentSpread2(t *testing.T) {
+
+	od := OperationDefinition{}
+	od.Kind = OPERATION_DEFINITION
+	od.OperationType = OperationTypeQuery
+	od.Name = &Name{Kind: NAME, Value: "inlineFragmentTyping"}
+
+	od.SelectionSet = &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+		&Field{
+			Kind: FIELD,
+			Name: &Name{Kind: NAME, Value: "profiles"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "handles"}, Value: &ListValue{Kind: LIST_VALUE, Values: []Value{
+					&StringValue{Kind: STRING_VALUE, Value: "zuck"},
+					&StringValue{Kind: STRING_VALUE, Value: "coca-cola"},
+				}}},
+			},
+
+			SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+				&Field{
+					Kind: FIELD,
+					Name: &Name{Kind: NAME, Value: "handle"},
+				},
+
+				&InlineFragment{
+					Kind:          INLINE_FRAGMENT,
+					TypeCondition: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "User"}},
+					Directives:    nil,
+					SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+
+						&Field{
+							Kind: FIELD,
+							Name: &Name{Kind: NAME, Value: "friends"},
+							SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+								&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "count"}},
+							}},
+						},
+					}},
+				},
+				&InlineFragment{
+					Kind:          INLINE_FRAGMENT,
+					TypeCondition: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Page"}},
+					Directives:    nil,
+					SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+
+						&Field{
+							Kind: FIELD,
+							Name: &Name{Kind: NAME, Value: "likers"},
+							SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+								&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "count"}},
+							}},
+						},
+					}},
+				},
+			}},
+		},
+	}}
+
+	expectedOutput := `query inlineFragmentTyping {
+  profiles(handles: ["zuck", "coca-cola"]) {
+    handle
+    ... on User {
+      friends {
+        count
+      }
+    }
+    ... on Page {
+      likers {
+        count
+      }
+    }
+  }
+}`
+
+	if od.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
+	}
+}
