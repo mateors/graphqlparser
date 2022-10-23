@@ -564,3 +564,70 @@ func TestOperationFragmentSpread(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
 	}
 }
+
+func TestOperationInlineFragmentSpread(t *testing.T) {
+
+	od := OperationDefinition{}
+	od.Kind = OPERATION_DEFINITION
+	od.OperationType = OperationTypeQuery
+	od.Name = &Name{Kind: NAME, Value: "inlineFragmentNoType"}
+	od.VariablesDefinition = []*VariableDefinition{
+		{
+			Kind:     VARIABLE_DEFINITION,
+			Variable: &Variable{Kind: VARIABLE, Name: &Name{Kind: NAME, Value: "expandedInfo"}},
+			Type:     &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Boolean"}},
+			//DefaultValue: &StringValue{Kind: STRING_VALUE, Value: "Active"}
+		},
+	}
+
+	od.SelectionSet = &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+		&Field{
+			Kind: FIELD,
+			Name: &Name{Kind: NAME, Value: "user"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "handle"}, Value: &StringValue{Kind: STRING_VALUE, Value: "zuck"}},
+			},
+
+			SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+				&Field{
+					Kind: FIELD,
+					Name: &Name{Kind: NAME, Value: "id"},
+				},
+				&Field{
+					Kind: FIELD,
+					Name: &Name{Kind: NAME, Value: "name"},
+				},
+				&InlineFragment{
+					Kind:          INLINE_FRAGMENT,
+					TypeCondition: nil,
+					Directives: []*Directive{
+						{Kind: DIRECTIVE, Name: &Name{Kind: NAME, Value: "include"}, Arguments: []*Argument{
+							{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "if"}, Value: &Variable{Kind: VARIABLE, Name: &Name{Kind: NAME, Value: "expandedInfo"}}},
+						}}},
+					SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+
+						&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "firstName"}},
+						&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "lastName"}},
+						&Field{Kind: FIELD, Name: &Name{Kind: NAME, Value: "birthday"}},
+					}},
+				},
+			}},
+		},
+	}}
+
+	expectedOutput := `query inlineFragmentNoType($expandedInfo: Boolean) {
+  user(handle: "zuck") {
+    id
+    name
+    ...  @include(if: $expandedInfo) {
+      firstName
+      lastName
+      birthday
+    }
+  }
+}`
+
+	if od.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
+	}
+}
