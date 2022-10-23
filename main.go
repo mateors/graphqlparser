@@ -66,6 +66,27 @@ func main() {
 	// 	},
 	// }
 
+	frgd := ast.FragmentDefinition{}
+	frgd.Kind = ast.FRAGMENT_DEFINITION
+	frgd.Operation = ""
+	frgd.FragmentName = &ast.Name{Kind: ast.NAME, Value: "friendFields"}
+	frgd.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}
+	frgd.Directives = nil
+	frgd.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "id"}},
+		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "name"}},
+		&ast.Field{
+			Kind: ast.FIELD,
+			Name: &ast.Name{Kind: ast.NAME, Value: "profilePic"},
+			Arguments: []*ast.Argument{
+				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "size"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "50"}},
+			},
+		},
+	}}
+
+	fmt.Println(frgd.String())
+	os.Exit(1)
+
 	od := ast.OperationDefinition{}
 	od.Kind = ast.OPERATION_DEFINITION
 	od.OperationType = ast.OperationTypeQuery

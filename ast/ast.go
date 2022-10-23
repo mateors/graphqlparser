@@ -84,7 +84,11 @@ func (fd *FragmentDefinition) GetSelectionSet() *SelectionSet {
 	return &SelectionSet{}
 }
 func (fd *FragmentDefinition) String() string {
-	return ""
+	name := fmt.Sprintf("%v", fd.FragmentName)
+	typeCondition := fmt.Sprintf("%v", fd.TypeCondition)
+	directives := toSliceString(fd.Directives)
+	selectionSet := fmt.Sprintf("%v", fd.SelectionSet)
+	return "fragment " + name + " on " + typeCondition + " " + wrap("", join(directives, " "), " ") + selectionSet
 }
 
 type OperationDefinition struct {
