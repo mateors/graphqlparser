@@ -31,9 +31,12 @@ type TypeSystemDefinition interface {
 
 var _ TypeSystemDefinition = (*SchemaDefinition)(nil)
 var _ TypeSystemDefinition = (TypeDefinition)(nil)
-
-// var _ TypeSystemDefinition = (*TypeExtensionDefinition)(nil)
+var _ TypeSystemDefinition = (*TypeExtensionDefinition)(nil)
 var _ TypeSystemDefinition = (*DirectiveDefinition)(nil)
+
+//TypeSystemExtension
+type TypeExtensionDefinition struct {
+}
 
 // SchemaDefinition implements Node, Definition
 type SchemaDefinition struct {

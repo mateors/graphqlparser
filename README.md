@@ -414,6 +414,44 @@ type Lift {
 }
 ```
 
+## Type Extensions
+
+### TypeSystemExtension:
+1. SchemaExtension
+2. TypeExtension
+
+2. TypeExtension::
+	1. ScalarTypeExtension
+	2. ObjectTypeExtension
+	3. InterfaceTypeExtension
+	4. UnionTypeExtension
+	5. EnumTypeExtension
+	6. InputObjectTypeExtension
+
+1. ScalarTypeExtension:
+> `extend scalar Name Directives`
+
+2. ObjectTypeExtension:
+* `extend type Name ImplementsInterfaces[opt] Directives[opt] FieldsDefinition`
+* `extend type Name ImplementsInterfaces[opt] Directives`
+* `extend type Name ImplementsInterfaces`
+
+3. InterfaceTypeExtension:
+* `extend interface Name ImplementsInterfaces[opt] Directives[opt] FieldsDefinition`
+* `extend interface Name ImplementsInterfaces[opt] Directives`
+* `extend interface Name ImplementsInterfaces`
+
+4. UnionTypeExtension:
+* `extend union Name Directives[opt] UnionMemberTypes`
+* `extend union Name Directives`
+
+5. EnumTypeExtension:
+* `extend enum Name Directives[opt] EnumValuesDefinition`
+* `extend enum Name Directives`
+
+6. InputObjectTypeExtension:
+* `extend input Name Directives[opt] InputFieldsDefinition`
+* `extend input Name Directives`
 
 ## Resource
 * https://graphql.org/learn/schema
