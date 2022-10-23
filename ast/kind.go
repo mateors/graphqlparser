@@ -33,4 +33,5 @@ const (
 	SCALAR_DEFINITION       = "ScalarDefinition"
 	DIRECTIVE_DEFINITION    = "DirectiveDefinition"
 	VARIABLE_DEFINITION     = "VariableDefinition"
+	FRAGMENT_DEFINITION     = "FragmentDefinition"
 )

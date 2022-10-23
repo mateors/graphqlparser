@@ -54,8 +54,38 @@ func (d *Document) GetKind() string {
 // Ensure that all definition types implements Definition interface
 var _ Definition = (*OperationDefinition)(nil)
 
-// var _ Definition = (*FragmentDefinition)(nil)
+var _ Definition = (*FragmentDefinition)(nil)
 var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition.
+
+type FragmentDefinition struct {
+	//fragment FragmentName TypeCondition Directives[opt] SelectionSet
+	Kind          string //FRAGMENT_DEFINITION
+	Token         token.Token
+	Operation     string
+	FragmentName  *Name
+	TypeCondition *NamedType
+	Directives    []*Directive
+	SelectionSet  *SelectionSet
+}
+
+func (fd *FragmentDefinition) TokenLiteral() string {
+	return fd.Token.Literal
+}
+func (fd *FragmentDefinition) GetKind() string {
+	return fd.Kind
+}
+func (fd *FragmentDefinition) GetOperation() string {
+	return fd.Operation
+}
+func (fd *FragmentDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (fd *FragmentDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (fd *FragmentDefinition) String() string {
+	return ""
+}
 
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
@@ -75,13 +105,13 @@ func (dd *OperationDefinition) GetKind() string {
 	return dd.Kind
 }
 func (dd *OperationDefinition) GetOperation() string {
-	return ""
+	return dd.OperationType
 }
 func (dd *OperationDefinition) GetVariableDefinitions() []*VariableDefinition {
-	return []*VariableDefinition{}
+	return dd.VariablesDefinition
 }
 func (dd *OperationDefinition) GetSelectionSet() *SelectionSet {
-	return &SelectionSet{}
+	return dd.SelectionSet
 }
 func (dd *OperationDefinition) String() string {
 
