@@ -72,9 +72,19 @@ func main() {
 	od.Name = &ast.Name{Kind: ast.NAME, Value: "Test"}
 	od.VariablesDefinition = nil
 	od.VariablesDefinition = []*ast.VariableDefinition{
-		{},
+		{Kind: ast.VARIABLE, Variable: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "status"}}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}, DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Active"}},
+		{
+			Kind:         ast.VARIABLE,
+			Variable:     &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "point"}},
+			Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}},
+			DefaultValue: &ast.IntValue{Kind: ast.STRING_VALUE, Value: "0"},
+			//Directives:   []*ast.Directive{{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}}},
+		},
 	}
-	od.Directives = nil
+
+	// od.Directives = []*ast.Directive{
+	// 	{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	// }
 	od.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
 		&ast.Field{
 			Kind: ast.FIELD,
@@ -84,6 +94,8 @@ func main() {
 			},
 		},
 	}}
+
+	//varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
 
 	fmt.Println(od.String())
 

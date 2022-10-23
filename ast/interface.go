@@ -146,9 +146,9 @@ func (i *InterfaceDefinition) String() string {
 	return out.String()
 }
 
-func wrap(start, maybeString, end string) string {
-	if maybeString == "" {
-		return maybeString
+func wrap(start, text, end string) string {
+	if text == "" {
+		return text
 	}
-	return start + maybeString + end
+	return start + text + end
 }

@@ -435,3 +435,9 @@ func TestSelectionSet(t *testing.T) {
 	}
 
 }
+
+func TestOperationDefinition(t *testing.T) {
+
+	
+
+}

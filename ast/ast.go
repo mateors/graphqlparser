@@ -87,7 +87,7 @@ func (dd *OperationDefinition) String() string {
 
 	op := dd.OperationType
 	name := fmt.Sprintf("%v", dd.Name)
-	varDefs := "" //wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
+	varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
 	directives := join(toSliceString(dd.Directives), " ")
 	selectionSet := fmt.Sprintf("%v", dd.SelectionSet)
 	// Anonymous queries with no directives or variable definitions can use
@@ -145,7 +145,15 @@ func (vd *VariableDefinition) GetKind() string {
 }
 
 func (vd *VariableDefinition) String() string {
-	return "vd.Token.Literal"
+
+	var defaultValue string
+	variable := fmt.Sprintf("%v", vd.Variable)
+	ttype := fmt.Sprintf("%v", vd.Type)
+	if vd.DefaultValue != nil {
+		defaultValue = fmt.Sprintf("%v", vd.DefaultValue)
+	}
+	directives := join(toSliceString(vd.Directives), " ")
+	return variable + ": " + ttype + wrap(" = ", defaultValue, "") + wrap("", directives, "")
 }
 
 var _ Node = (*Directive)(nil)
