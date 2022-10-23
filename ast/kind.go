@@ -32,4 +32,5 @@ const (
 	INPUT_OBJECT_DEFINITION = "InputObjectDefinition"
 	SCALAR_DEFINITION       = "ScalarDefinition"
 	DIRECTIVE_DEFINITION    = "DirectiveDefinition"
+	VARIABLE_DEFINITION     = "VariableDefinition"
 )

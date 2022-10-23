@@ -72,7 +72,7 @@ func main() {
 	od.Name = &ast.Name{Kind: ast.NAME, Value: "Test"}
 	od.VariablesDefinition = nil
 	od.VariablesDefinition = []*ast.VariableDefinition{
-		{Kind: ast.VARIABLE, Variable: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "status"}}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}, DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Active"}},
+		{Kind: ast.VARIABLE_DEFINITION, Variable: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "status"}}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}, DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Active"}},
 		{
 			Kind:         ast.VARIABLE,
 			Variable:     &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "point"}},
@@ -95,10 +95,7 @@ func main() {
 		},
 	}}
 
-	//varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
-
 	fmt.Println(od.String())
-
 	os.Exit(1)
 
 	dd := ast.DirectiveDefinition{}
