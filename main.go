@@ -71,7 +71,9 @@ func main() {
 	frgd.Operation = ""
 	frgd.FragmentName = &ast.Name{Kind: ast.NAME, Value: "friendFields"}
 	frgd.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}
-	frgd.Directives = nil
+	frgd.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	}
 	frgd.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
 		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "id"}},
 		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "name"}},
