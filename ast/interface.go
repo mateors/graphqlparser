@@ -29,11 +29,49 @@ type TypeSystemDefinition interface {
 	GetSelectionSet() *SelectionSet
 }
 
-// var _ TypeSystemDefinition = (*SchemaDefinition)(nil)
+var _ TypeSystemDefinition = (*SchemaDefinition)(nil)
 var _ TypeSystemDefinition = (TypeDefinition)(nil)
 
 // var _ TypeSystemDefinition = (*TypeExtensionDefinition)(nil)
 var _ TypeSystemDefinition = (*DirectiveDefinition)(nil)
+
+// SchemaDefinition implements Node, Definition
+type SchemaDefinition struct {
+	//Description[opt] schema Directives[opt] { RootOperationTypeDefinition[list] }
+	Kind           string //SCHEMA_DEFINITION
+	Token          token.Token
+	Description    *StringValue
+	Directives     []*Directive
+	OperationTypes []*RootOperationTypeDefinition
+}
+
+func (sd *SchemaDefinition) TokenLiteral() string {
+	return sd.Token.Literal
+}
+func (sd *SchemaDefinition) GetKind() string {
+	return sd.Kind
+}
+func (sd *SchemaDefinition) GetOperation() string {
+	return ""
+}
+func (sd *SchemaDefinition) GetVariableDefinitions() []*VariableDefinition {
+	return []*VariableDefinition{}
+}
+func (sd *SchemaDefinition) GetSelectionSet() *SelectionSet {
+	return &SelectionSet{}
+}
+func (sd *SchemaDefinition) String() string {
+	return sd.Token.Literal
+}
+
+// OperationTypeDefinition implements Node, Definition
+type RootOperationTypeDefinition struct {
+	//OperationType:NamedType
+	Kind          string //SCHEMA_DEFINITION
+	Token         token.Token
+	OperationType string //query | muation | subscription
+	NamedType     *NamedType
+}
 
 type DirectiveDefinition struct {
 	//Description[opt] directive @Name ArgumentsDefinition[opt] repeatable[opt] on DirectiveLocations
