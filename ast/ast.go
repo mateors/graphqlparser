@@ -59,13 +59,13 @@ var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition
 
 type OperationDefinition struct {
 	//OperationType Name[opt] VariablesDefinition[opt] Directives[opt] SelectionSet
-	Kind          string //OPERATION_DEFINITION
-	Token         token.Token
-	OperationType string //query | mutation | subscription
-	Name          *Name
+	Kind                string //OPERATION_DEFINITION
+	Token               token.Token
+	OperationType       string //query | mutation | subscription
+	Name                *Name
 	VariablesDefinition []*VariableDefinition
-	Directives   []*Directive
-	SelectionSet *SelectionSet
+	Directives          []*Directive
+	SelectionSet        *SelectionSet
 }
 
 func (od *OperationDefinition) TokenLiteral() string {
@@ -909,7 +909,10 @@ func (s *StringValue) GetValue() interface{} {
 	return s.Value
 }
 func (s *StringValue) String() string {
-	var vals string = fmt.Sprintf(`"%s"`, s.Value)
+	var vals string = s.Value
+	if s.Kind == STRING_VALUE {
+		vals = fmt.Sprintf(`"%s"`, s.Value)
+	}
 	return vals
 }
 
