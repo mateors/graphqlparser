@@ -507,3 +507,60 @@ func TestFragmentDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, frgd.String(), len(expectedOutput), len(frgd.String()))
 	}
 }
+
+func TestOperationFragmentSpread(t *testing.T) {
+
+	od := OperationDefinition{}
+	od.Kind = OPERATION_DEFINITION
+	od.OperationType = OperationTypeQuery
+	od.Name = &Name{Kind: NAME, Value: "withFragments"}
+	od.VariablesDefinition = nil
+
+	od.SelectionSet = &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+		&Field{
+			Kind: FIELD,
+			Name: &Name{Kind: NAME, Value: "user"},
+			Arguments: []*Argument{
+				{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "id"}, Value: &IntValue{Kind: NAME, Value: "4"}},
+			},
+
+			SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+				&Field{
+					Kind: FIELD,
+					Name: &Name{Kind: NAME, Value: "friends"},
+					Arguments: []*Argument{
+						{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "first"}, Value: &IntValue{Kind: NAME, Value: "10"}},
+					},
+					SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+						&FragmentSpread{Kind: FRAGMENT_SPREAD, FragmentName: &Name{Kind: NAME, Value: "friendFields"}},
+					}},
+				},
+				&Field{
+					Kind: FIELD,
+					Name: &Name{Kind: NAME, Value: "mutualFriends"},
+					Arguments: []*Argument{
+						{Kind: ARGUMENT, Name: &Name{Kind: NAME, Value: "first"}, Value: &IntValue{Kind: NAME, Value: "10"}},
+					},
+					SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+						&FragmentSpread{Kind: FRAGMENT_SPREAD, FragmentName: &Name{Kind: NAME, Value: "friendFields"}, Directives: nil},
+					}},
+				},
+			}},
+		},
+	}}
+
+	expectedOutput := `query withFragments {
+  user(id: 4) {
+    friends(first: 10) {
+      ...friendFields
+    }
+    mutualFriends(first: 10) {
+      ...friendFields
+    }
+  }
+}`
+
+	if od.String() != expectedOutput {
+		t.Errorf("wrong output,expected=%q, got=%q %d/%d", expectedOutput, od.String(), len(expectedOutput), len(od.String()))
+	}
+}

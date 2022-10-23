@@ -53,7 +53,6 @@ func (d *Document) GetKind() string {
 
 // Ensure that all definition types implements Definition interface
 var _ Definition = (*OperationDefinition)(nil)
-
 var _ Definition = (*FragmentDefinition)(nil)
 var _ Definition = (TypeSystemDefinition)(nil) // experimental non-spec addition.
 
@@ -331,7 +330,9 @@ func (fs *FragmentSpread) GetSelectionSet() *SelectionSet {
 	return nil
 }
 func (fs *FragmentSpread) String() string {
-	return ""
+	name := fs.FragmentName.String()
+	directives := toSliceString(fs.Directives)
+	return "..." + name + wrap(" ", join(directives, " "), "")
 }
 
 type InlineFragment struct {

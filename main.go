@@ -66,55 +66,78 @@ func main() {
 	// 	},
 	// }
 
-	frgd := ast.FragmentDefinition{}
-	frgd.Kind = ast.FRAGMENT_DEFINITION
-	frgd.Operation = ""
-	frgd.FragmentName = &ast.Name{Kind: ast.NAME, Value: "friendFields"}
-	frgd.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}
-	frgd.Directives = []*ast.Directive{
-		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
-	}
-	frgd.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
-		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "id"}},
-		&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "name"}},
-		&ast.Field{
-			Kind: ast.FIELD,
-			Name: &ast.Name{Kind: ast.NAME, Value: "profilePic"},
-			Arguments: []*ast.Argument{
-				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "size"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "50"}},
-			},
-		},
-	}}
+	// frgd := ast.FragmentDefinition{}
+	// frgd.Kind = ast.FRAGMENT_DEFINITION
+	// frgd.Operation = ""
+	// frgd.FragmentName = &ast.Name{Kind: ast.NAME, Value: "friendFields"}
+	// frgd.TypeCondition = &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "User"}}
+	// frgd.Directives = []*ast.Directive{
+	// 	{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	// }
+	// frgd.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+	// 	&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "id"}},
+	// 	&ast.Field{Kind: ast.FIELD, Name: &ast.Name{Kind: ast.NAME, Value: "name"}},
+	// 	&ast.Field{
+	// 		Kind: ast.FIELD,
+	// 		Name: &ast.Name{Kind: ast.NAME, Value: "profilePic"},
+	// 		Arguments: []*ast.Argument{
+	// 			{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "size"}, Value: &ast.IntValue{Kind: ast.INT_VALUE, Value: "50"}},
+	// 		},
+	// 	},
+	// }}
 
-	fmt.Println(frgd.String())
-	os.Exit(1)
+	// fmt.Println(frgd.String())
+	// os.Exit(1)
 
 	od := ast.OperationDefinition{}
 	od.Kind = ast.OPERATION_DEFINITION
 	od.OperationType = ast.OperationTypeQuery
-	od.Name = &ast.Name{Kind: ast.NAME, Value: "Test"}
+	od.Name = &ast.Name{Kind: ast.NAME, Value: "withFragments"}
 	od.VariablesDefinition = nil
-	od.VariablesDefinition = []*ast.VariableDefinition{
-		{Kind: ast.VARIABLE_DEFINITION, Variable: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "status"}}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}, DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Active"}},
-		{
-			Kind:         ast.VARIABLE,
-			Variable:     &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "point"}},
-			Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}},
-			DefaultValue: &ast.IntValue{Kind: ast.STRING_VALUE, Value: "0"},
-			//Directives:   []*ast.Directive{{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}}},
-		},
-	}
+	// od.VariablesDefinition = []*ast.VariableDefinition{
+	// 	{Kind: ast.VARIABLE_DEFINITION, Variable: &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "status"}}, Type: &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "String"}}, DefaultValue: &ast.StringValue{Kind: ast.STRING_VALUE, Value: "Active"}},
+	// 	{
+	// 		Kind:         ast.VARIABLE,
+	// 		Variable:     &ast.Variable{Kind: ast.VARIABLE, Name: &ast.Name{Kind: ast.NAME, Value: "point"}},
+	// 		Type:         &ast.NamedType{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Int"}},
+	// 		DefaultValue: &ast.IntValue{Kind: ast.STRING_VALUE, Value: "0"},
+	// 		//Directives:   []*ast.Directive{{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}}},
+	// 	},
+	// }
 
-	od.Directives = []*ast.Directive{
-		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
-	}
+	// od.Directives = []*ast.Directive{
+	// 	{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "caching"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	// }
 	od.SelectionSet = &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
 		&ast.Field{
 			Kind: ast.FIELD,
-			Name: &ast.Name{Kind: ast.NAME, Value: "status"},
+			Name: &ast.Name{Kind: ast.NAME, Value: "user"},
 			Arguments: []*ast.Argument{
-				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "status"}, Value: &ast.StringValue{Kind: ast.NAME, Value: "LiftStatus"}},
+				{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "id"}, Value: &ast.IntValue{Kind: ast.NAME, Value: "4"}},
 			},
+
+			SelectionSet: &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+				&ast.Field{
+					Kind: ast.FIELD,
+					Name: &ast.Name{Kind: ast.NAME, Value: "friends"},
+					Arguments: []*ast.Argument{
+						{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "first"}, Value: &ast.IntValue{Kind: ast.NAME, Value: "10"}},
+					},
+					SelectionSet: &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+						&ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD, FragmentName: &ast.Name{Kind: ast.NAME, Value: "friendFields"}},
+					}},
+				},
+				&ast.Field{
+					Kind: ast.FIELD,
+					Name: &ast.Name{Kind: ast.NAME, Value: "mutualFriends"},
+					Arguments: []*ast.Argument{
+						{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "first"}, Value: &ast.IntValue{Kind: ast.NAME, Value: "10"}},
+					},
+					SelectionSet: &ast.SelectionSet{Kind: ast.SELECTION_SET, Selections: []ast.Selection{
+						&ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD, FragmentName: &ast.Name{Kind: ast.NAME, Value: "friendFields"}, Directives: nil},
+					}},
+				},
+			}},
 		},
 	}}
 
