@@ -19,8 +19,7 @@ type Lift struct {
 	Size int
 }
 
-func main() {
-
+func manualTest() {
 	// fmt.Println(lower('S'))
 	// fmt.Println(32 | 83)
 
@@ -450,5 +449,11 @@ func main() {
 		}
 
 	}
+
+}
+
+func main() {
+
+	manualTest()
 
 }
