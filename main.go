@@ -6,6 +6,7 @@ import (
 
 	"github.com/mateors/graphqlparser/ast"
 	"github.com/mateors/graphqlparser/lexer"
+	"github.com/mateors/graphqlparser/parser"
 	"github.com/mateors/graphqlparser/token"
 )
 
@@ -464,27 +465,32 @@ func main() {
 	// 	appearsIn: [Episode]!
 	// }
 	// `
-	input := `type Person {
-		id: ID!
-		name: String!
-	}`
+	// input := `type Person {
+	// 	id: ID!
+	// 	name: String!
+	// }`
 
-	//fmt.Println(input[5:14], len(input[5:14]))
+	input := `name: String`
+
 	lex := lexer.New(input)
-
-	for {
-
-		tok := lex.NextToken()
-
-		if tok.Type == token.EOF {
-			break
-		}
-		if tok.Literal == input[tok.Start:tok.End] {
-			fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
-		} else {
-			fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
-		}
-
+	p := parser.New(lex)
+	doc := p.ParseDocument()
+	for i, def := range doc.Definitions {
+		fmt.Println("*", i, def.GetKind(), def)
 	}
+
+	// for {
+
+	// 	tok := lex.NextToken()
+	// 	if tok.Type == token.EOF {
+	// 		//fmt.Println("eof")
+	// 		break
+	// 	}
+	// 	if tok.Literal == input[tok.Start:tok.End] {
+	// 		fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
+	// 	} else {
+	// 		fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
+	// 	}
+	// }
 
 }

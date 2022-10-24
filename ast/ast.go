@@ -697,7 +697,7 @@ func toSliceString(slice interface{}) []string {
 			log.Println("activity panicking with value >>", rec)
 		}
 	}()
-
+	fmt.Println("--toSliceString")
 	if slice == nil {
 		return []string{}
 	}
@@ -707,6 +707,7 @@ func toSliceString(slice interface{}) []string {
 		s := reflect.ValueOf(slice)
 		for i := 0; i < s.Len(); i++ {
 			elem := s.Index(i)
+			fmt.Println("--")
 			reflect.ValueOf(&elem).MethodByName("String").Call([]reflect.Value{})
 			elemv := fmt.Sprintf("%v", elem)
 			res = append(res, elemv)
@@ -817,7 +818,7 @@ func (fd *FieldDefinition) String() string {
 	if len(fd.Description) > 0 {
 		out.WriteString(fmt.Sprintf("\"%s\"\n", fd.Description))
 	}
-	out.WriteString(fd.Name.Value)
+	out.WriteString(fd.Name.String())
 	if len(fd.Arguments) > 0 {
 		out.WriteString("(")
 		var vals string
@@ -829,7 +830,7 @@ func (fd *FieldDefinition) String() string {
 		out.WriteString(")")
 		//out.WriteString(": " + fd.Type.String())
 	}
-	out.WriteString(": " + fd.Type.String())
+	out.WriteString(": " + fd.Type.String()) //?
 
 	directives := []string{}
 	for _, directive := range fd.Directives {

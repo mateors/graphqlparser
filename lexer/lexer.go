@@ -113,7 +113,7 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Line = l.line
 			tok.Start = l.position
 			tok.Literal = l.readIdentifier()
-			tok.Type = token.LookupIdent(tok.Literal)
+			tok.Type = token.IDENT //token.LookupIdent(tok.Literal)
 			tok.End = tok.Start + len(tok.Literal)
 			return tok
 

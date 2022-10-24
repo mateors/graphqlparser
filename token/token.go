@@ -82,13 +82,13 @@ var keywords = map[string]TokenType{
 	"implements":   IMPLEMENTS,
 	"union":        UNION,
 	"on":           ON,
-	"Int":          INT,
-	"Float":        FLOAT,
-	"String":       STRING,
-	"Boolean":      BOOLEAN,
-	"ID":           ID,
-	"null":         NULL,
-	"...":          VARIADIC, //SPREAD
+	//"Int":          INT,
+	//"Float":        FLOAT,
+	//"String":       STRING,//??
+	//"Boolean":      BOOLEAN,
+	//"ID":           ID,
+	"null": NULL,
+	"...":  VARIADIC, //SPREAD
 }
 
 func LookupIdent(ident string) TokenType {

@@ -33,7 +33,7 @@ func (p *Parser) nextToken() {
 
 func (p *Parser) ParseDocument() *ast.Document {
 
-	document := &ast.Document{} //root node
+	document := &ast.Document{Kind: ast.DOCUMENT} //root node
 	document.Definitions = []ast.Node{}
 
 	for p.curToken.Type != token.EOF {
@@ -50,11 +50,39 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 	switch p.curToken.Type {
 	case token.TYPE:
+		fmt.Println("parseTypeSystemDefinition()")
 		return p.parseTypeSystemDefinition()
 
+	case token.IDENT:
+		return p.parseFieldDefinition()
+
 	default:
-		return &ast.OperationDefinition{}
+		fmt.Println("parseDocument")
+		return nil //&ast.OperationDefinition{}
 	}
+}
+
+func (p *Parser) parseFieldDefinition() ast.Node {
+
+	fmt.Println("fieldDefinition", p.curToken)
+	fd := &ast.FieldDefinition{}
+	fd.Kind = ast.FIELD_DEFINITION
+	fd.Token = p.curToken
+	fd.Name = p.parseName()
+
+	fmt.Println("current:1", p.curToken)
+	//fmt.Println(fd.Name, p.curToken, p.peekToken, !p.peekTokenIs(token.COLON), "==>", p.curTokenIs(token.COLON), p.expectPeek(token.COLON))
+	if !p.expectPeek(token.COLON) {
+		fmt.Println("*nil*")
+		return nil
+	}
+	fmt.Println("current:2", p.curToken)
+	p.nextToken()
+	fmt.Println("current:3", p.curToken)
+
+	fd.Type = p.parseType()
+	fmt.Println("-->", fd.Type)
+	return fd
 }
 
 func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
@@ -91,6 +119,7 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
+		fmt.Println("peekTokenIspeekTokenIs")
 		p.nextToken()
 		return true
 	} else {
@@ -101,7 +130,8 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 
 // Converts a name lex token into a name parse node.
 func (p *Parser) parseName() *ast.Name {
-	if !p.expectPeek(token.IDENT) {
+
+	if !p.curTokenIs(token.IDENT) {
 		return nil
 	}
 	return &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
@@ -111,7 +141,10 @@ func (p *Parser) parseName() *ast.Name {
  * NamedType : Name
  */
 func (p *Parser) parseNamed() *ast.NamedType {
+
+	fmt.Println("parseNamed()", p.curToken)
 	name := p.parseName()
+	fmt.Println("name:", name)
 	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: p.curToken, Name: name}
 }
 
@@ -134,7 +167,7 @@ func (p *Parser) parseType() (ttype ast.Type) {
 		p.nextToken()
 		ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: p.curToken, Type: ttype}
 
-	case token.IDENT:
+	case token.IDENT, token.STRING:
 		ttype = p.parseNamed()
 	}
 
