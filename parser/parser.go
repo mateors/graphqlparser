@@ -97,3 +97,11 @@ func parseName(p *Parser) *ast.Name {
 	}
 	return &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
 }
+
+/**
+ * NamedType : Name
+ */
+func parseNamed(p *Parser) *ast.NamedType {
+	name := parseName(p)
+	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: p.curToken, Name: name}
+}
