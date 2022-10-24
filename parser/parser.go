@@ -17,6 +17,15 @@ type Parser struct {
 	//infixParseFns  map[token.TokenType]infixParseFn
 }
 
+func New(l *lexer.Lexer) *Parser {
+
+	p := &Parser{l: l, errors: []string{}}
+
+	p.nextToken()
+	p.nextToken()
+	return p
+}
+
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
@@ -91,7 +100,7 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 }
 
 // Converts a name lex token into a name parse node.
-func parseName(p *Parser) *ast.Name {
+func (p *Parser) parseName() *ast.Name {
 	if !p.expectPeek(token.IDENT) {
 		return nil
 	}
@@ -101,7 +110,38 @@ func parseName(p *Parser) *ast.Name {
 /**
  * NamedType : Name
  */
-func parseNamed(p *Parser) *ast.NamedType {
-	name := parseName(p)
+func (p *Parser) parseNamed() *ast.NamedType {
+	name := p.parseName()
 	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: p.curToken, Name: name}
+}
+
+/**
+ * Type :
+ *   - NamedType
+ *   - ListType
+ *   - NonNullType
+ */
+func (p *Parser) parseType() (ttype ast.Type) {
+
+	// [ String! ]!
+	switch p.curToken.Type {
+	case token.LBRACKET: //[
+		p.nextToken()
+		ttype = p.parseType()
+		fallthrough
+
+	case token.RBRACKET: //]
+		p.nextToken()
+		ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: p.curToken, Type: ttype}
+
+	case token.IDENT:
+		ttype = p.parseNamed()
+	}
+
+	// BANG must be executed
+	if p.expectPeek(token.BANG) {
+		p.nextToken()
+		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
+	}
+	return ttype
 }
