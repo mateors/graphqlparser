@@ -855,7 +855,7 @@ type InputValueDefinition struct {
 	//Description[opt] Name : Type DefaultValue[opt] Directives[opt]
 	Kind         string //INPUT_VALUE_DEFINITION
 	Token        token.Token
-	Description  string
+	Description  *StringValue
 	Name         *Name
 	Type         Type
 	DefaultValue Value

@@ -142,7 +142,7 @@ func (dd *DirectiveDefinition) String() string {
 	args := toSliceString(dd.Arguments)
 	hasArgDesc := false
 	for _, arg := range dd.Arguments {
-		if arg.Description != "" {
+		if arg.Description != nil {
 			hasArgDesc = true
 			break
 		}
