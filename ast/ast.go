@@ -36,7 +36,7 @@ type Expression interface {
 
 type Document struct { //Program | Document
 	Kind        string
-	Definitions []Definition
+	Definitions []Node //[]Definition
 }
 
 func (d *Document) TokenLiteral() string {

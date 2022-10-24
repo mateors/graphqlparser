@@ -454,6 +454,37 @@ func manualTest() {
 
 func main() {
 
-	manualTest()
+	// input := `type Person {
+	// 	id: ID!
+	// 	adult: Boolean!
+	// 	name: String!
+	// 	age: Int!
+	// 	salary: Float!
+	// 	length(unit: LengthUnit = METER): Float
+	// 	appearsIn: [Episode]!
+	// }
+	// `
+	input := `type Person {
+		id: ID!
+		name: String!
+	}`
+
+	//fmt.Println(input[5:14], len(input[5:14]))
+	lex := lexer.New(input)
+
+	for {
+
+		tok := lex.NextToken()
+
+		if tok.Type == token.EOF {
+			break
+		}
+		if tok.Literal == input[tok.Start:tok.End] {
+			fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
+		} else {
+			fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
+		}
+
+	}
 
 }
