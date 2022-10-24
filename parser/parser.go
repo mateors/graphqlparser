@@ -85,7 +85,15 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 		p.nextToken()
 		return true
 	} else {
-		//p.peekError(t)
+		p.peekError(t)
 		return false
 	}
+}
+
+// Converts a name lex token into a name parse node.
+func parseName(p *Parser) *ast.Name {
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+	return &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
 }
