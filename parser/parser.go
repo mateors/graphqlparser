@@ -53,8 +53,8 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		fmt.Println("parseTypeSystemDefinition()")
 		return p.parseTypeSystemDefinition()
 
-	case token.IDENT:
-		return p.parseFieldDefinition()
+	//case token.IDENT:
+	//return p.parseFieldDefinition()
 
 	default:
 		fmt.Println("parseDocument")
@@ -99,7 +99,19 @@ func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefiniti
 
 func (p *Parser) parseObjectDefinition() ast.Node {
 
-	od := &ast.ObjectDefinition{}
+	fmt.Println("parseObjectDefinition")
+	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
+	od.Token = p.curToken
+
+	fmt.Println("cur1:", p.curToken)
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+	fmt.Println("cur2:", p.curToken)
+
+	od.Description = ""
+	od.Name = p.parseName()
+	fmt.Println("od.Name", od.Name)
 	return od
 }
 

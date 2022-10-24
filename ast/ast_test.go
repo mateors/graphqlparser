@@ -205,7 +205,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 
 	var obj ObjectDefinition
 	obj.Kind = OBJECT_DEFINITION
-	obj.Description = "Description for the type"
+	obj.Description = &StringValue{Kind: STRING_VALUE, Value: "Description for the type"}
 	obj.Name = &Name{Kind: NAME, Value: "Lift"}
 	obj.Interfaces = infcs
 	obj.Directives = nil

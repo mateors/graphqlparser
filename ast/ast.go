@@ -86,6 +86,7 @@ func (fd *FragmentDefinition) String() string {
 	name := fmt.Sprintf("%v", fd.FragmentName)
 	typeCondition := fd.TypeCondition.String()
 	directives := toSliceString(fd.Directives)
+
 	selectionSet := fd.SelectionSet.String()
 	return "fragment " + name + " on " + typeCondition + " " + wrap("", join(directives, " "), " ") + selectionSet
 }
@@ -697,7 +698,7 @@ func toSliceString(slice interface{}) []string {
 			log.Println("activity panicking with value >>", rec)
 		}
 	}()
-	fmt.Println("--toSliceString")
+	//fmt.Println("--toSliceString")
 	if slice == nil {
 		return []string{}
 	}
@@ -707,7 +708,6 @@ func toSliceString(slice interface{}) []string {
 		s := reflect.ValueOf(slice)
 		for i := 0; i < s.Len(); i++ {
 			elem := s.Index(i)
-			fmt.Println("--")
 			reflect.ValueOf(&elem).MethodByName("String").Call([]reflect.Value{})
 			elemv := fmt.Sprintf("%v", elem)
 			res = append(res, elemv)
@@ -722,7 +722,7 @@ type ObjectDefinition struct {
 	//Description[opt] type Name ImplementsInterfaces[opt] Directives[opt] { FieldsDefinition }
 	Kind        string //OBJECT_DEFINITION
 	Token       token.Token
-	Description string
+	Description *StringValue
 	Name        *Name
 	Interfaces  []*NamedType //NAMED
 	Directives  []*Directive
@@ -747,9 +747,11 @@ func (ob *ObjectDefinition) GetSelectionSet() *SelectionSet {
 func (ob *ObjectDefinition) String() string {
 	var out bytes.Buffer
 
-	if len(ob.Description) > 0 {
-		//desc := join([]string{`"""`, desc, `"""`}, sep)
-		out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", ob.Description) + "\n")
+	if ob.Description != nil {
+		if len(ob.Description.Value) > 0 {
+			//desc := join([]string{`"""`, desc, `"""`}, sep)
+			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", ob.Description.Value) + "\n")
+		}
 	}
 	name := ob.Name.Value
 	out.WriteString("type" + " " + name)
