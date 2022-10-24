@@ -64,24 +64,23 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseFieldDefinition() ast.Node {
 
-	fmt.Println("fieldDefinition", p.curToken)
+	//fmt.Println("fieldDefinition", p.curToken)
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
 	fd.Name = p.parseName()
 
-	fmt.Println("current:1", p.curToken)
+	//fmt.Println("current:1", p.curToken)
 	//fmt.Println(fd.Name, p.curToken, p.peekToken, !p.peekTokenIs(token.COLON), "==>", p.curTokenIs(token.COLON), p.expectPeek(token.COLON))
 	if !p.expectPeek(token.COLON) {
-		fmt.Println("*nil*")
 		return nil
 	}
-	fmt.Println("current:2", p.curToken)
+	//fmt.Println("current:2", p.curToken)
 	p.nextToken()
-	fmt.Println("current:3", p.curToken)
+	//fmt.Println("current:3", p.curToken)
 
 	fd.Type = p.parseType()
-	fmt.Println("-->", fd.Type)
+	//fmt.Println("-->", fd.Type)
 	return fd
 }
 
@@ -119,7 +118,7 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
-		fmt.Println("peekTokenIspeekTokenIs")
+		//fmt.Println("peekTokenIspeekTokenIs")
 		p.nextToken()
 		return true
 	} else {
@@ -142,9 +141,9 @@ func (p *Parser) parseName() *ast.Name {
  */
 func (p *Parser) parseNamed() *ast.NamedType {
 
-	fmt.Println("parseNamed()", p.curToken)
+	//fmt.Println("parseNamed()", p.curToken)
 	name := p.parseName()
-	fmt.Println("name:", name)
+	//fmt.Println("name:", name)
 	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: p.curToken, Name: name}
 }
 

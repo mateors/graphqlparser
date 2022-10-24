@@ -465,12 +465,12 @@ func main() {
 	// 	appearsIn: [Episode]!
 	// }
 	// `
-	// input := `type Person {
-	// 	id: ID!
-	// 	name: String!
-	// }`
 
-	input := `name: String`
+	input := `type Person {
+		id: ID!
+		name: String!
+	}`
+	//input := `name: String`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
