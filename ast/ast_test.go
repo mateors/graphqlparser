@@ -184,7 +184,7 @@ func TestObjectDefinitionFieldDirective(t *testing.T) {
 
 	field := &FieldDefinition{}
 	field.Kind = FIELD_DEFINITION
-	field.Description = "Field comments or description"
+	field.Description = &StringValue{Kind: STRING_VALUE, Value: "Field comments or description"}
 	field.Name = &Name{Kind: NAME, Value: "name"}
 	field.Type = &NonNullType{Kind: NONNULL_TYPE, Type: &ListType{Kind: LIST_TYPE, Type: &NonNullType{Kind: NONNULL_TYPE, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}}}}
 	field.Directives = nil
@@ -277,9 +277,9 @@ func TestInterfaceDefinition(t *testing.T) {
 	fieldi2.Type = &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "Int"}}
 
 	id.Fields = []*FieldDefinition{
-		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "id"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "ID"}}, Directives: nil},
-		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "url"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
-		{Kind: FIELD_DEFINITION, Description: "", Name: &Name{Kind: NAME, Value: "thumbnail"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
+		{Kind: FIELD_DEFINITION, Description: nil, Name: &Name{Kind: NAME, Value: "id"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "ID"}}, Directives: nil},
+		{Kind: FIELD_DEFINITION, Description: nil, Name: &Name{Kind: NAME, Value: "url"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
+		{Kind: FIELD_DEFINITION, Description: nil, Name: &Name{Kind: NAME, Value: "thumbnail"}, Arguments: nil, Type: &NamedType{Kind: NAMED_TYPE, Name: &Name{Kind: NAME, Value: "String"}}, Directives: nil},
 	}
 
 	expectedOutput := `interface Image implements Resource & Node {

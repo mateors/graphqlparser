@@ -797,7 +797,7 @@ type FieldDefinition struct {
 	//ArgumentsDefinition: ( InputValueDefinition[list] )
 	Kind        string //FIELD_DEFINITION
 	Token       token.Token
-	Description string
+	Description *StringValue
 	Name        *Name
 	Arguments   []*InputValueDefinition
 	Type        Type
@@ -817,8 +817,10 @@ func (fd *FieldDefinition) String() string {
 	//Description[opt] Name ArgumentsDefinition[opt] : Type Directives[opt]
 	//name: String
 	//name: String!
-	if len(fd.Description) > 0 {
-		out.WriteString(fmt.Sprintf("\"%s\"\n", fd.Description))
+	if fd.Description != nil {
+		if len(fd.Description.Value) > 0 {
+			out.WriteString(fmt.Sprintf("\"%s\"\n", fd.Description.Value))
+		}
 	}
 	out.WriteString(fd.Name.String())
 	if len(fd.Arguments) > 0 {
