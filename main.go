@@ -450,6 +450,24 @@ func manualTest() {
 
 }
 
+func manualParseObjectDefinition() {
+
+	input := `
+	"""test desc"""
+	type Person {
+		id: ID!
+		name: String!
+		age: Int
+		subject: [String!]!
+	}`
+	lex := lexer.New(input)
+	p := parser.New(lex)
+	doc := p.ParseDocument()
+	for i, def := range doc.Definitions {
+		fmt.Println("*", i, def.GetKind(), def)
+	}
+}
+
 func main() {
 
 	// input := `type Person {
