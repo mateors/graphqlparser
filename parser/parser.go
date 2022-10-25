@@ -92,8 +92,7 @@ func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefiniti
 		//p.nextToken()
 	}
 
-	p.to
-	fmt.Println("c1>", p.curToken, p.peekToken, cToken.Type)
+	//fmt.Println("c1>", p.curToken, p.peekToken.Literal, token.IsKeyword(p.peekToken.Literal))
 	if !p.peekTokenIs(token.IDENT) {
 		fmt.Println("nil", p.curToken)
 		return nil

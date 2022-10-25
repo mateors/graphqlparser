@@ -97,3 +97,10 @@ func LookupIdent(ident string) TokenType {
 	}
 	return IDENT
 }
+
+func IsKeyword(ident string) bool {
+	if _, ok := keywords[ident]; ok {
+		return true
+	}
+	return false
+}
