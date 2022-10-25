@@ -28,11 +28,10 @@ func New(l *lexer.Lexer) *Parser {
 	p.tokenDefinitionFns = make(map[token.TokenType]parseDefinitionFn)
 
 	//p.registerTokenDefinitionFns(token.LBRACE, parseOperationDefinition)
-	p.registerTokenDefinitionFns(token.STRING, p.parseTypeSystemDefinition)
-	p.registerTokenDefinitionFns(token.BLOCK_STRING, p.parseTypeSystemDefinition)
-
-	p.registerTokenDefinitionFns(token.IDENT, p.parseTypeSystemDefinition)
-	p.registerTokenDefinitionFns(token.TYPE, p.parseTypeSystemDefinition)
+	//p.registerTokenDefinitionFns(token.STRING, p.parseTypeSystemDefinition)
+	//p.registerTokenDefinitionFns(token.BLOCK_STRING, p.parseTypeSystemDefinition)
+	//p.registerTokenDefinitionFns(token.IDENT, p.parseTypeSystemDefinition)
+	//p.registerTokenDefinitionFns(token.TYPE, p.parseTypeSystemDefinition)
 
 	//p.registerTokenDefinitionFns(token.TYPE, p.parseObjectDefinition)
 	p.nextToken()
@@ -74,7 +73,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	//case token.TYPE:
 	//return p.parseObjectDefinition()
 
-	case token.BLOCK_STRING, token.STRING, token.HASH:
+	case token.BLOCK_STRING, token.STRING, token.HASH, token.TYPE:
 		return p.parseObjectDefinition()
 
 	// case token.IDENT: //,token.LBRACE, token.STRING
@@ -93,33 +92,33 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 }
 
-func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
+func (p *Parser) parseObjectDefinition() ast.Node {
 
-	fmt.Println("parseTypeSystemDefinition>", p.curToken)
+	fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
+	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
+	od.Token = p.curToken
+	od.Description = p.parseDescription()
 
-	var keyWordToken token.Token
-	if p.isDescription() {
-		keyWordToken = p.peekToken
-	}
-
-	if !p.peekTokenIsKeyword() {
-		p.peekError(token.IDENT)
+	if !p.expectToken(token.TYPE) {
+		//fmt.Println("*nil*")
 		return nil
 	}
+	od.Name = p.parseName()
 
-	//fmt.Println("c2>", p.curToken, keyWordToken)
-	item, ok := p.tokenDefinitionFns[keyWordToken.Type]
-	if !ok {
-		return nil
-	}
-	return item()
-}
+	//loop
+	p.nextToken()
+	p.nextToken()
+	od.Fields = []*ast.FieldDefinition{}
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
-func (p *Parser) isDescription() bool {
-	if p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.STRING) {
-		return true
+		fd := p.parseFieldDefinition()
+		if fd != nil {
+			od.Fields = append(od.Fields, fd)
+		}
+		p.nextToken()
 	}
-	return false
+	fmt.Println("parseObjectDefinition->DONE")
+	return od
 }
 
 func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
@@ -140,47 +139,23 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	return fd
 }
 
-func (p *Parser) expectToken(t token.TokenType) bool {
-	fmt.Println("expectToken", t)
-	if p.curTokenIs(t) {
-		p.nextToken()
-		return true
-	}
-	return false
-}
+// func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
 
-func (p *Parser) parseObjectDefinition() ast.Node {
-
-	fmt.Println("parseObjectDefinition", p.curToken) //starting from first token
-	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
-	od.Token = p.curToken
-	od.Description = p.parseDescription()
-
-	//fmt.Println("AfterDescription:", p.curToken)
-	if !p.expectToken(token.TYPE) {
-		//fmt.Println("*nil*")
-		return nil
-	}
-
-	od.Name = p.parseName()
-	//fmt.Println("od.Name", od.Name, p.curToken)
-
-	//loop
-	p.nextToken()
-	p.nextToken()
-	od.Fields = []*ast.FieldDefinition{}
-	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
-
-		fd := p.parseFieldDefinition()
-		//fmt.Println("fieldD--->", fd)
-		if fd != nil {
-			od.Fields = append(od.Fields, fd)
-		}
-		p.nextToken()
-	}
-	fmt.Println("DONE")
-	return od
-}
+// 	fmt.Println("parseTypeSystemDefinition>", p.curToken)
+// 	var keyWordToken token.Token
+// 	if p.isDescription() {
+// 		keyWordToken = p.peekToken
+// 	}
+// 	if !p.peekTokenIsKeyword() {
+// 		p.peekError(token.IDENT)
+// 		return nil
+// 	}
+// 	item, ok := p.tokenDefinitionFns[keyWordToken.Type]
+// 	if !ok {
+// 		return nil
+// 	}
+// 	return item()
+// }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
 	return p.curToken.Type == t
@@ -208,6 +183,22 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 		p.peekError(t)
 		return false
 	}
+}
+
+func (p *Parser) isDescription() bool {
+	if p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.STRING) {
+		return true
+	}
+	return false
+}
+
+func (p *Parser) expectToken(t token.TokenType) bool {
+	fmt.Println("expectToken", t)
+	if p.curTokenIs(t) {
+		p.nextToken()
+		return true
+	}
+	return false
 }
 
 // Converts a name lex token into a name parse node.

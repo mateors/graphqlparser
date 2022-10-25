@@ -453,6 +453,28 @@ type Lift {
 * `extend input Name Directives[opt] InputFieldsDefinition`
 * `extend input Name Directives`
 
+## ObjectDefinition Input
+```
+type Person {
+  id: ID!
+  adult: Boolean!
+}
+```
+### Output steps:
+* parseDocument> 29
+* parseObjectDefinition->START {29 2 2 6 type}
+* parseDescription {29 2 2 6 type} {20 2 7 13 Person}
+* expectToken 29
+* fieldDefinition {20 3 18 20 id}
+* fieldDefinition {20 4 28 33 adult}
+* parseObjectDefinition->DONE
+```
+type Person {
+id: ID!
+adult: Boolean!
+}
+```
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
