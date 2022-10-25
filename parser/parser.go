@@ -152,10 +152,6 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
 
-	// if !p.curTokenIs(token.TYPE) {
-	// 	return nil
-	// }
-	// p.nextToken()
 	if !p.expectToken(token.TYPE) {
 		return nil
 	}
