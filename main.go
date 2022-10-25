@@ -483,7 +483,7 @@ func main() {
 	// }
 	// `
 	input := `
-	"test"
+	#test
 	type Person {
 		id: ID!
 		adult: Boolean!
