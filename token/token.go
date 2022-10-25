@@ -66,29 +66,29 @@ type Token struct {
 }
 
 var keywords = map[string]TokenType{
-	"type":         TYPE,
-	"mutation":     MUTATION,
-	"fragment":     FRAGMENT,
-	"input":        INPUT,
-	"query":        QUERY,
-	"subscription": SUBSCRIPTION,
-	"schema":       SCHEMA,
-	"return":       RETURN,
-	"scalar":       SCALAR,
-	"enum":         ENUM,
-	"extend":       EXTEND,
-	"directive":    DIRECTIVE,
-	"interface":    INTERFACE,
-	"implements":   IMPLEMENTS,
-	"union":        UNION,
-	"on":           ON,
+	"type":         TYPE,         //
+	"mutation":     MUTATION,     //
+	"fragment":     FRAGMENT,     //
+	"input":        INPUT,        //
+	"query":        QUERY,        //
+	"subscription": SUBSCRIPTION, //
+	"schema":       SCHEMA,       //
+	"scalar":       SCALAR,       //
+	"enum":         ENUM,         //
+	"extend":       EXTEND,       //
+	"directive":    DIRECTIVE,    //
+	"interface":    INTERFACE,    //
+	"union":        UNION,        //
+	//"return":       RETURN,
+	//"implements":   IMPLEMENTS,
+	//"on":           ON,
 	//"Int":          INT,
 	//"Float":        FLOAT,
 	//"String":       STRING,//??
 	//"Boolean":      BOOLEAN,
 	//"ID":           ID,
-	"null": NULL,
-	"...":  VARIADIC, //SPREAD
+	//"null": NULL,
+	//"...":  VARIADIC, //SPREAD
 }
 
 func LookupIdent(ident string) TokenType {

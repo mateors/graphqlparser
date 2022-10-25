@@ -437,9 +437,7 @@ func manualTest() {
 	lex := lexer.New(input)
 
 	for {
-
 		tok := lex.NextToken()
-
 		if tok.Type == token.EOF {
 			break
 		}
@@ -448,7 +446,6 @@ func manualTest() {
 		} else {
 			fmt.Println(tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
 		}
-
 	}
 
 }
@@ -482,7 +479,6 @@ func main() {
 	}
 
 	// for {
-
 	// 	tok := lex.NextToken()
 	// 	if tok.Type == token.EOF {
 	// 		//fmt.Println("eof")

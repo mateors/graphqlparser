@@ -8,11 +8,16 @@ import (
 	"github.com/mateors/graphqlparser/token"
 )
 
+type parseDefinitionFn func() ast.Node
+
+//var tokenDefinitionFn map[string]parseDefinitionFn
+
 type Parser struct {
-	l         *lexer.Lexer
-	errors    []string
-	curToken  token.Token //position
-	peekToken token.Token //read position
+	l                  *lexer.Lexer
+	errors             []string
+	curToken           token.Token //position
+	peekToken          token.Token //read position
+	tokenDefinitionFns map[token.TokenType]parseDefinitionFn
 	//prefixParseFns map[token.TokenType]prefixParseFn
 	//infixParseFns  map[token.TokenType]infixParseFn
 }
@@ -20,10 +25,22 @@ type Parser struct {
 func New(l *lexer.Lexer) *Parser {
 
 	p := &Parser{l: l, errors: []string{}}
+	p.tokenDefinitionFns = make(map[token.TokenType]parseDefinitionFn)
 
+	//p.registerTokenDefinitionFns(token.LBRACE, parseOperationDefinition)
+	p.registerTokenDefinitionFns(token.STRING, p.parseTypeSystemDefinition)
+	p.registerTokenDefinitionFns(token.BLOCK_STRING, p.parseTypeSystemDefinition)
+	p.registerTokenDefinitionFns(token.IDENT, p.parseTypeSystemDefinition)
+
+	p.registerTokenDefinitionFns(token.TYPE, p.parseObjectDefinition)
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) registerTokenDefinitionFns(tokenType token.TokenType, fn parseDefinitionFn) {
+
+	p.tokenDefinitionFns[tokenType] = fn
 }
 
 func (p *Parser) nextToken() {
@@ -49,35 +66,57 @@ func (p *Parser) ParseDocument() *ast.Document {
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 	switch p.curToken.Type {
-	case token.BLOCK_STRING: //,token.TYPE
-		fmt.Println("parseTypeSystemDefinition()")
-		return p.parseTypeSystemDefinition()
+	case token.IDENT, token.BLOCK_STRING: //,token.LBRACE, token.STRING
+		fmt.Println("tokenDefinitionFns->")
+		//prefix := p.prefixParseFns[p.curToken.Type]
+		parseFunc := p.tokenDefinitionFns[p.curToken.Type]
+		//fmt.Println(">>", parseFunc, reflect.TypeOf(parseFunc))
+		return parseFunc()
 
 	//case token.IDENT:
 	//return p.parseFieldDefinition()
 
 	default:
-		fmt.Println("parseDocument")
+		fmt.Println("unexpected")
 		return nil //&ast.OperationDefinition{}
 	}
 }
 
 func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
 
-	switch p.curToken.Type {
-	case token.TYPE:
-		return p.parseObjectDefinition()
-	case token.IDENT:
-		return nil
-	default:
-		fmt.Println(">>", p.curToken)
+	fmt.Println("parseTypeSystemDefinition>", p.curToken, p.peekToken, p.curTokenIs(token.BLOCK_STRING))
+
+	var cToken token.Token
+	if p.isDescription() {
+		cToken = p.curToken
+		//p.nextToken()
+	}
+
+	p.to
+	fmt.Println("c1>", p.curToken, p.peekToken, cToken.Type)
+	if !p.peekTokenIs(token.IDENT) {
+		fmt.Println("nil", p.curToken)
 		return nil
 	}
+
+	fmt.Println("c2>", p.curToken)
+	item, ok := p.tokenDefinitionFns[cToken.Type]
+	if !ok {
+		return nil
+	}
+	return item()
+}
+
+func (p *Parser) isDescription() bool {
+	if p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.STRING) {
+		return true
+	}
+	return false
 }
 
 func (p *Parser) parseFieldDefinition() ast.Node {
 
-	//fmt.Println("fieldDefinition", p.curToken)
+	fmt.Println("fieldDefinition", p.curToken)
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
