@@ -468,6 +468,8 @@ func main() {
 	type Person {
 		id: ID!
 		name: String!
+		age: Int
+		subject: [String!]!
 	}`
 	//input := `name: String`
 
