@@ -84,26 +84,19 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
 
-	fmt.Println("parseTypeSystemDefinition>", p.curToken, p.peekToken, p.curTokenIs(token.BLOCK_STRING))
+	fmt.Println("parseTypeSystemDefinition>", p.curToken)
 
 	var keyWordToken token.Token
 	if p.isDescription() {
 		keyWordToken = p.peekToken
-		//p.nextToken()
 	}
 
-	//fmt.Println("c1>", p.curToken, p.peekToken.Literal, token.IsKeyword(p.peekToken.Literal))
-	// if !p.peekTokenIs(token.IDENT) {
-	// 	fmt.Println("nil", p.curToken)
-	// 	return nil
-	// }
-	//if !token.IsKeyword(p.peekToken.Literal) {
 	if !p.peekTokenIsKeyword() {
 		p.peekError(token.IDENT)
 		return nil
 	}
 
-	fmt.Println("c2>", p.curToken, keyWordToken)
+	//fmt.Println("c2>", p.curToken, keyWordToken)
 	item, ok := p.tokenDefinitionFns[keyWordToken.Type]
 	if !ok {
 		return nil
@@ -118,44 +111,52 @@ func (p *Parser) isDescription() bool {
 	return false
 }
 
-func (p *Parser) parseFieldDefinition() ast.Node {
+func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
-	fmt.Println("fieldDefinition", p.curToken)
+	fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
 	fd.Name = p.parseName()
 
-	//fmt.Println("current:1", p.curToken)
-	//fmt.Println(fd.Name, p.curToken, p.peekToken, !p.peekTokenIs(token.COLON), "==>", p.curTokenIs(token.COLON), p.expectPeek(token.COLON))
 	if !p.expectPeek(token.COLON) {
 		return nil
 	}
-	//fmt.Println("current:2", p.curToken)
-	p.nextToken()
-	//fmt.Println("current:3", p.curToken)
 
+	p.nextToken()
 	fd.Type = p.parseType()
-	//fmt.Println("-->", fd.Type)
+	//fmt.Println("-->", fd.Type, p.curToken)
 	return fd
 }
 
 func (p *Parser) parseObjectDefinition() ast.Node {
 
-	fmt.Println("parseObjectDefinition")
+	fmt.Println("parseObjectDefinition", p.curToken) //starting from first token
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
 
-	fmt.Println("cur1:", p.curToken, od.Description.Value, p.peekToken)
 	if !p.expectPeek(token.TYPE) {
 		return nil
 	}
-	fmt.Println("cur2:", p.curToken)
-	p.nextToken()
 
+	p.nextToken()
 	od.Name = p.parseName()
-	fmt.Println("od.Name", od.Name)
+	//fmt.Println("od.Name", od.Name, p.curToken)
+
+	//loop
+	p.nextToken()
+	p.nextToken()
+	od.Fields = []*ast.FieldDefinition{}
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+
+		fd := p.parseFieldDefinition()
+		//fmt.Println("fieldD--->", fd)
+		if fd != nil {
+			od.Fields = append(od.Fields, fd)
+		}
+		p.nextToken()
+	}
 	return od
 }
 
@@ -172,7 +173,7 @@ func (p *Parser) peekTokenIsKeyword() bool {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	msg := fmt.Sprintf("expected next token to be %v, got %v instead", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
 
@@ -232,7 +233,6 @@ func (p *Parser) parseType() (ttype ast.Type) {
 
 	// BANG must be executed
 	if p.expectPeek(token.BANG) {
-		p.nextToken()
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
 	}
 	return ttype
