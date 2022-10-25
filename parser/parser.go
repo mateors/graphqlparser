@@ -49,7 +49,7 @@ func (p *Parser) ParseDocument() *ast.Document {
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 	switch p.curToken.Type {
-	case token.TYPE:
+	case token.BLOCK_STRING: //,token.TYPE
 		fmt.Println("parseTypeSystemDefinition()")
 		return p.parseTypeSystemDefinition()
 
@@ -59,6 +59,19 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	default:
 		fmt.Println("parseDocument")
 		return nil //&ast.OperationDefinition{}
+	}
+}
+
+func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
+
+	switch p.curToken.Type {
+	case token.TYPE:
+		return p.parseObjectDefinition()
+	case token.IDENT:
+		return nil
+	default:
+		fmt.Println(">>", p.curToken)
+		return nil
 	}
 }
 
@@ -84,24 +97,13 @@ func (p *Parser) parseFieldDefinition() ast.Node {
 	return fd
 }
 
-func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
-
-	switch p.curToken.Type {
-	case token.TYPE:
-		return p.parseObjectDefinition()
-	case token.IDENT:
-		return nil
-	default:
-		fmt.Println(">>", p.curToken)
-		return nil
-	}
-}
-
 func (p *Parser) parseObjectDefinition() ast.Node {
 
 	fmt.Println("parseObjectDefinition")
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
+
+	od.Description = p.parseDescription()
 
 	fmt.Println("cur1:", p.curToken)
 	if !p.expectPeek(token.IDENT) {
@@ -109,7 +111,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	}
 	fmt.Println("cur2:", p.curToken)
 
-	od.Description = ""
+	od.Description = nil //&ast.StringValue{}
 	od.Name = p.parseName()
 	fmt.Println("od.Name", od.Name)
 	return od
@@ -188,4 +190,21 @@ func (p *Parser) parseType() (ttype ast.Type) {
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
 	}
 	return ttype
+}
+
+func (p *Parser) parseDescription() *ast.StringValue {
+
+	fmt.Println("parseDescription", p.curToken, p.peekToken)
+	if p.peekTokenIs(token.STRING) || p.peekTokenIs(token.BLOCK_STRING) {
+
+		return p.parseStringLiteral()
+	}
+	return nil
+}
+
+func (p *Parser) parseStringLiteral() *ast.StringValue {
+
+	//p.nextToken()
+	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: p.curToken, Value: p.curToken.Literal}
+
 }

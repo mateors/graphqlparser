@@ -466,7 +466,9 @@ func main() {
 	// }
 	// `
 
-	input := `type Person {
+	input := `
+	"""test desc"""
+	type Person {
 		id: ID!
 		name: String!
 	}`
