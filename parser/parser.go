@@ -86,20 +86,25 @@ func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefiniti
 
 	fmt.Println("parseTypeSystemDefinition>", p.curToken, p.peekToken, p.curTokenIs(token.BLOCK_STRING))
 
-	var cToken token.Token
+	var keyWordToken token.Token
 	if p.isDescription() {
-		cToken = p.curToken
+		keyWordToken = p.peekToken
 		//p.nextToken()
 	}
 
 	//fmt.Println("c1>", p.curToken, p.peekToken.Literal, token.IsKeyword(p.peekToken.Literal))
-	if !p.peekTokenIs(token.IDENT) {
-		fmt.Println("nil", p.curToken)
+	// if !p.peekTokenIs(token.IDENT) {
+	// 	fmt.Println("nil", p.curToken)
+	// 	return nil
+	// }
+	//if !token.IsKeyword(p.peekToken.Literal) {
+	if !p.peekTokenIsKeyword() {
+		p.peekError(token.IDENT)
 		return nil
 	}
 
-	fmt.Println("c2>", p.curToken)
-	item, ok := p.tokenDefinitionFns[cToken.Type]
+	fmt.Println("c2>", p.curToken, keyWordToken)
+	item, ok := p.tokenDefinitionFns[keyWordToken.Type]
 	if !ok {
 		return nil
 	}
@@ -140,16 +145,15 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	fmt.Println("parseObjectDefinition")
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
-
 	od.Description = p.parseDescription()
 
-	fmt.Println("cur1:", p.curToken)
-	if !p.expectPeek(token.IDENT) {
+	fmt.Println("cur1:", p.curToken, od.Description.Value, p.peekToken)
+	if !p.expectPeek(token.TYPE) {
 		return nil
 	}
 	fmt.Println("cur2:", p.curToken)
+	p.nextToken()
 
-	od.Description = nil //&ast.StringValue{}
 	od.Name = p.parseName()
 	fmt.Println("od.Name", od.Name)
 	return od
@@ -161,6 +165,10 @@ func (p *Parser) curTokenIs(t token.TokenType) bool {
 
 func (p *Parser) peekTokenIs(t token.TokenType) bool {
 	return p.peekToken.Type == t
+}
+
+func (p *Parser) peekTokenIsKeyword() bool {
+	return token.IsKeyword(p.peekToken.Literal)
 }
 
 func (p *Parser) peekError(t token.TokenType) {
@@ -233,8 +241,7 @@ func (p *Parser) parseType() (ttype ast.Type) {
 func (p *Parser) parseDescription() *ast.StringValue {
 
 	fmt.Println("parseDescription", p.curToken, p.peekToken)
-	if p.peekTokenIs(token.STRING) || p.peekTokenIs(token.BLOCK_STRING) {
-
+	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) {
 		return p.parseStringLiteral()
 	}
 	return nil
