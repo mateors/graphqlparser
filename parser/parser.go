@@ -67,12 +67,13 @@ func (p *Parser) ParseDocument() *ast.Document {
 
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
+	fmt.Println("parseDocument>", p.curToken.Type)
 	switch p.curToken.Type {
 
 	case token.TYPE:
 		return p.parseObjectDefinition()
 
-	case token.BLOCK_STRING:
+	case token.BLOCK_STRING, token.STRING:
 		return p.parseObjectDefinition()
 
 	case token.IDENT: //,token.LBRACE, token.STRING
@@ -257,7 +258,6 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 	fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) {
-		p.nextToken()
 		return p.parseStringLiteral()
 	}
 	return nil
@@ -265,7 +265,8 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 func (p *Parser) parseStringLiteral() *ast.StringValue {
 
-	//p.nextToken()
-	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: p.curToken, Value: p.curToken.Literal}
+	cToken := p.curToken
+	p.nextToken()
+	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
 
 }
