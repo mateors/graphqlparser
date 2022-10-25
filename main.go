@@ -470,7 +470,9 @@ func manualParseObjectDefinition() {
 
 func main() {
 
-	// input := `type Person {
+	// input := `
+	// """test"""
+	// type Person {
 	// 	id: ID!
 	// 	adult: Boolean!
 	// 	name: String!
@@ -480,16 +482,13 @@ func main() {
 	// 	appearsIn: [Episode]!
 	// }
 	// `
-
 	input := `
-	"""test desc"""
+	"""ddd"""
 	type Person {
 		id: ID!
-		name: String!
-		age: Int
-		subject: [String!]!
-	}`
-	//input := `name: String`
+		adult: Boolean!
+	}
+	`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)

@@ -30,9 +30,11 @@ func New(l *lexer.Lexer) *Parser {
 	//p.registerTokenDefinitionFns(token.LBRACE, parseOperationDefinition)
 	p.registerTokenDefinitionFns(token.STRING, p.parseTypeSystemDefinition)
 	p.registerTokenDefinitionFns(token.BLOCK_STRING, p.parseTypeSystemDefinition)
-	p.registerTokenDefinitionFns(token.IDENT, p.parseTypeSystemDefinition)
 
-	p.registerTokenDefinitionFns(token.TYPE, p.parseObjectDefinition)
+	p.registerTokenDefinitionFns(token.IDENT, p.parseTypeSystemDefinition)
+	p.registerTokenDefinitionFns(token.TYPE, p.parseTypeSystemDefinition)
+
+	//p.registerTokenDefinitionFns(token.TYPE, p.parseObjectDefinition)
 	p.nextToken()
 	p.nextToken()
 	return p
@@ -66,18 +68,24 @@ func (p *Parser) ParseDocument() *ast.Document {
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 	switch p.curToken.Type {
-	case token.IDENT, token.BLOCK_STRING: //,token.LBRACE, token.STRING
-		fmt.Println("tokenDefinitionFns->")
-		//prefix := p.prefixParseFns[p.curToken.Type]
+
+	case token.TYPE:
+		return p.parseObjectDefinition()
+
+	case token.BLOCK_STRING:
+		return p.parseObjectDefinition()
+
+	case token.IDENT: //,token.LBRACE, token.STRING
+
+		fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 		parseFunc := p.tokenDefinitionFns[p.curToken.Type]
-		//fmt.Println(">>", parseFunc, reflect.TypeOf(parseFunc))
 		return parseFunc()
 
 	//case token.IDENT:
 	//return p.parseFieldDefinition()
 
 	default:
-		fmt.Println("unexpected")
+		fmt.Println("unexpected", p.curToken.Type)
 		return nil //&ast.OperationDefinition{}
 	}
 }
@@ -129,6 +137,14 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	return fd
 }
 
+func (p *Parser) expectToken(t token.TokenType) bool {
+	if p.curTokenIs(t) {
+		p.nextToken()
+		return true
+	}
+	return false
+}
+
 func (p *Parser) parseObjectDefinition() ast.Node {
 
 	fmt.Println("parseObjectDefinition", p.curToken) //starting from first token
@@ -136,11 +152,14 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
 
-	if !p.expectPeek(token.TYPE) {
+	// if !p.curTokenIs(token.TYPE) {
+	// 	return nil
+	// }
+	// p.nextToken()
+	if !p.expectToken(token.TYPE) {
 		return nil
 	}
 
-	p.nextToken()
 	od.Name = p.parseName()
 	//fmt.Println("od.Name", od.Name, p.curToken)
 
@@ -242,6 +261,7 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 	fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) {
+		p.nextToken()
 		return p.parseStringLiteral()
 	}
 	return nil
