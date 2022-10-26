@@ -172,15 +172,14 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	inv.Token = p.curToken
 	inv.Description = nil //p.parseStringLiteral()
 
-	inv.Name = p.parseName() //??
-	//p.nextToken()            //??
+	//current token.IDENT
+	inv.Name = p.parseName()
 
 	if !p.expectToken(token.COLON) {
 		return nil
 	}
 
 	inv.Type = p.parseType()
-	//p.nextToken() //??
 
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
@@ -238,7 +237,8 @@ func (p *Parser) parseValueLiteral() ast.Value {
 
 		//parseObject
 	}
-
+	p.nextToken()
+	fmt.Println("???", p.curToken) // )
 	return value
 }
 
