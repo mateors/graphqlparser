@@ -100,17 +100,13 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	od.Description = p.parseDescription()
 
 	if !p.expectToken(token.TYPE) {
-		fmt.Println("*nil*")
 		return nil
 	}
 
 	od.Name = p.parseName()
-	fmt.Println(">>", od.Name, p.curToken)
 
 	//loop
-	//p.nextToken()
 	p.nextToken()
-	fmt.Println("BEFORE", p.curToken)
 	od.Fields = []*ast.FieldDefinition{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
@@ -118,9 +114,6 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		if fd != nil {
 			od.Fields = append(od.Fields, fd)
 		}
-		fmt.Println("###", fd, p.curToken)
-		//p.nextToken()
-
 	}
 	fmt.Println("parseObjectDefinition->DONE")
 	return od
