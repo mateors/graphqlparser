@@ -192,7 +192,7 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 func (p *Parser) parseDefaultValue() ast.Value {
 
 	//fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
-	if !p.curTokenIs(token.ASSIGN) {
+	if !p.expectToken(token.ASSIGN) {
 		fmt.Println("parseDefaultValue **nil**", p.curToken)
 		return nil
 	}
