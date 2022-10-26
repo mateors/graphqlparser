@@ -872,6 +872,13 @@ func (iv *InputValueDefinition) String() string {
 	var out bytes.Buffer
 	name := fmt.Sprintf("%v", iv.Name.Value)
 	ttype := fmt.Sprintf("%v", iv.Type)
+
+	if iv.Description != nil {
+		if len(iv.Description.Value) > 0 {
+			out.WriteString(fmt.Sprintf(`"%s" `, iv.Description.Value))
+		}
+	}
+
 	out.WriteString(name + ": " + ttype)
 
 	if iv.DefaultValue != nil {
