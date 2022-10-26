@@ -170,7 +170,6 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 		}
 		//fmt.Println("##", p.curToken, p.peekToken)
 		p.expectPeek(token.COMMA)
-		p.nextToken()
 	}
 	return args
 }
@@ -190,9 +189,63 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	}
 
 	inv.Type = p.parseType()
-	inv.DefaultValue = nil
+	p.nextToken() //??
+	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
 	return inv
+}
+
+func (p *Parser) parseDefaultValue() ast.Value {
+
+	fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
+	if !p.expectToken(token.ASSIGN) {
+		fmt.Println("**nil**", p.curToken)
+		return nil
+	}
+	return p.parseValueLiteral()
+}
+
+func (p *Parser) parseValueLiteral() ast.Value {
+
+	fmt.Println("parseValueLiteral", p.curToken)
+	cToken := p.curToken
+	var value ast.Value
+
+	if cToken.Type == token.IDENT {
+
+		if cToken.Literal == "true" {
+			value = &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Token: cToken, Value: true}
+
+		} else if cToken.Literal == "false" {
+			value = &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Token: cToken, Value: false}
+
+		} else if cToken.Literal == "null" {
+			value = &ast.EnumValue{Kind: ast.ENUM_VALUE, Token: cToken, Value: cToken.Literal}
+
+		} else if cToken.Literal != "null" {
+			value = &ast.EnumValue{Kind: ast.ENUM_VALUE, Token: cToken, Value: cToken.Literal}
+		}
+
+	} else if cToken.Type == token.INT {
+		value = &ast.IntValue{Kind: ast.INT_VALUE, Token: cToken, Value: cToken.Literal}
+
+	} else if cToken.Type == token.FLOAT {
+		value = &ast.FloatValue{Kind: ast.FLOAT_VALUE, Token: cToken, Value: cToken.Literal}
+
+	} else if cToken.Type == token.STRING {
+		value = &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
+		//value = p.parseStringLiteral()
+
+	} else if cToken.Type == token.LBRACKET {
+
+		//parseList
+
+	} else if cToken.Type == token.LBRACE {
+
+		//parseObject
+	}
+
+	return value
 }
 
 // func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
