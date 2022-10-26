@@ -103,11 +103,14 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		fmt.Println("*nil*")
 		return nil
 	}
+
 	od.Name = p.parseName()
+	fmt.Println(">>", od.Name, p.curToken)
 
 	//loop
+	//p.nextToken()
 	p.nextToken()
-	p.nextToken()
+	fmt.Println("BEFORE", p.curToken)
 	od.Fields = []*ast.FieldDefinition{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
@@ -115,7 +118,9 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		if fd != nil {
 			od.Fields = append(od.Fields, fd)
 		}
-		p.nextToken()
+		fmt.Println("###", fd, p.curToken)
+		//p.nextToken()
+
 	}
 	fmt.Println("parseObjectDefinition->DONE")
 	return od
@@ -123,13 +128,18 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
-	fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
+	// if !p.expectPeek(token.IDENT) {
+	// 	fmt.Println("nil")
+	// 	return nil
+	// }
+
+	//fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
 	fd.Name = p.parseName()
 
-	fmt.Println(">>>>>>", p.curToken, p.peekToken)
+	//fmt.Println("1>>", fd.Name, p.curToken, p.peekToken)
 	fd.Arguments = p.parseArgumentDefinition()
 	// if !p.expectPeek(token.LPAREN) {
 	// 	return nil
@@ -143,12 +153,11 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	// 	}
 	// 	p.nextToken()
 	// }
-
-	if !p.expectPeek(token.COLON) {
+	//fmt.Println("...peek", p.curToken, p.peekToken)
+	if !p.expectToken(token.COLON) {
 		return nil
 	}
 
-	p.nextToken()
 	fd.Type = p.parseType()
 	//fmt.Println("-->", fd.Type, p.curToken)
 	return fd
@@ -156,6 +165,7 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
 func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
+	fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
 	if !p.expectPeek(token.LPAREN) {
 		fmt.Println("**nil**")
@@ -182,14 +192,15 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	inv.Description = nil //p.parseStringLiteral()
 
 	inv.Name = p.parseName() //??
-	p.nextToken()            //??
+	//p.nextToken()            //??
 
 	if !p.expectToken(token.COLON) {
 		return nil
 	}
 
 	inv.Type = p.parseType()
-	p.nextToken() //??
+	//p.nextToken() //??
+
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
 	return inv
@@ -197,9 +208,9 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
 func (p *Parser) parseDefaultValue() ast.Value {
 
-	fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
+	//fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
 	if !p.expectToken(token.ASSIGN) {
-		fmt.Println("**nil**", p.curToken)
+		fmt.Println("parseDefaultValue **nil**", p.curToken)
 		return nil
 	}
 	return p.parseValueLiteral()
@@ -302,7 +313,7 @@ func (p *Parser) isDescription() bool {
 }
 
 func (p *Parser) expectToken(t token.TokenType) bool {
-	fmt.Println("expectToken", t)
+	//fmt.Println("expectToken", t)
 	if p.curTokenIs(t) {
 		p.nextToken()
 		return true
@@ -313,10 +324,13 @@ func (p *Parser) expectToken(t token.TokenType) bool {
 // Converts a name lex token into a name parse node.
 func (p *Parser) parseName() *ast.Name {
 
+	//fmt.Println("parseName-->", p.curToken)
 	if !p.curTokenIs(token.IDENT) {
 		return nil
 	}
-	return &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
+	name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
+	p.nextToken()
+	return name
 }
 
 /**
@@ -325,9 +339,9 @@ func (p *Parser) parseName() *ast.Name {
 func (p *Parser) parseNamed() *ast.NamedType {
 
 	//fmt.Println("parseNamed()", p.curToken)
+	cToken := p.curToken
 	name := p.parseName()
-	//fmt.Println("name:", name)
-	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: p.curToken, Name: name}
+	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: cToken, Name: name}
 }
 
 /**
@@ -338,7 +352,9 @@ func (p *Parser) parseNamed() *ast.NamedType {
  */
 func (p *Parser) parseType() (ttype ast.Type) {
 
-	// [ String! ]!
+	//fmt.Println("parseType", p.curToken, p.peekToken)
+	cToken := p.curToken
+
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
 		p.nextToken()
@@ -347,22 +363,23 @@ func (p *Parser) parseType() (ttype ast.Type) {
 
 	case token.RBRACKET: //]
 		p.nextToken()
-		ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: p.curToken, Type: ttype}
+		ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
 
 	case token.IDENT, token.STRING:
 		ttype = p.parseNamed()
 	}
 
 	// BANG must be executed
-	if p.expectPeek(token.BANG) {
+	if p.curTokenIs(token.BANG) {
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
+		p.nextToken()
 	}
 	return ttype
 }
 
 func (p *Parser) parseDescription() *ast.StringValue {
 
-	fmt.Println("parseDescription", p.curToken, p.peekToken)
+	//fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.HASH) {
 		if p.curTokenIs(token.HASH) {
 			p.nextToken()
@@ -374,7 +391,7 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 func (p *Parser) parseStringLiteral() *ast.StringValue {
 
-	fmt.Println("parseStringLiteral", p.curToken)
+	//fmt.Println("parseStringLiteral", p.curToken)
 	cToken := p.curToken
 	p.nextToken()
 	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
