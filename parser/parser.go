@@ -121,11 +121,6 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
-	// if !p.expectPeek(token.IDENT) {
-	// 	fmt.Println("nil")
-	// 	return nil
-	// }
-
 	//fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
@@ -134,19 +129,7 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
 	//fmt.Println("1>>", fd.Name, p.curToken, p.peekToken)
 	fd.Arguments = p.parseArgumentDefinition()
-	// if !p.expectPeek(token.LPAREN) {
-	// 	return nil
-	// }
-	// fd.Arguments = []*ast.InputValueDefinition{}
-	// for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
 
-	// 	ivd := p.parseInputValueDefinition()
-	// 	if ivd != nil {
-	// 		fd.Arguments = append(fd.Arguments, ivd)
-	// 	}
-	// 	p.nextToken()
-	// }
-	//fmt.Println("...peek", p.curToken, p.peekToken)
 	if !p.expectToken(token.COLON) {
 		return nil
 	}
@@ -161,7 +144,7 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 	fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
 	if !p.expectPeek(token.LPAREN) {
-		fmt.Println("**nil**")
+		//fmt.Println("**nil**")
 		return nil
 	}
 
