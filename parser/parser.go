@@ -110,6 +110,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	od.Fields = []*ast.FieldDefinition{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
+		//starting with token.IDENT
 		fd := p.parseFieldDefinition()
 		if fd != nil {
 			od.Fields = append(od.Fields, fd)
@@ -127,7 +128,6 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	fd.Token = p.curToken
 	fd.Name = p.parseName()
 
-	//fmt.Println("1>>", fd.Name, p.curToken, p.peekToken)
 	fd.Arguments = p.parseArgumentDefinition()
 
 	if !p.expectToken(token.COLON) {
@@ -135,7 +135,6 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	}
 
 	fd.Type = p.parseType()
-	//fmt.Println("-->", fd.Type, p.curToken)
 	return fd
 }
 
@@ -143,20 +142,26 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
 	fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
-	if !p.expectPeek(token.LPAREN) {
-		//fmt.Println("**nil**")
+
+	if !p.curTokenIs(token.LPAREN) {
+		fmt.Println("**nil**")
 		return nil
 	}
 
-	p.nextToken() //(
-	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
+	p.nextToken()
+	for !p.curTokenIs(token.RPAREN) {
+
+		//starting with token.IDENT
 		ivd := p.parseInputValueDefinition()
 		if ivd != nil {
 			args = append(args, ivd)
 		}
-		//fmt.Println("##", p.curToken, p.peekToken)
-		p.expectPeek(token.COMMA)
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+		}
 	}
+	//last current token is token.RPAREN so next
+	p.nextToken()
 	return args
 }
 
@@ -179,13 +184,15 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
+	//last token is token.RPAREN = )
 	return inv
+
 }
 
 func (p *Parser) parseDefaultValue() ast.Value {
 
 	//fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
-	if !p.expectToken(token.ASSIGN) {
+	if !p.curTokenIs(token.ASSIGN) {
 		fmt.Println("parseDefaultValue **nil**", p.curToken)
 		return nil
 	}
