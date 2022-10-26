@@ -460,7 +460,7 @@ type Person {
   adult: Boolean!
 }
 ```
-### Output steps:
+### Output steps / Manual tracing:
 * parseDocument> 29
 * parseObjectDefinition->START {29 2 2 6 type}
 * parseDescription {29 2 2 6 type} {20 2 7 13 Person}

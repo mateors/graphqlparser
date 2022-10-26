@@ -100,7 +100,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	od.Description = p.parseDescription()
 
 	if !p.expectToken(token.TYPE) {
-		//fmt.Println("*nil*")
+		fmt.Println("*nil*")
 		return nil
 	}
 	od.Name = p.parseName()
@@ -129,6 +129,21 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	fd.Token = p.curToken
 	fd.Name = p.parseName()
 
+	fmt.Println(">>>>>>", p.curToken, p.peekToken)
+	fd.Arguments = p.parseArgumentDefinition()
+	// if !p.expectPeek(token.LPAREN) {
+	// 	return nil
+	// }
+	// fd.Arguments = []*ast.InputValueDefinition{}
+	// for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
+
+	// 	ivd := p.parseInputValueDefinition()
+	// 	if ivd != nil {
+	// 		fd.Arguments = append(fd.Arguments, ivd)
+	// 	}
+	// 	p.nextToken()
+	// }
+
 	if !p.expectPeek(token.COLON) {
 		return nil
 	}
@@ -137,6 +152,49 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	fd.Type = p.parseType()
 	//fmt.Println("-->", fd.Type, p.curToken)
 	return fd
+}
+
+func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
+
+	args := []*ast.InputValueDefinition{}
+	if !p.expectPeek(token.LPAREN) {
+		fmt.Println("**nil**")
+		return nil
+	}
+
+	p.nextToken() //(
+	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
+		ivd := p.parseInputValueDefinition()
+		if ivd != nil {
+			args = append(args, ivd)
+		}
+		//fmt.Println("##", p.curToken, p.peekToken)
+		//if p.expectPeek(token.COMMA) {
+		//fmt.Println("comma found")
+		//}
+		p.nextToken()
+	}
+	return args
+}
+
+func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
+
+	fmt.Println("parseInputValueDefinition", p.curToken)
+	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
+	inv.Token = p.curToken
+	inv.Description = nil //p.parseStringLiteral()
+
+	inv.Name = p.parseName() //??
+	p.nextToken()            //??
+
+	if !p.expectToken(token.COLON) {
+		return nil
+	}
+
+	inv.Type = p.parseType()
+	inv.DefaultValue = nil
+	inv.Directives = nil
+	return inv
 }
 
 // func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition
@@ -255,7 +313,9 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 	fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.HASH) {
-		p.nextToken()
+		if p.curTokenIs(token.HASH) {
+			p.nextToken()
+		}
 		return p.parseStringLiteral()
 	}
 	return nil

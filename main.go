@@ -485,9 +485,10 @@ func main() {
 	input := `
 	type Person {
 		id: ID!
-		adult: Boolean!
+		adult(unit: String): Boolean!
 	}
 	`
+	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
