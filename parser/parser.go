@@ -169,9 +169,7 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 			args = append(args, ivd)
 		}
 		//fmt.Println("##", p.curToken, p.peekToken)
-		//if p.expectPeek(token.COMMA) {
-		//fmt.Println("comma found")
-		//}
+		p.expectPeek(token.COMMA)
 		p.nextToken()
 	}
 	return args

@@ -485,7 +485,7 @@ func main() {
 	input := `
 	type Person {
 		id: ID!
-		adult(unit: String): Boolean!
+		adult(unit: String, test: Int): Boolean!
 	}
 	`
 	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
