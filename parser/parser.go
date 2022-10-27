@@ -161,7 +161,6 @@ func (p *Parser) Arguments() []*ast.Argument {
 		arg := p.parseArgument()
 		if arg != nil {
 			args = append(args, arg)
-			fmt.Println("arg>>", arg.Name, arg.Value, "==>", p.curToken, p.peekToken)
 		}
 	}
 	return args
