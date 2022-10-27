@@ -111,13 +111,12 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	// }
 
 	od.Interfaces = p.parseImplementInterfaces()
-	fmt.Println("@@", p.curToken) //if everything okay then current token is token.LBRACE
-
+	fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
 	//current token is token.LBRACE
-	//od.Directives = p.parseDirectives() //nil
-	od.Directives = []*ast.Directive{
-		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
-	}
+	od.Directives = p.parseDirectives() //nil
+	// od.Directives = []*ast.Directive{
+	// 	{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	// }
 
 	//loop current token is token.LPAREN
 	p.nextToken()
@@ -136,13 +135,72 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
-	if !p.curTokenIs(token.AT) {
-		return nil
-	}
-
+	//fmt.Println()
+	//fmt.Println()
+	//fmt.Println("DDDDD", p.curToken, p.peekToken)
 	dirs := make([]*ast.Directive, 0)
 
+	for !p.curTokenIs(token.LBRACE) {
+
+		// if !p.expectToken(token.AT) {
+		// 	return nil
+		// }
+		// directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
+		// directive.Name = p.parseName()
+		// directive.Arguments = p.Arguments()
+		// fmt.Println(directive.Name, "args-->", len(directive.Arguments), directive.Arguments, p.curToken.Literal)
+		// p.nextToken()
+		directive := p.parseDirective()
+		if directive != nil {
+			dirs = append(dirs, directive)
+		}
+
+	}
+	//fmt.Println("parseDirectives>>", dirs, p.curToken.Literal, p.peekToken)
 	return dirs
+}
+
+func (p *Parser) parseDirective() *ast.Directive {
+
+	if !p.expectToken(token.AT) {
+		return nil
+	}
+	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
+	directive.Name = p.parseName()
+	directive.Arguments = p.Arguments()
+	//fmt.Println(">>", directive.Name, "==>", p.curToken.Literal, p.peekToken.Literal)
+	//fmt.Println(directive.Name, "args-->", len(directive.Arguments), directive.Arguments, p.curToken.Literal)
+	p.nextToken() //--> )
+	return directive
+}
+
+func (p *Parser) Arguments() []*ast.Argument {
+
+	args := []*ast.Argument{}
+	p.nextToken() //-> (
+	for !p.curTokenIs(token.RPAREN) {
+
+		arg := p.parseArgument()
+		if arg != nil {
+			args = append(args, arg)
+			fmt.Println("arg>>", arg.Name, arg.Value, "==>", p.curToken, p.peekToken)
+		}
+	}
+	return args
+}
+
+func (p *Parser) parseArgument() *ast.Argument {
+
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	arg := &ast.Argument{Kind: ast.ARGUMENT, Token: p.curToken}
+	arg.Name = p.parseName()
+	if p.curTokenIs(token.COLON) {
+		p.nextToken()
+	}
+	arg.Value = p.parseValueLiteral()
+	return arg
 }
 
 func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
@@ -151,7 +209,7 @@ func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 	if !p.curTokenIs(token.IMPLEMENTS) {
 		return nil
 	}
-	fmt.Println("implements ==>", p.curToken.Literal)
+	//fmt.Println("implements ==>", p.curToken.Literal)
 	p.nextToken()
 	for !p.curTokenIs(token.LBRACE) {
 		named := p.parseNamed()
@@ -161,9 +219,13 @@ func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 		if p.curTokenIs(token.AMP) {
 			p.nextToken()
 		}
-	}
-	//fmt.Println("Next {", p.peekToken.Literal, "Total", len(namedSlc), namedSlc)
 
+		if p.curTokenIs(token.AT) {
+			//fmt.Println("@ FOUND", p.peekToken)
+			break
+		}
+	}
+	//fmt.Println("!!!", p.curToken, p.peekToken, namedSlc, len(namedSlc))
 	return namedSlc
 }
 
@@ -263,7 +325,7 @@ func (p *Parser) parseDefaultValue() ast.Value {
 
 func (p *Parser) parseValueLiteral() ast.Value {
 
-	fmt.Println("parseValueLiteral", p.curToken)
+	//fmt.Println("parseValueLiteral", p.curToken)
 	cToken := p.curToken
 	var value ast.Value
 
@@ -301,7 +363,7 @@ func (p *Parser) parseValueLiteral() ast.Value {
 		//parseObject
 	}
 	p.nextToken()
-	fmt.Println("???", p.curToken) // )
+	//fmt.Println("???", p.curToken) // )
 	return value
 }
 

@@ -485,7 +485,7 @@ func main() {
 
 	input := `
 	# Object definition
-	type Person implements Human & Book {
+	type Person implements Human & Book @skip1(name: true) @skip2(age: false) {
 		id: ID!
 		age: Int
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
