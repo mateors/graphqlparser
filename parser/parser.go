@@ -112,17 +112,22 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 	//loop current token is token.LPAREN
 	p.nextToken()
-	od.Fields = []*ast.FieldDefinition{}
-	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+	od.Fields = p.parseFieldsDefinition()
+	fmt.Println("parseObjectDefinition->DONE")
+	return od
+}
 
+func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition {
+
+	fields := []*ast.FieldDefinition{}
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 		//starting with token.IDENT
 		fd := p.parseFieldDefinition()
 		if fd != nil {
-			od.Fields = append(od.Fields, fd)
+			fields = append(fields, fd)
 		}
 	}
-	fmt.Println("parseObjectDefinition->DONE")
-	return od
+	return fields
 }
 
 func (p *Parser) parseDirectives() []*ast.Directive {
