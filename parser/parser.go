@@ -172,11 +172,8 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	fmt.Println("parseInputValueDefinition", p.curToken)
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
-
-	//inv.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "ddtest"} //nil //p.parseStringLiteral()
-	inv.Description = nil //p.parseStringLiteral()
+	inv.Description = p.parseDescription()
 	fmt.Println("++++", p.curToken, p.peekToken)
-	//os.Exit(2)
 
 	//current token.IDENT
 	inv.Name = p.parseName()

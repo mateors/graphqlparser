@@ -486,7 +486,7 @@ func main() {
 	type Person {
 		"sdsd" id: ID!
 		age: Int
-		length(unit: LengthUnit = METER): Float
+		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 	}
 	`
 	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
