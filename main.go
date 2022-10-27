@@ -484,10 +484,10 @@ func main() {
 	// `
 
 	input := `
-	#Object definition
+	# Object definition
 	type Person {
-		"Description for id" id: ID!
-		"Description for age" age: Int
+		id: ID!
+		age: Int
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 	}
 	`

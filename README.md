@@ -482,6 +482,7 @@ adult: Boolean!
 * Every parser method should have starting with a validation check and `return nil`
 * Optional fields parser method must have a starting validation checker which `return nil` if wrong
 * validation checker is a current token checker, ex: `p.curTokenIs(token.IDENT)`
+* If any error or bug make sure token/lexer package producing the correct tokens.
 
 ### ObjectTypeDefinition Input
 ```go
