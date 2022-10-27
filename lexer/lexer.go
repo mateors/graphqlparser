@@ -97,7 +97,18 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.AT, l.ch, l.line, l.position, l.position+1)
 
 	case '#':
-		tok = newToken(token.HASH, l.ch, l.line, l.position, l.position+1)
+		for {
+			l.readChar()
+			if isLetter(l.ch) {
+				tok.Start = l.position
+				break
+			}
+		}
+		tok.Line = l.line
+		tok.Type = token.HASH
+		text := l.readString()
+		tok.End = tok.Start + len(text) + 1
+		tok.Literal = l.input[tok.Start:tok.End]
 
 	case 0:
 		tok.Line = l.line
