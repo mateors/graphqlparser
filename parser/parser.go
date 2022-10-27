@@ -131,20 +131,10 @@ func (p *Parser) parseDirectives() []*ast.Directive {
 	dirs := make([]*ast.Directive, 0)
 
 	for !p.curTokenIs(token.LBRACE) {
-
-		// if !p.expectToken(token.AT) {
-		// 	return nil
-		// }
-		// directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
-		// directive.Name = p.parseName()
-		// directive.Arguments = p.Arguments()
-		// fmt.Println(directive.Name, "args-->", len(directive.Arguments), directive.Arguments, p.curToken.Literal)
-		// p.nextToken()
 		directive := p.parseDirective()
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
-
 	}
 	//fmt.Println("parseDirectives>>", dirs, p.curToken.Literal, p.peekToken)
 	return dirs
@@ -158,8 +148,6 @@ func (p *Parser) parseDirective() *ast.Directive {
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
 	directive.Arguments = p.Arguments()
-	//fmt.Println(">>", directive.Name, "==>", p.curToken.Literal, p.peekToken.Literal)
-	//fmt.Println(directive.Name, "args-->", len(directive.Arguments), directive.Arguments, p.curToken.Literal)
 	p.nextToken() //--> )
 	return directive
 }
@@ -279,7 +267,7 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
 func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
-	fmt.Println("parseInputValueDefinition", p.curToken)
+	//fmt.Println("parseInputValueDefinition", p.curToken)
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
 	inv.Description = p.parseDescription()
@@ -299,10 +287,7 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 }
 
 func (p *Parser) parseDefaultValue() ast.Value {
-
-	//fmt.Println("parseDefaultValue:", p.curToken, p.peekToken)
 	if !p.expectToken(token.ASSIGN) {
-		fmt.Println("parseDefaultValue **nil**", p.curToken)
 		return nil
 	}
 	return p.parseValueLiteral()
@@ -340,11 +325,9 @@ func (p *Parser) parseValueLiteral() ast.Value {
 		//value = p.parseStringLiteral()
 
 	} else if cToken.Type == token.LBRACKET {
-
 		//parseList
 
 	} else if cToken.Type == token.LBRACE {
-
 		//parseObject
 	}
 	p.nextToken()
@@ -389,7 +372,6 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
-		//fmt.Println("peekTokenIspeekTokenIs")
 		p.nextToken()
 		return true
 	} else {
@@ -406,7 +388,6 @@ func (p *Parser) isDescription() bool {
 }
 
 func (p *Parser) expectToken(t token.TokenType) bool {
-	//fmt.Println("expectToken", t)
 	if p.curTokenIs(t) {
 		p.nextToken()
 		return true
@@ -425,17 +406,6 @@ func (p *Parser) parseName() *ast.Name {
 	p.nextToken()
 	return name
 }
-
-/**
- * NamedType : Name
- */
-// func (p *Parser) parseNamed() *ast.NamedType {
-
-// 	//fmt.Println("parseNamed()", p.curToken)
-// 	cToken := p.curToken
-// 	name := p.parseName()
-// 	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: cToken, Name: name}
-// }
 
 /**
  * Type :
@@ -480,10 +450,7 @@ func (p *Parser) parseDescription() *ast.StringValue {
 }
 
 func (p *Parser) parseStringLiteral() *ast.StringValue {
-
-	fmt.Println("parseStringLiteral", p.curToken, p.peekToken)
 	cToken := p.curToken
 	p.nextToken()
 	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
-
 }
