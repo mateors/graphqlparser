@@ -475,6 +475,14 @@ adult: Boolean!
 }
 ```
 
+## Tips for parsing ast.Node
+* Take closer look in your token/lexer package
+* Parsing feels like you are walking in a street.
+* You should not/or avoid useing builtin package/libarary
+* Every parser method should have starting with a validation check and `return nil`
+* Optional fields parser method must have a starting validation checker which `return nil` if wrong
+* validation checker is a current token checker, ex: `p.curTokenIs(token.IDENT)`
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
