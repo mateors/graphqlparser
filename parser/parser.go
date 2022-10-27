@@ -126,6 +126,8 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
+
+	fd.Description = p.parseDescription()
 	fd.Name = p.parseName()
 
 	fd.Arguments = p.parseArgumentDefinition()
@@ -170,7 +172,11 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	fmt.Println("parseInputValueDefinition", p.curToken)
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
-	inv.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "test"} //nil //p.parseStringLiteral()
+
+	//inv.Description = &ast.StringValue{Kind: ast.STRING_VALUE, Value: "ddtest"} //nil //p.parseStringLiteral()
+	inv.Description = nil //p.parseStringLiteral()
+	fmt.Println("++++", p.curToken, p.peekToken)
+	//os.Exit(2)
 
 	//current token.IDENT
 	inv.Name = p.parseName()
@@ -374,7 +380,7 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 func (p *Parser) parseStringLiteral() *ast.StringValue {
 
-	//fmt.Println("parseStringLiteral", p.curToken)
+	fmt.Println("parseStringLiteral", p.curToken, p.peekToken)
 	cToken := p.curToken
 	p.nextToken()
 	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}

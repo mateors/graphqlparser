@@ -484,9 +484,9 @@ func main() {
 	// `
 	input := `
 	type Person {
-		id: ID!
-		appearsIn: [Episode]!
-		length(age: Float = 55.67, unit: LengthUnit, student: Boolean = true): Float
+		"sdsd" id: ID!
+		age: Int
+		length(unit: LengthUnit = METER): Float
 	}
 	`
 	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
