@@ -79,8 +79,8 @@ var keywords = map[string]TokenType{
 	"directive":    DIRECTIVE,    //
 	"interface":    INTERFACE,    //
 	"union":        UNION,        //
+	"implements":   IMPLEMENTS,
 	//"return":       RETURN,
-	//"implements":   IMPLEMENTS,
 	//"on":           ON,
 	//"Int":          INT,
 	//"Float":        FLOAT,

@@ -114,7 +114,10 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	fmt.Println("@@", p.curToken) //if everything okay then current token is token.LBRACE
 
 	//current token is token.LBRACE
-	od.Directives = nil
+	//od.Directives = p.parseDirectives() //nil
+	od.Directives = []*ast.Directive{
+		{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
+	}
 
 	//loop current token is token.LPAREN
 	p.nextToken()
@@ -131,26 +134,36 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	return od
 }
 
+func (p *Parser) parseDirectives() []*ast.Directive {
+
+	if !p.curTokenIs(token.AT) {
+		return nil
+	}
+
+	dirs := make([]*ast.Directive, 0)
+
+	return dirs
+}
+
 func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 
 	namedSlc := []*ast.NamedType{}
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IMPLEMENTS) {
 		return nil
 	}
-	//fmt.Println("implements ==>", p.curToken.Literal)
-	if p.curToken.Literal == "implements" {
-		p.nextToken()
-		for !p.curTokenIs(token.LBRACE) {
-			named := p.parseNamed()
-			if named != nil {
-				namedSlc = append(namedSlc, named)
-			}
-			if p.curTokenIs(token.AMP) {
-				p.nextToken()
-			}
+	fmt.Println("implements ==>", p.curToken.Literal)
+	p.nextToken()
+	for !p.curTokenIs(token.LBRACE) {
+		named := p.parseNamed()
+		if named != nil {
+			namedSlc = append(namedSlc, named)
 		}
-		//fmt.Println("Next {", p.peekToken.Literal, "Total", len(namedSlc), namedSlc)
+		if p.curTokenIs(token.AMP) {
+			p.nextToken()
+		}
 	}
+	//fmt.Println("Next {", p.peekToken.Literal, "Total", len(namedSlc), namedSlc)
+
 	return namedSlc
 }
 
