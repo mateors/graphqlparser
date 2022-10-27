@@ -367,9 +367,6 @@ func (p *Parser) parseDescription() *ast.StringValue {
 
 	//fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.HASH) {
-		//if p.curTokenIs(token.HASH) {
-		//p.nextToken()
-		//}
 		return p.parseStringLiteral()
 	}
 	return nil
