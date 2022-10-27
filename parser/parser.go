@@ -94,7 +94,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseObjectDefinition() ast.Node {
 
-	fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
+	//fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
@@ -102,18 +102,15 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	if !p.expectToken(token.TYPE) {
 		return nil
 	}
-
 	od.Name = p.parseName()
-
 	od.Interfaces = p.parseImplementInterfaces()
 	//fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
 	//current token is token.LBRACE
-	od.Directives = p.parseDirectives() //nil
-
+	od.Directives = p.parseDirectives()
 	//loop current token is token.LPAREN
 	p.nextToken()
 	od.Fields = p.parseFieldsDefinition()
-	fmt.Println("parseObjectDefinition->DONE")
+	//fmt.Println("parseObjectDefinition->DONE")
 	return od
 }
 
