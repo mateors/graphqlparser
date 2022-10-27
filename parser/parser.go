@@ -104,19 +104,11 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	}
 
 	od.Name = p.parseName()
-	//fmt.Println("AfterParseName:", p.curToken) //current token is token.IDENT and Literal = implements
-	// infcs := []*ast.NamedType{
-	// 	{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Human"}},
-	// 	{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Book"}},
-	// }
 
 	od.Interfaces = p.parseImplementInterfaces()
-	fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
+	//fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
 	//current token is token.LBRACE
 	od.Directives = p.parseDirectives() //nil
-	// od.Directives = []*ast.Directive{
-	// 	{Kind: ast.DIRECTIVE, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Arguments: []*ast.Argument{{Kind: ast.ARGUMENT, Name: &ast.Name{Kind: ast.NAME, Value: "skip"}, Value: &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Value: true}}}},
-	// }
 
 	//loop current token is token.LPAREN
 	p.nextToken()
@@ -135,8 +127,6 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
-	//fmt.Println()
-	//fmt.Println()
 	//fmt.Println("DDDDD", p.curToken, p.peekToken)
 	dirs := make([]*ast.Directive, 0)
 
@@ -235,7 +225,6 @@ func (p *Parser) parseNamed() *ast.NamedType {
 	if !p.curTokenIs(token.IDENT) {
 		return nil
 	}
-	fmt.Println("parseNamed:", p.curToken.Literal)
 	named := &ast.NamedType{Kind: ast.NAMED_TYPE}
 	named.Token = p.curToken
 	named.Name = p.parseName()
@@ -264,11 +253,10 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
 func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
-	fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
+	//fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
 
 	if !p.curTokenIs(token.LPAREN) {
-		fmt.Println("**nil**")
 		return nil
 	}
 
@@ -295,7 +283,6 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
 	inv.Description = p.parseDescription()
-	fmt.Println("++++", p.curToken, p.peekToken)
 
 	//current token.IDENT
 	inv.Name = p.parseName()
@@ -305,12 +292,10 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	}
 
 	inv.Type = p.parseType()
-
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
 	//last token is token.RPAREN = )
 	return inv
-
 }
 
 func (p *Parser) parseDefaultValue() ast.Value {
