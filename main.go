@@ -483,9 +483,10 @@ func main() {
 	// }
 	// `
 	input := `
+	"""Object definition"""
 	type Person {
-		"sdsd" id: ID!
-		age: Int
+		"Description for id" id: ID!
+		"Description for age" age: Int
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 	}
 	`

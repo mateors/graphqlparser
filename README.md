@@ -483,6 +483,30 @@ adult: Boolean!
 * Optional fields parser method must have a starting validation checker which `return nil` if wrong
 * validation checker is a current token checker, ex: `p.curTokenIs(token.IDENT)`
 
+### ObjectTypeDefinition Input
+```go
+	"""Object definition"""
+	type Person {
+		"Description for id" id: ID!
+		"Description for age" age: Int
+		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+	}
+```
+
+### ObjectTypeDefinition Parser Output
+```go
+"""
+Object definition
+"""
+type Person {
+"Description for id"
+id: ID!
+"Description for age"
+age: Int
+length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+}
+```
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
