@@ -97,18 +97,24 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.AT, l.ch, l.line, l.position, l.position+1)
 
 	case '#':
+		tok.Start = 0
 		for {
 			l.readChar()
-			if isLetter(l.ch) {
-				tok.Start = l.position
+			if isLetter(l.ch) && tok.Start == 0 {
+				tok.Start = l.position + 0
+			}
+			if l.ch == '\n' { //or check for next token
+				tok.End = l.position
 				break
 			}
 		}
+		//fmt.Println("2START:", tok.Start)
 		tok.Line = l.line
 		tok.Type = token.HASH
-		text := l.readString()
-		tok.End = tok.Start + len(text) + 1
+		//text := l.readString()
+		//tok.End = tok.Start + len(text) + 1
 		tok.Literal = l.input[tok.Start:tok.End]
+		return tok
 
 	case 0:
 		tok.Line = l.line

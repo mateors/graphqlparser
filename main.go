@@ -482,35 +482,37 @@ func main() {
 	// 	appearsIn: [Episode]!
 	// }
 	// `
-	// input := `
-	// """Object definition"""
-	// type Person {
-	// 	"Description for id" id: ID!
-	// 	"Description for age" age: Int
-	// 	length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
-	// }
-	// `
-	input := `# this is a comment`
+
+	input := `
+	#Object definition
+	type Person {
+		"Description for id" id: ID!
+		"Description for age" age: Int
+		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+	}
+	`
+
+	//input := `# this is a comment`
 	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
 
 	lex := lexer.New(input)
-	// p := parser.New(lex)
-	// doc := p.ParseDocument()
-	// for i, def := range doc.Definitions {
-	// 	fmt.Println("*", i, def.GetKind(), def)
-	// }
-
-	for {
-		tok := lex.NextToken()
-		if tok.Type == token.EOF {
-			//fmt.Println("eof")
-			break
-		}
-		if tok.Literal == input[tok.Start:tok.End] {
-			fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
-		} else {
-			fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
-		}
+	p := parser.New(lex)
+	doc := p.ParseDocument()
+	for i, def := range doc.Definitions {
+		fmt.Println("*", i, def.GetKind(), def)
 	}
+
+	// for {
+	// 	tok := lex.NextToken()
+	// 	if tok.Type == token.EOF {
+	// 		//fmt.Println("eof")
+	// 		break
+	// 	}
+	// 	if tok.Literal == input[tok.Start:tok.End] {
+	// 		fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
+	// 	} else {
+	// 		fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
+	// 	}
+	// }
 
 }
