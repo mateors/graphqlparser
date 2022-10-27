@@ -104,8 +104,19 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	}
 
 	od.Name = p.parseName()
+	//fmt.Println("AfterParseName:", p.curToken) //current token is token.IDENT and Literal = implements
+	// infcs := []*ast.NamedType{
+	// 	{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Human"}},
+	// 	{Kind: ast.NAMED_TYPE, Name: &ast.Name{Kind: ast.NAME, Value: "Book"}},
+	// }
 
-	//loop
+	od.Interfaces = p.parseImplementInterfaces()
+	fmt.Println("@@", p.curToken) //if everything okay then current token is token.LBRACE
+
+	//current token is token.LBRACE
+	od.Directives = nil
+
+	//loop current token is token.LPAREN
 	p.nextToken()
 	od.Fields = []*ast.FieldDefinition{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
@@ -118,6 +129,42 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	}
 	fmt.Println("parseObjectDefinition->DONE")
 	return od
+}
+
+func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
+
+	namedSlc := []*ast.NamedType{}
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	//fmt.Println("implements ==>", p.curToken.Literal)
+	if p.curToken.Literal == "implements" {
+		p.nextToken()
+		for !p.curTokenIs(token.LBRACE) {
+			named := p.parseNamed()
+			if named != nil {
+				namedSlc = append(namedSlc, named)
+			}
+			if p.curTokenIs(token.AMP) {
+				p.nextToken()
+			}
+		}
+		//fmt.Println("Next {", p.peekToken.Literal, "Total", len(namedSlc), namedSlc)
+	}
+	return namedSlc
+}
+
+func (p *Parser) parseNamed() *ast.NamedType {
+
+	//expecting current token is token.IDENT
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	fmt.Println("parseNamed:", p.curToken.Literal)
+	named := &ast.NamedType{Kind: ast.NAMED_TYPE}
+	named.Token = p.curToken
+	named.Name = p.parseName()
+	return named
 }
 
 func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
@@ -322,13 +369,13 @@ func (p *Parser) parseName() *ast.Name {
 /**
  * NamedType : Name
  */
-func (p *Parser) parseNamed() *ast.NamedType {
+// func (p *Parser) parseNamed() *ast.NamedType {
 
-	//fmt.Println("parseNamed()", p.curToken)
-	cToken := p.curToken
-	name := p.parseName()
-	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: cToken, Name: name}
-}
+// 	//fmt.Println("parseNamed()", p.curToken)
+// 	cToken := p.curToken
+// 	name := p.parseName()
+// 	return &ast.NamedType{Kind: ast.NAMED_TYPE, Token: cToken, Name: name}
+// }
 
 /**
  * Type :

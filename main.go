@@ -485,7 +485,7 @@ func main() {
 
 	input := `
 	# Object definition
-	type Person {
+	type Person implements Human & Book {
 		id: ID!
 		age: Int
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
