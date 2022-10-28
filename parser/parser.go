@@ -110,7 +110,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	//loop current token is token.LPAREN
 	p.nextToken()
 	od.Fields = p.parseFieldsDefinition()
-	//fmt.Println("parseObjectDefinition->DONE")
+	fmt.Println("parseObjectDefinition->DONE")
 	return od
 }
 
@@ -129,7 +129,7 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition {
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
-	//fmt.Println("DDDDD", p.curToken, p.peekToken)
+	fmt.Println("DDDDD", p.curToken, p.peekToken)
 	dirs := make([]*ast.Directive, 0)
 
 	for !p.curTokenIs(token.LBRACE) {
@@ -137,8 +137,12 @@ func (p *Parser) parseDirectives() []*ast.Directive {
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
+		fmt.Println("parseDirectives2", directive, p.curToken)
+		if directive == nil {
+			break
+		}
 	}
-	//fmt.Println("parseDirectives>>", dirs, p.curToken.Literal, p.peekToken)
+	fmt.Println("parseDirectives>>", dirs, len(dirs), "-->", p.curToken.Literal, p.peekToken.Literal)
 	return dirs
 }
 
@@ -147,15 +151,27 @@ func (p *Parser) parseDirective() *ast.Directive {
 	if !p.expectToken(token.AT) {
 		return nil
 	}
+	// if p.curTokenIs(token.LBRACE) {
+	// 	return nil
+	// }
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
+
 	directive.Arguments = p.Arguments()
-	p.nextToken() //--> )
+	if !p.curTokenIs(token.LBRACE) {
+		p.nextToken() //--> )
+	}
 	return directive
 }
 
 func (p *Parser) Arguments() []*ast.Argument {
 
+	if !p.curTokenIs(token.LPAREN) {
+		return nil
+	}
 	args := []*ast.Argument{}
 	p.nextToken() //-> (
 	for !p.curTokenIs(token.RPAREN) {
@@ -163,6 +179,9 @@ func (p *Parser) Arguments() []*ast.Argument {
 		arg := p.parseArgument()
 		if arg != nil {
 			args = append(args, arg)
+		}
+		if arg == nil {
+			break
 		}
 	}
 	return args

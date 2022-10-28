@@ -508,6 +508,11 @@ length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 }
 ```
 
+* git tag
+* git tag -a v0.0 -m "parseObjectDefinition complete"
+* git show v0.0
+* git push origin v0.0
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
