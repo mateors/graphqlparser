@@ -65,6 +65,63 @@ type Token struct {
 	Literal string
 }
 
+var tokenDescription = map[TokenType]string{
+	ILLEGAL:      "ILLEGAL",
+	ASSIGN:       "=",
+	EOF:          "EOF",
+	BANG:         "!",     //DELIMETERS
+	COMMA:        ",",     //DELIMETERS
+	COLON:        ":",     //DELIMETERS
+	DOT:          ".",     //DELIMETERS
+	DOLLAR:       "$",     //DELIMETERS
+	AT:           "@",     //DELIMETERS
+	HASH:         "#",     //DELIMETERS
+	AMP:          "&",     //DELIMETERS
+	SEMICOLON:    ";",     //DELIMETERS
+	LPAREN:       "(",     //DELIMETERS
+	RPAREN:       ")",     //DELIMETERS
+	LBRACE:       "{",     //DELIMETERS
+	RBRACE:       "}",     //DELIMETERS
+	LBRACKET:     "[",     //DELIMETERS
+	RBRACKET:     "]",     //DELIMETERS
+	UNDERSCORE:   "_",     //DELIMETERS
+	PIPE:         "|",     //DELIMETERS
+	IDENT:        "IDENT", //VARIABLES,IDENTIFIER
+	INT:          "INT",
+	FLOAT:        "FLOAT",
+	STRING:       "STRING",
+	BLOCK_STRING: "BLOCK_STRING",
+	BOOLEAN:      "BOOLEAN", //Boolean
+	ID:           "ID",
+	NULL:         "NULL",
+	VARIADIC:     "...",
+	TYPE:         "TYPE",         //KEYWORDS
+	RETURN:       "RETURN",       //KEYWORDS
+	QUERY:        "QUERY",        //KEYWORDS
+	MUTATION:     "MUTATION",     //KEYWORDS
+	ON:           "ON",           //
+	INPUT:        "INPUT",        //KEYWORDS
+	SUBSCRIPTION: "SUBSCRIPTION", //KEYWORDS
+	SCHEMA:       "SCHEMA",       //KEYWORDS
+	ALIAS:        "ALIAS",        //KEYWORDS
+	FRAGMENT:     "FRAGMENT",     //KEYWORDS
+	OPERATION:    "OPERATION",    //KEYWORDS
+	SCALAR:       "SCALAR",       //KEYWORDS
+	ENUM:         "ENUM",         //KEYWORDS
+	EXTEND:       "EXTEND",       //KEYWORDS
+	INTERFACE:    "INTERFACE",    //KEYWORDS
+	IMPLEMENTS:   "IMPLEMENTS",   //KEYWORDS
+	UNION:        "UNION",        //KEYWORDS
+	DIRECTIVE:    "DIRECTIVE",    //KEYWORDS @
+}
+
+func Name(tokType TokenType) string {
+	if name, isFound := tokenDescription[tokType]; isFound {
+		return name
+	}
+	return "UNKNOWN"
+}
+
 var keywords = map[string]TokenType{
 	"type":         TYPE,         //
 	"mutation":     MUTATION,     //
