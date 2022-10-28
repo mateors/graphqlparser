@@ -129,20 +129,19 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition {
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
-	fmt.Println("DDDDD", p.curToken, p.peekToken)
+	if !p.curTokenIs(token.AT) {
+		return nil
+	}
 	dirs := make([]*ast.Directive, 0)
-
 	for !p.curTokenIs(token.LBRACE) {
 		directive := p.parseDirective()
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
-		fmt.Println("parseDirectives2", directive, p.curToken)
 		if directive == nil {
 			break
 		}
 	}
-	fmt.Println("parseDirectives>>", dirs, len(dirs), "-->", p.curToken.Literal, p.peekToken.Literal)
 	return dirs
 }
 
@@ -160,14 +159,14 @@ func (p *Parser) parseDirective() *ast.Directive {
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
 
-	directive.Arguments = p.Arguments()
+	directive.Arguments = p.parseArguments()
 	if !p.curTokenIs(token.LBRACE) {
 		p.nextToken() //--> )
 	}
 	return directive
 }
 
-func (p *Parser) Arguments() []*ast.Argument {
+func (p *Parser) parseArguments() []*ast.Argument {
 
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
@@ -198,15 +197,19 @@ func (p *Parser) parseArgument() *ast.Argument {
 		p.nextToken()
 	}
 	arg.Value = p.parseValueLiteral()
+
+	if p.curTokenIs(token.COMMA) {
+		p.nextToken()
+	}
 	return arg
 }
 
 func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 
-	namedSlc := []*ast.NamedType{}
 	if !p.curTokenIs(token.IMPLEMENTS) {
 		return nil
 	}
+	namedSlc := []*ast.NamedType{}
 	//fmt.Println("implements ==>", p.curToken.Literal)
 	p.nextToken()
 	for !p.curTokenIs(token.LBRACE) {
@@ -214,12 +217,13 @@ func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 		if named != nil {
 			namedSlc = append(namedSlc, named)
 		}
+		if named == nil {
+			break
+		}
 		if p.curTokenIs(token.AMP) {
 			p.nextToken()
 		}
-
 		if p.curTokenIs(token.AT) {
-			//fmt.Println("@ FOUND", p.peekToken)
 			break
 		}
 	}

@@ -484,7 +484,7 @@ func main() {
 	// `
 
 	input := `
-	type Person implements Human @TEST {
+	type Person implements Human @skip(name:true, age:false) {
 		id: ID!
 		age: Int
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
