@@ -110,7 +110,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	//loop current token is token.LPAREN
 	p.nextToken()
 	od.Fields = p.parseFieldsDefinition()
-	fmt.Println("parseObjectDefinition->DONE")
+	fmt.Println("parseObjectDefinition->DONE", p.errors, od.Fields)
 	return od
 }
 
@@ -122,6 +122,9 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition {
 		fd := p.parseFieldDefinition()
 		if fd != nil {
 			fields = append(fields, fd)
+		}
+		if fd == nil {
+			break
 		}
 	}
 	return fields
