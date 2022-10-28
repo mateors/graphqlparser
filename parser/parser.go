@@ -280,6 +280,9 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 		if ivd != nil {
 			args = append(args, ivd)
 		}
+		if ivd == nil {
+			break
+		}
 		if p.curTokenIs(token.COMMA) {
 			p.nextToken()
 		}
