@@ -143,7 +143,7 @@ func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) {
 		fd, err := p.parseFieldDefinition()
 		if err != nil {
 			fmt.Println(">>>", err)
-			return nil, err
+			//return nil, err
 		}
 
 		//fmt.Println(">>>>>>>>>>", fd.Name, err)
@@ -151,9 +151,12 @@ func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) {
 			fields = append(fields, fd)
 		}
 		if fd == nil {
-			break
+			fmt.Println("BREAK...", p.curToken.Literal)
+			p.nextToken()
+			//break
 		}
 	}
+	fmt.Println("@@", p.curToken, p.peekToken)
 	return fields, nil
 }
 
