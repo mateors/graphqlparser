@@ -135,7 +135,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 	return od
 }
 
-func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) {
+func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) { //???? working not finished yet
 
 	fields := []*ast.FieldDefinition{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
@@ -152,8 +152,8 @@ func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) {
 		}
 		if fd == nil {
 			fmt.Println("BREAK...", p.curToken.Literal)
-			p.nextToken()
-			//break
+			//p.nextToken()
+			break
 		}
 	}
 	fmt.Println("@@", p.curToken, p.peekToken)
