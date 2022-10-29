@@ -141,6 +141,14 @@ func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) { //???
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 		//starting with token.IDENT
 		fd, err := p.parseFieldDefinition()
+
+		fmt.Println("<2><2>", fd.Type, p.curToken, p.peekToken)
+		if fd.Type == nil {
+			fmt.Println("EXIT", p.curToken, p.peekToken)
+			//os.Exit(2)
+			//return nil, errors.New("<<type nil error<<")
+			fd = nil
+		}
 		if err != nil {
 			fmt.Println(">>>", err)
 			//return nil, err
@@ -150,11 +158,10 @@ func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) { //???
 		if fd != nil {
 			fields = append(fields, fd)
 		}
-		if fd == nil {
-			fmt.Println("BREAK...", p.curToken.Literal)
-			//p.nextToken()
-			break
-		}
+		//if fd == nil {
+		//fmt.Println("BREAK...", p.curToken.Literal)
+		//break
+		//}
 	}
 	fmt.Println("@@", p.curToken, p.peekToken)
 	return fields, nil
@@ -342,7 +349,7 @@ func (p *Parser) parseFieldDefinition() (*ast.FieldDefinition, error) { //??
 		err = p.addError("parseFieldDefinition.parseType error")
 		return nil, err
 	}
-
+	fmt.Println("<1><1>", ptype, p.curToken, p.peekToken)
 	// if ptype == nil {
 	// 	fmt.Println(fd.Name, "nil so return", p.curToken, p.peekToken)
 	// 	return nil, errors.New("type nil error")
@@ -564,14 +571,14 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
 		p.nextToken()
-		// if p.curToken.Type == token.RBRACKET {
-		// 	fmt.Println("###", p.curToken.Literal) //expecting IDENT
-		// 	return nil, errors.New("--missing type--")
-		// }
+		if p.curToken.Type == token.RBRACKET {
+			//fmt.Println("###", p.curToken.Literal) //expecting IDENT
+			//return nil, errors.New("--missing type--")
+		}
 		ttype, err = p.parseType()
 		//fmt.Println("2###", p.curToken.Literal, ttype, err)
 		if err != nil {
-			fmt.Println(">>", err)
+			//fmt.Println(">>", err)
 			return nil, err
 		}
 
@@ -579,10 +586,14 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 
 	case token.RBRACKET: //]
 
-		//if ttype != nil {
-		p.nextToken()
-		ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
-		//}
+		fmt.Println("~~", p.curToken, p.peekToken, ttype)
+		if ttype != nil {
+			p.nextToken()
+			ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
+		}
+		if ttype == nil {
+			fmt.Println("==========NIL========")
+		}
 
 	case token.IDENT, token.STRING:
 		ttype, err = p.parseNamed()
@@ -595,19 +606,21 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 	}
 
 	// BANG must be executed
-	//fmt.Println("1~~~~", p.curToken.Literal)
-	// if ttype == nil {
-	// 	fmt.Println("nil so next", p.curToken, p.peekToken)
-	// 	p.nextToken()
-	// 	//p.nextToken()
-	// }
+	fmt.Println("1~~~~", p.curToken, p.peekToken)
 
-	if p.curTokenIs(token.BANG) {
+	if ttype == nil {
+		fmt.Println("nil so next", p.curToken, p.peekToken)
+		//p.nextToken()
+		p.nextToken()
+	}
+
+	if p.curTokenIs(token.BANG) && ttype != nil {
+		fmt.Println("INSIDE BANG")
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
 		p.nextToken()
 	}
-	//fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
-	//fmt.Println()
+	fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
+	fmt.Println()
 	return ttype, nil
 }
 
