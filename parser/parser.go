@@ -515,22 +515,14 @@ func (p *Parser) parseName() *ast.Name {
 //Instead of error we return nil
 func (p *Parser) parseType() (ttype ast.Type) { //????
 
-	//fmt.Println("parseType", p.curToken, p.peekToken)
 	cToken := p.curToken
 
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
 		p.nextToken()
 		if p.curToken.Type == token.RBRACKET {
-			//fmt.Println("###", p.curToken.Literal) //expecting IDENT
-			//return nil, errors.New("--missing type--")
 		}
 		ttype = p.parseType()
-		//fmt.Println("2###", p.curToken.Literal, ttype, err)
-		//if err != nil {
-		//return nil, err
-		//}
-
 		fallthrough
 
 	case token.RBRACKET: //]
@@ -549,19 +541,10 @@ func (p *Parser) parseType() (ttype ast.Type) { //????
 		if ttype == nil {
 			p.addError("parseNamed nil from parseType @600")
 		}
-		// if err != nil {
-		// 	msg := "type identifier missing"
-		// 	fmt.Println(">>", msg)
-		// 	p.addError(msg)
-		// 	return nil, errors.New(msg)
-		// }
 	}
 
 	// BANG must be executed
-	//fmt.Println("1~~~~", p.curToken, p.peekToken)
-
 	if ttype == nil {
-		//fmt.Println("nil so next", p.curToken, p.peekToken)
 		p.nextToken()
 	}
 
