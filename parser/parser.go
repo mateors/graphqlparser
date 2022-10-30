@@ -139,9 +139,9 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		fd := p.parseFieldDefinition()
 
 		if fd != nil {
-			fields = append(fields, fd)
 
-			fmt.Println("<2><2>", fd, p.curToken, p.peekToken) //fd.Type
+			fields = append(fields, fd)
+			//fmt.Println("<2><2>", fd, p.curToken, p.peekToken) //fd.Type
 			if fd.Type == nil {
 				fmt.Println("EXIT", p.curToken, p.peekToken)
 				fd = nil
@@ -149,7 +149,7 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		}
 
 	}
-	fmt.Println("@@", p.curToken, p.peekToken, len(fields))
+	//fmt.Println("@@", p.curToken, p.peekToken, len(fields))
 	return fields
 }
 
@@ -305,10 +305,8 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 		p.addError("parseFieldDefinition.parseType error")
 		return nil
 	}
-	//fmt.Println("<1><1>", ptype, p.curToken, p.peekToken)
 	fd.Type = ptype
 	fd.Directives = nil
-	//fmt.Println("------>", err, fd.Name, ptype, "**", p.curToken, p.peekToken)
 	return fd
 }
 
@@ -497,7 +495,6 @@ func (p *Parser) expectToken(t token.TokenType) bool {
 func (p *Parser) parseName() *ast.Name {
 
 	if !p.curTokenIs(token.IDENT) {
-		//err := p.tokenError(token.IDENT)
 		p.addError("parseName identifier missing")
 		return nil
 	}
