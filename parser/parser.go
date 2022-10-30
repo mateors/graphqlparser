@@ -606,11 +606,10 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 	}
 
 	// BANG must be executed
-	fmt.Println("1~~~~", p.curToken, p.peekToken)
+	//fmt.Println("1~~~~", p.curToken, p.peekToken)
 
 	if ttype == nil {
-		fmt.Println("nil so next", p.curToken, p.peekToken)
-		//p.nextToken()
+		//fmt.Println("nil so next", p.curToken, p.peekToken)
 		p.nextToken()
 	}
 
@@ -619,8 +618,8 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
 		p.nextToken()
 	}
-	fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
-	fmt.Println()
+	//fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
+	//fmt.Println()
 	return ttype, nil
 }
 
