@@ -104,81 +104,64 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		return nil
 	}
 
-	name, err := p.parseName()
-	if err != nil {
-		fmt.Println(err)
+	name := p.parseName()
+	if name == nil {
+		//fmt.Println("name nil so continue")
+		p.addError("objectDefinition name error!")
 	}
 	od.Name = name
 
-	infs, err := p.parseImplementInterfaces()
-	if err != nil {
-		fmt.Println(err)
-	}
-	od.Interfaces = infs
+	od.Interfaces = p.parseImplementInterfaces()
 	//fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
 	//current token is token.LBRACE
 
-	dirs, err := p.parseDirectives()
-	if err != nil {
-		fmt.Println(err)
-	}
-	od.Directives = dirs
+	od.Directives = p.parseDirectives()
 	//loop current token is token.LPAREN
 	p.nextToken()
 
-	fields, err := p.parseFieldsDefinition()
-	if err != nil {
-		fmt.Println("parseFieldsDefinition->", err)
+	fields := p.parseFieldsDefinition()
+	if fields == nil {
+		p.addError("objecDefinition fields parse error")
 	}
 	od.Fields = fields
 	fmt.Println("parseObjectDefinition->DONE", p.errors, od.Fields)
 	return od
 }
 
-func (p *Parser) parseFieldsDefinition() ([]*ast.FieldDefinition, error) { //???? working not finished yet
+func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working not finished yet
 
+	//check if return nil
 	fields := []*ast.FieldDefinition{}
+
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+
 		//starting with token.IDENT
-		fd, err := p.parseFieldDefinition()
+		fd := p.parseFieldDefinition()
 
-		fmt.Println("<2><2>", fd.Type, p.curToken, p.peekToken)
-		if fd.Type == nil {
-			fmt.Println("EXIT", p.curToken, p.peekToken)
-			//os.Exit(2)
-			//return nil, errors.New("<<type nil error<<")
-			fd = nil
-		}
-		if err != nil {
-			fmt.Println(">>>", err)
-			//return nil, err
-		}
-
-		//fmt.Println(">>>>>>>>>>", fd.Name, err)
 		if fd != nil {
 			fields = append(fields, fd)
+
+			fmt.Println("<2><2>", fd, p.curToken, p.peekToken) //fd.Type
+			if fd.Type == nil {
+				fmt.Println("EXIT", p.curToken, p.peekToken)
+				fd = nil
+			}
 		}
-		//if fd == nil {
-		//fmt.Println("BREAK...", p.curToken.Literal)
-		//break
-		//}
+
 	}
-	fmt.Println("@@", p.curToken, p.peekToken)
-	return fields, nil
+	fmt.Println("@@", p.curToken, p.peekToken, len(fields))
+	return fields
 }
 
-func (p *Parser) parseDirectives() ([]*ast.Directive, error) {
+func (p *Parser) parseDirectives() []*ast.Directive {
 
 	if !p.curTokenIs(token.AT) {
-		err := p.tokenError(token.AT)
-		return nil, err
+		return nil
 	}
 	dirs := make([]*ast.Directive, 0)
 	for !p.curTokenIs(token.LBRACE) {
-		directive, err := p.parseDirective()
-		if err != nil {
-			return nil, err
-		}
+
+		directive := p.parseDirective()
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
@@ -186,57 +169,43 @@ func (p *Parser) parseDirectives() ([]*ast.Directive, error) {
 			break
 		}
 	}
-	return dirs, nil
+	return dirs
 }
 
-func (p *Parser) parseDirective() (*ast.Directive, error) {
+func (p *Parser) parseDirective() *ast.Directive {
 
 	if !p.expectToken(token.AT) {
-		err := p.tokenError(token.AT)
-		return nil, err
+		return nil
 	}
 	// if p.curTokenIs(token.LBRACE) {
 	// 	return nil
 	// }
 	if !p.curTokenIs(token.IDENT) {
-		err := p.tokenError(token.AT)
-		return nil, err
+		p.tokenError(token.AT)
+		return nil
 	}
+
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 
-	name, err := p.parseName()
-	if err != nil {
-		return nil, err
-	}
-	directive.Name = name
+	directive.Name = p.parseName()
+	directive.Arguments = p.parseArguments()
 
-	args, err := p.parseArguments()
-	if err != nil {
-		return nil, err
-	}
-
-	directive.Arguments = args
 	if !p.curTokenIs(token.LBRACE) {
 		p.nextToken() //--> )
 	}
-	return directive, nil
+	return directive
 }
 
-func (p *Parser) parseArguments() ([]*ast.Argument, error) {
+func (p *Parser) parseArguments() []*ast.Argument {
 
 	if !p.curTokenIs(token.LPAREN) {
-		err := p.tokenError(token.LPAREN)
-		return nil, err
+		return nil
 	}
 	args := []*ast.Argument{}
 	p.nextToken() //-> (
 	for !p.curTokenIs(token.RPAREN) {
 
-		arg, err := p.parseArgument()
-		if err != nil {
-			return nil, err
-		}
-
+		arg := p.parseArgument()
 		if arg != nil {
 			args = append(args, arg)
 		}
@@ -244,21 +213,18 @@ func (p *Parser) parseArguments() ([]*ast.Argument, error) {
 			break
 		}
 	}
-	return args, nil
+	return args
 }
 
-func (p *Parser) parseArgument() (*ast.Argument, error) {
+func (p *Parser) parseArgument() *ast.Argument {
 
 	if !p.curTokenIs(token.IDENT) {
-		err := p.tokenError(token.IDENT)
-		return nil, err
+		return nil
 	}
+
 	arg := &ast.Argument{Kind: ast.ARGUMENT, Token: p.curToken}
-	name, err := p.parseName()
-	if err != nil {
-		return nil, err
-	}
-	arg.Name = name
+	arg.Name = p.parseName()
+
 	if p.curTokenIs(token.COLON) {
 		p.nextToken()
 	}
@@ -266,26 +232,23 @@ func (p *Parser) parseArgument() (*ast.Argument, error) {
 	if p.curTokenIs(token.COMMA) {
 		p.nextToken()
 	}
-	return arg, nil
+	return arg
 }
 
-func (p *Parser) parseImplementInterfaces() ([]*ast.NamedType, error) {
+func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 
 	if !p.curTokenIs(token.IMPLEMENTS) {
-		err := p.tokenError(token.IMPLEMENTS)
-		return nil, err
+		return nil
 	}
+
 	namedSlc := []*ast.NamedType{}
-	//fmt.Println("implements ==>", p.curToken.Literal)
 	p.nextToken()
 	for !p.curTokenIs(token.LBRACE) {
-		named, err := p.parseNamed()
-		if err != nil {
-			return nil, err
+
+		named := p.parseNamed()
+		if named != nil {
+			namedSlc = append(namedSlc, named)
 		}
-		//if named != nil {
-		namedSlc = append(namedSlc, named)
-		//}
 
 		if p.curTokenIs(token.AMP) {
 			p.nextToken()
@@ -294,93 +257,79 @@ func (p *Parser) parseImplementInterfaces() ([]*ast.NamedType, error) {
 			break
 		}
 	}
-	//fmt.Println("!!!", p.curToken, p.peekToken, namedSlc, len(namedSlc))
-	return namedSlc, nil
+	return namedSlc
 }
 
-func (p *Parser) parseNamed() (*ast.NamedType, error) {
+func (p *Parser) parseNamed() *ast.NamedType {
 
 	//expecting current token is token.IDENT
 	if !p.curTokenIs(token.IDENT) {
-		err := p.tokenError(token.IDENT)
-		return nil, err
+		p.tokenError(token.IDENT)
+		return nil
 	}
 	named := &ast.NamedType{Kind: ast.NAMED_TYPE}
 	named.Token = p.curToken
-	name, err := p.parseName()
-	if err != nil {
-		return nil, err
+	name := p.parseName()
+	if name == nil {
+		return nil
 	}
 	named.Name = name
-	return named, nil
+	return named
 }
 
-func (p *Parser) parseFieldDefinition() (*ast.FieldDefinition, error) { //??
+func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 
 	//fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
-	var err error
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
 
 	fd.Description = p.parseDescription()
 
-	name, err := p.parseName()
-	if err != nil {
-		err = p.addError("parseFieldDefinition.parseName type missing")
-		return nil, err
+	name := p.parseName()
+	if name == nil {
+		p.addError("parseFieldDefinition.parseName type missing")
+		return nil
 	}
-	fd.Name = name
-	//fmt.Println("field-->", name)
 
-	argd, err := p.parseArgumentDefinition() //optional
-	if err != nil {
-		fmt.Println("parseArgumentDefinition>", err)
-	}
-	fd.Arguments = argd
+	fd.Name = name
+	fd.Arguments = p.parseArgumentDefinition()
 
 	if !p.expectToken(token.COLON) {
-		err = p.tokenError(token.COLON)
-		return nil, err
+		p.tokenError(token.COLON)
+		return nil
 	}
 
-	ptype, err := p.parseType()
-	if err != nil {
-		err = p.addError("parseFieldDefinition.parseType error")
-		return nil, err
+	ptype := p.parseType()
+	if ptype == nil {
+		p.addError("parseFieldDefinition.parseType error")
+		return nil
 	}
-	fmt.Println("<1><1>", ptype, p.curToken, p.peekToken)
-	// if ptype == nil {
-	// 	fmt.Println(fd.Name, "nil so return", p.curToken, p.peekToken)
-	// 	return nil, errors.New("type nil error")
-	// }
-
+	//fmt.Println("<1><1>", ptype, p.curToken, p.peekToken)
 	fd.Type = ptype
 	fd.Directives = nil
 	//fmt.Println("------>", err, fd.Name, ptype, "**", p.curToken, p.peekToken)
-	return fd, nil
+	return fd
 }
 
-func (p *Parser) parseArgumentDefinition() ([]*ast.InputValueDefinition, error) {
+func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
 	//fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
 	//var err error
 	if !p.curTokenIs(token.LPAREN) {
-		return nil, nil
+		return nil
 	}
 
 	p.nextToken()
 	for !p.curTokenIs(token.RPAREN) {
 
 		//starting with token.IDENT
-		ivd, err := p.parseInputValueDefinition()
-		if err != nil {
-			return nil, err
+		ivd := p.parseInputValueDefinition()
+
+		if ivd != nil {
+			args = append(args, ivd)
 		}
-		//if ivd != nil {
-		args = append(args, ivd)
-		//}
 
 		if p.curTokenIs(token.COMMA) {
 			p.nextToken()
@@ -388,10 +337,10 @@ func (p *Parser) parseArgumentDefinition() ([]*ast.InputValueDefinition, error) 
 	}
 	//last current token is token.RPAREN so next
 	p.nextToken()
-	return args, nil
+	return args
 }
 
-func (p *Parser) parseInputValueDefinition() (*ast.InputValueDefinition, error) {
+func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
 	//fmt.Println("parseInputValueDefinition", p.curToken)
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
@@ -399,28 +348,28 @@ func (p *Parser) parseInputValueDefinition() (*ast.InputValueDefinition, error) 
 	inv.Description = p.parseDescription()
 
 	//current token.IDENT
-	name, err := p.parseName()
-	if err != nil {
-		return nil, err
+	name := p.parseName()
+	if name == nil {
+		return nil
 	}
 	inv.Name = name
 
 	if !p.expectToken(token.COLON) {
-		err := p.tokenError(token.COLON)
-		return nil, err
+		p.tokenError(token.COLON)
+		return nil
 	}
 
-	ptype, err := p.parseType()
-	if err != nil {
-		err = p.addError("parseInputValueDefinition parseType error")
-		return nil, err
+	ptype := p.parseType()
+	if ptype == nil {
+		p.addError("parseInputValueDefinition parseType error")
+		return nil
 	}
 
 	inv.Type = ptype
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = nil
 	//last token is token.RPAREN = )
-	return inv, nil
+	return inv
 }
 
 func (p *Parser) parseDefaultValue() ast.Value {
@@ -545,16 +494,16 @@ func (p *Parser) expectToken(t token.TokenType) bool {
 }
 
 // Converts a name lex token into a name parse node.
-func (p *Parser) parseName() (*ast.Name, error) {
+func (p *Parser) parseName() *ast.Name {
 
 	if !p.curTokenIs(token.IDENT) {
 		//err := p.tokenError(token.IDENT)
-		err := p.addError("parseName identifier missing")
-		return nil, err
+		p.addError("parseName identifier missing")
+		return nil
 	}
 	name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
 	p.nextToken()
-	return name, nil
+	return name
 }
 
 /**
@@ -563,7 +512,8 @@ func (p *Parser) parseName() (*ast.Name, error) {
  *   - ListType
  *   - NonNullType
  */
-func (p *Parser) parseType() (ttype ast.Type, err error) { //????
+//Instead of error we return nil
+func (p *Parser) parseType() (ttype ast.Type) { //????
 
 	//fmt.Println("parseType", p.curToken, p.peekToken)
 	cToken := p.curToken
@@ -575,34 +525,36 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 			//fmt.Println("###", p.curToken.Literal) //expecting IDENT
 			//return nil, errors.New("--missing type--")
 		}
-		ttype, err = p.parseType()
+		ttype = p.parseType()
 		//fmt.Println("2###", p.curToken.Literal, ttype, err)
-		if err != nil {
-			//fmt.Println(">>", err)
-			return nil, err
-		}
+		//if err != nil {
+		//return nil, err
+		//}
 
 		fallthrough
 
 	case token.RBRACKET: //]
 
-		fmt.Println("~~", p.curToken, p.peekToken, ttype)
+		//fmt.Println("~~", p.curToken, p.peekToken, ttype)
 		if ttype != nil {
 			p.nextToken()
 			ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
 		}
 		if ttype == nil {
-			fmt.Println("==========NIL========")
+			fmt.Println("==========token.RBRACKET NIL========")
 		}
 
 	case token.IDENT, token.STRING:
-		ttype, err = p.parseNamed()
-		if err != nil {
-			msg := "type identifier missing"
-			fmt.Println(">>", msg)
-			p.addError(msg)
-			return nil, errors.New(msg)
+		ttype = p.parseNamed()
+		if ttype == nil {
+			p.addError("parseNamed nil from parseType @600")
 		}
+		// if err != nil {
+		// 	msg := "type identifier missing"
+		// 	fmt.Println(">>", msg)
+		// 	p.addError(msg)
+		// 	return nil, errors.New(msg)
+		// }
 	}
 
 	// BANG must be executed
@@ -620,7 +572,7 @@ func (p *Parser) parseType() (ttype ast.Type, err error) { //????
 	}
 	//fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
 	//fmt.Println()
-	return ttype, nil
+	return ttype
 }
 
 func (p *Parser) parseDescription() *ast.StringValue {

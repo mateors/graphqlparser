@@ -486,7 +486,7 @@ func main() {
 	input := `
 	type Person implements Human @skip(name:true, age:false) {
 		id: ID!
-		age: [String]!
+		age: []!
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 	}
 	`

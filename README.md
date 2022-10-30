@@ -514,6 +514,22 @@ length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
 * git show v0.0
 * git push origin v0.0
 
+
+### Return nil in the following function if any error
+* parseName
+* parseNamed
+* parseType
+
+### Parse Hierarchy
+```
+parseDocument::
+	parseObjectDefinition::
+		parseFieldsDefinition
+			parseFieldDefinition
+				parseArgumentDefinition
+					parseInputValueDefinition
+```
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
