@@ -516,17 +516,14 @@ func (p *Parser) parseName() *ast.Name {
 func (p *Parser) parseType() (ttype ast.Type) { //????
 
 	cToken := p.curToken
-
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
 		p.nextToken()
-		//if p.curToken.Type == token.RBRACKET {
-		//}
+		//if p.curToken.Type == token.RBRACKET{}
 		ttype = p.parseType()
 		fallthrough
 
 	case token.RBRACKET: //]
-
 		if ttype != nil {
 			p.nextToken()
 			ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
@@ -534,9 +531,6 @@ func (p *Parser) parseType() (ttype ast.Type) { //????
 
 	case token.IDENT, token.STRING:
 		ttype = p.parseNamed()
-		if ttype == nil {
-			p.addError("parseNamed nil from parseType @538")
-		}
 	}
 
 	// BANG must be executed
