@@ -520,26 +520,22 @@ func (p *Parser) parseType() (ttype ast.Type) { //????
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
 		p.nextToken()
-		if p.curToken.Type == token.RBRACKET {
-		}
+		//if p.curToken.Type == token.RBRACKET {
+		//}
 		ttype = p.parseType()
 		fallthrough
 
 	case token.RBRACKET: //]
 
-		//fmt.Println("~~", p.curToken, p.peekToken, ttype)
 		if ttype != nil {
 			p.nextToken()
 			ttype = &ast.ListType{Kind: ast.LIST_TYPE, Token: cToken, Type: ttype}
-		}
-		if ttype == nil {
-			fmt.Println("==========token.RBRACKET NIL========")
 		}
 
 	case token.IDENT, token.STRING:
 		ttype = p.parseNamed()
 		if ttype == nil {
-			p.addError("parseNamed nil from parseType @600")
+			p.addError("parseNamed nil from parseType @538")
 		}
 	}
 
@@ -549,12 +545,9 @@ func (p *Parser) parseType() (ttype ast.Type) { //????
 	}
 
 	if p.curTokenIs(token.BANG) && ttype != nil {
-		fmt.Println("INSIDE BANG")
 		ttype = &ast.NonNullType{Kind: ast.NONNULL_TYPE, Token: p.curToken, Type: ttype}
 		p.nextToken()
 	}
-	//fmt.Println("2~~~~~~~~~~", p.curToken, p.peekToken, ttype)
-	//fmt.Println()
 	return ttype
 }
 
