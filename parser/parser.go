@@ -124,7 +124,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		p.addError("objecDefinition fields parse error")
 	}
 	od.Fields = fields
-	fmt.Println("parseObjectDefinition->DONE", p.errors, od.Fields)
+	fmt.Println("parseObjectDefinition->DONE", p.errors, len(p.errors))
 	return od
 }
 
