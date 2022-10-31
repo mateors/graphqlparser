@@ -204,6 +204,14 @@ func (p *Parser) parseArguments() []*ast.Argument {
 	for !p.curTokenIs(token.RPAREN) {
 
 		arg := p.parseArgument()
+		if arg.Name == nil {
+			p.addError("parseArgument Name missing")
+			arg = nil
+		}
+		if arg.Value == nil {
+			p.addError("parseArgument Value missing")
+			arg = nil
+		}
 		if arg != nil {
 			args = append(args, arg)
 		}
@@ -226,7 +234,7 @@ func (p *Parser) parseArgument() *ast.Argument {
 	if p.curTokenIs(token.COLON) {
 		p.nextToken()
 	}
-	arg.Value = p.parseValueLiteral()
+	arg.Value = p.parseValueLiteral() //return nil if missing
 	if p.curTokenIs(token.COMMA) {
 		p.nextToken()
 	}
@@ -372,7 +380,6 @@ func (p *Parser) parseDefaultValue() ast.Value {
 
 func (p *Parser) parseValueLiteral() ast.Value {
 
-	//fmt.Println("parseValueLiteral", p.curToken)
 	cToken := p.curToken
 	var value ast.Value
 
