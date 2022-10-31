@@ -484,11 +484,12 @@ func main() {
 	// `
 
 	input := `
+	"""Test description"""
 	type Person implements Human @skip(name:true, age:false) {
 		id: ID!
 		age: []!
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
-		oldField: String @deprecated(reason: )
+		oldField: String @deprecated(reason: "Use newField.")
 	}
 	`
 
@@ -498,6 +499,10 @@ func main() {
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
+
+	def := doc.Definitions[0]
+	fmt.Println(def.String())
+	fmt.Println("----")
 	for i, def := range doc.Definitions {
 		fmt.Println("*", i, def.GetKind(), def)
 	}

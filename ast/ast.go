@@ -19,6 +19,7 @@ const (
 type Node interface {
 	TokenLiteral() string
 	GetKind() string
+	String() string
 }
 
 type Definition interface { //Statement | Definition | SchemaDefinition | TypeSystems | GraphQLObjectType
