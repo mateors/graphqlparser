@@ -42,3 +42,24 @@ oldField: String @deprecated(reason: "Use newField.")
 	}
 
 }
+
+func TestObjectTypeDefinition2(t *testing.T) {
+
+	input := `"""
+Test description
+"""
+type Person implements Human @skip(name: true, age: false) {
+id: ID!
+length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+oldField: String @deprecated(reason: "Use newField.")
+}`
+
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+
+}
