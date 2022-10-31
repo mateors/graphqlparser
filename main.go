@@ -488,6 +488,7 @@ func main() {
 		id: ID!
 		age: []!
 		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+		oldField: String @deprecated(reason: "Use newField.")
 	}
 	`
 

@@ -302,7 +302,7 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 		return nil
 	}
 	fd.Type = ptype
-	fd.Directives = nil
+	fd.Directives = p.parseDirectives()
 	return fd
 }
 
