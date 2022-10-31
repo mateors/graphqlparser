@@ -484,7 +484,9 @@ func main() {
 	// `
 
 	input := `
-	"""Test description"""
+	"""
+	Test description
+	"""
 	type Person implements Human @skip(name:true, age:false) {
 		id: ID!
 		age: []!

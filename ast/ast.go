@@ -751,7 +751,8 @@ func (ob *ObjectDefinition) String() string {
 	if ob.Description != nil {
 		if len(ob.Description.Value) > 0 {
 			//desc := join([]string{`"""`, desc, `"""`}, sep)
-			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", ob.Description.Value) + "\n")
+			desc := strings.TrimSpace(ob.Description.Value)
+			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", desc) + "\n")
 		}
 	}
 	name := ob.Name.Value
