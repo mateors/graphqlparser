@@ -143,7 +143,6 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 			fields = append(fields, fd)
 			//fmt.Println("<2><2>", fd, p.curToken, p.peekToken) //fd.Type
 			if fd.Type == nil {
-				fmt.Println("EXIT", p.curToken, p.peekToken)
 				fd = nil
 			}
 		}
@@ -186,7 +185,6 @@ func (p *Parser) parseDirective() *ast.Directive {
 	}
 
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
-
 	directive.Name = p.parseName()
 	directive.Arguments = p.parseArguments()
 
@@ -264,7 +262,6 @@ func (p *Parser) parseNamed() *ast.NamedType {
 
 	//expecting current token is token.IDENT
 	if !p.curTokenIs(token.IDENT) {
-		p.tokenError(token.IDENT)
 		return nil
 	}
 	named := &ast.NamedType{Kind: ast.NAMED_TYPE}
@@ -283,7 +280,6 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
-
 	fd.Description = p.parseDescription()
 
 	name := p.parseName()
@@ -312,9 +308,7 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 
 func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
-	//fmt.Println("parseArgumentDefinition", p.curToken, p.peekToken)
 	args := []*ast.InputValueDefinition{}
-	//var err error
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
@@ -340,7 +334,6 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
 func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
-	//fmt.Println("parseInputValueDefinition", p.curToken)
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
 	inv.Description = p.parseDescription()
@@ -415,7 +408,6 @@ func (p *Parser) parseValueLiteral() ast.Value {
 		//parseObject
 	}
 	p.nextToken()
-	//fmt.Println("???", p.curToken) // )
 	return value
 }
 
