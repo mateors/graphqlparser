@@ -484,6 +484,7 @@ func main() {
 	// `
 
 	input := `
+	"""test"""
 	interface Image implements Resource & Node {
 	  id: ID!
 	  url: String

@@ -160,18 +160,14 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 	name := p.parseName()
 	if name == nil {
-		//fmt.Println("name nil so continue")
 		p.addError("objectDefinition name error!")
 	}
 	od.Name = name
 
 	od.Interfaces = p.parseImplementInterfaces()
 	//fmt.Println("@@", p.curToken) //if everything okay then current token is token.AT or token.LBRACE
-	//current token is token.LBRACE
 
 	od.Directives = p.parseDirectives()
-	//loop current token is token.LPAREN
-	p.nextToken()
 
 	fields := p.parseFieldsDefinition()
 	if fields == nil {
