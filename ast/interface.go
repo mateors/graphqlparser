@@ -186,8 +186,8 @@ func (i *InterfaceDefinition) String() string {
 	var out bytes.Buffer
 	if i.Description != nil {
 		if len(i.Description.Value) > 0 {
-			//desc := join([]string{`"""`, desc, `"""`}, sep)
-			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", i.Description) + "\n")
+			desc := strings.TrimSpace(i.Description.Value)
+			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", desc) + "\n")
 		}
 	}
 
