@@ -120,15 +120,13 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseInterfaceDefinition() ast.Node {
 
-	fmt.Println("parseInterfaceDefinition:", p.curToken)
+	//fmt.Println("parseInterfaceDefinition:", p.curToken)
 	id := &ast.InterfaceDefinition{Kind: ast.INTERFACE_DEFINITION}
 	id.Token = p.curToken
 	id.Description = p.parseDescription()
 
 	//fmt.Println(">>", p.curToken, p.peekToken, token.INTERFACE, id.Description)
-
 	if !p.expectToken(token.INTERFACE) {
-		fmt.Println("nil")
 		return nil
 	}
 
@@ -137,25 +135,21 @@ func (p *Parser) parseInterfaceDefinition() ast.Node {
 		p.addError("interfaceDefinition name error!")
 	}
 	id.Name = name
-
 	//fmt.Println("2>>", id.Name, p.curToken, p.peekToken)
 
 	id.Interfaces = p.parseImplementInterfaces()
+	//fmt.Println("3>>", id.Interfaces, p.curToken, p.peekToken)
 
-	fmt.Println("3>>", id.Interfaces, p.curToken, p.peekToken)
+	id.Directives = p.parseDirectives()
+	//p.nextToken() //additional/extra headache
 
-	id.Directives = nil //p.parseDirectives()
-	p.nextToken()       //additional/extra headache
-
-	fmt.Println("4>>>", id.Directives, p.curToken, p.peekToken)
-
+	//fmt.Println("4>>>", id.Directives, p.curToken, p.peekToken)
 	fields := p.parseFieldsDefinition()
 	if fields == nil {
 		p.addError("interfaceDefinition fields parse error")
 	}
 	id.Fields = fields
-	fmt.Println("FINAL::", id.Fields, len(fields), p.curToken, p.peekToken)
-
+	//fmt.Println("FINAL::", id.Fields, len(fields), p.curToken, p.peekToken)
 	return id
 }
 
@@ -197,6 +191,10 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working not finished yet
 
 	//check if return nil
+	if !p.expectToken(token.LBRACE) { //expecting {
+		return nil
+	}
+
 	fields := []*ast.FieldDefinition{}
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
@@ -214,7 +212,7 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		}
 
 	}
-	fmt.Println("@@", p.curToken, p.peekToken, len(fields))
+	//fmt.Println("@@", p.curToken, p.peekToken, len(fields))
 	return fields
 }
 
