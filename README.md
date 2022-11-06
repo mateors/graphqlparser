@@ -530,6 +530,14 @@ parseDocument::
 					parseInputValueDefinition
 ```
 
+### TypeDefinition
+* ScalarTypeDefinition
+* ObjectTypeDefinition
+* **InterfaceTypeDefinition**
+* UnionTypeDefinition
+* EnumTypeDefinition
+* InputObjectTypeDefinition
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries

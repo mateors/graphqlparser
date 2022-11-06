@@ -60,22 +60,47 @@ func (p *Parser) ParseDocument() *ast.Document {
 		if doc != nil {
 			document.Definitions = append(document.Definitions, doc)
 		}
-		fmt.Println("...")
+		fmt.Println("...", doc)
 		p.nextToken()
 	}
 	return document
 }
 
+func (p *Parser) analyzeWhichDefinition() string {
+
+	curToken := p.curToken.Type
+	peekToken := p.peekToken.Type
+
+	if (curToken == token.BLOCK_STRING || curToken == token.STRING) && peekToken == token.TYPE {
+		return ast.OBJECT_DEFINITION
+
+	} else if curToken == token.TYPE {
+		return ast.OBJECT_DEFINITION
+
+	} else if p.isDescription() && peekToken == token.INTERFACE {
+		return ast.INTERFACE_DEFINITION
+
+	} else if curToken == token.INTERFACE {
+		return ast.INTERFACE_DEFINITION
+	}
+
+	return ast.UNKNOWN
+}
+
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
-	fmt.Println("parseDocument>", p.curToken.Type)
-	switch p.curToken.Type {
+	fmt.Println("parseDocument>", p.curToken.Type, p.analyzeWhichDefinition())
+
+	switch p.analyzeWhichDefinition() {
 
 	//case token.TYPE:
 	//return p.parseObjectDefinition()
 
-	case token.BLOCK_STRING, token.STRING, token.HASH, token.TYPE:
+	case ast.OBJECT_DEFINITION:
 		return p.parseObjectDefinition()
+
+	case ast.INTERFACE_DEFINITION:
+		return p.parseInterfaceDefinition()
 
 	// case token.IDENT: //,token.LBRACE, token.STRING
 
@@ -91,6 +116,47 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseInterfaceDefinition() ast.Node {
+
+	fmt.Println("parseInterfaceDefinition:", p.curToken)
+	id := &ast.InterfaceDefinition{Kind: ast.INTERFACE_DEFINITION}
+	id.Token = p.curToken
+	id.Description = p.parseDescription()
+
+	//fmt.Println(">>", p.curToken, p.peekToken, token.INTERFACE, id.Description)
+
+	if !p.expectToken(token.INTERFACE) {
+		fmt.Println("nil")
+		return nil
+	}
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("interfaceDefinition name error!")
+	}
+	id.Name = name
+
+	//fmt.Println("2>>", id.Name, p.curToken, p.peekToken)
+
+	id.Interfaces = p.parseImplementInterfaces()
+
+	fmt.Println("3>>", id.Interfaces, p.curToken, p.peekToken)
+
+	id.Directives = nil //p.parseDirectives()
+	p.nextToken()       //additional/extra headache
+
+	fmt.Println("4>>>", id.Directives, p.curToken, p.peekToken)
+
+	fields := p.parseFieldsDefinition()
+	if fields == nil {
+		p.addError("interfaceDefinition fields parse error")
+	}
+	id.Fields = fields
+	fmt.Println("FINAL::", id.Fields, len(fields), p.curToken, p.peekToken)
+
+	return id
 }
 
 func (p *Parser) parseObjectDefinition() ast.Node {
@@ -148,7 +214,7 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		}
 
 	}
-	//fmt.Println("@@", p.curToken, p.peekToken, len(fields))
+	fmt.Println("@@", p.curToken, p.peekToken, len(fields))
 	return fields
 }
 
@@ -546,6 +612,7 @@ func (p *Parser) parseDescription() *ast.StringValue {
 	//fmt.Println("parseDescription", p.curToken, p.peekToken)
 	if p.curTokenIs(token.STRING) || p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.HASH) {
 		return p.parseStringLiteral()
+
 	}
 	return nil
 }
@@ -553,5 +620,6 @@ func (p *Parser) parseDescription() *ast.StringValue {
 func (p *Parser) parseStringLiteral() *ast.StringValue {
 	cToken := p.curToken
 	p.nextToken()
+	fmt.Println(">>", p.curToken, p.peekToken)
 	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
 }

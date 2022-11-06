@@ -25,7 +25,7 @@ const (
 	LIST_VALUE                     = "ListValue"               //
 	OBJECT_VALUE                   = "ObjectValue"             //
 	OBJECT_FIELD                   = "ObjectField"             //
-	INTERFACE_DEFINITION           = "InterfaceDefinition"     //
+	INTERFACE_DEFINITION           = "InterfaceDefinition"     //?
 	UNION_DEFINITION               = "UnionDefinition"         //
 	ENUM_DEFINITION                = "EnumDefinition"          //
 	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //
@@ -36,5 +36,6 @@ const (
 	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
 	SCHEMA_DEFINITION              = "SchemaDefinition"        //
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
+	UNKNOWN                        = "Unknown"
 	//TypeExtensionDefinition
 )

@@ -484,14 +484,10 @@ func main() {
 	// `
 
 	input := `
-	"""
-	Test description
-	"""
-	type Person implements Human @skip(name:true, age:false) {
-		id: ID!
-		age: []!
-		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
-		oldField: String @deprecated(reason: "Use newField.")
+	interface Image implements Resource & Node {
+	  id: ID!
+	  url: String
+	  thumbnail: String
 	}
 	`
 

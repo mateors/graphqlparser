@@ -184,10 +184,13 @@ func (i *InterfaceDefinition) GetSelectionSet() *SelectionSet {
 func (i *InterfaceDefinition) String() string {
 
 	var out bytes.Buffer
-	if len(i.Description.Value) > 0 {
-		//desc := join([]string{`"""`, desc, `"""`}, sep)
-		out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", i.Description) + "\n")
+	if i.Description != nil {
+		if len(i.Description.Value) > 0 {
+			//desc := join([]string{`"""`, desc, `"""`}, sep)
+			out.WriteString(fmt.Sprintf("\"\"\"\n%s\n\"\"\"", i.Description) + "\n")
+		}
 	}
+
 	name := i.Name.Value
 	out.WriteString("interface" + " " + name)
 
@@ -201,17 +204,19 @@ func (i *InterfaceDefinition) String() string {
 		out.WriteString(infcs)
 	}
 
-	directives := []string{}
-	for _, directive := range i.Directives {
-		directives = append(directives, fmt.Sprintf("%v", directive.String()))
-	}
-	if len(directives) > 0 {
-		var dstr string
-		for _, str := range directives {
-			dstr += fmt.Sprintf("%s ", str)
+	if i.Directives != nil {
+		directives := []string{}
+		for _, directive := range i.Directives {
+			directives = append(directives, fmt.Sprintf("%v", directive.String()))
 		}
-		dstr = strings.TrimRight(dstr, " ")
-		out.WriteString(dstr)
+		if len(directives) > 0 {
+			var dstr string
+			for _, str := range directives {
+				dstr += fmt.Sprintf("%s ", str)
+			}
+			dstr = strings.TrimRight(dstr, " ")
+			out.WriteString(dstr)
+		}
 	}
 
 	out.WriteString(" {")
