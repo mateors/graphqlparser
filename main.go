@@ -484,6 +484,9 @@ func main() {
 	// `
 
 	input := `
+	"""
+	test
+	"""
 	scalar UUID @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")
 	`
 

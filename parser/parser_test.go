@@ -141,3 +141,18 @@ input Example  @skip(name: true, age: false) {
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestScalarTypeDefinition(t *testing.T) {
+
+	input := `"""
+test description
+"""
+scalar UUID  @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}
