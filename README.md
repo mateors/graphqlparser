@@ -531,12 +531,12 @@ parseDocument::
 ```
 
 ### TypeDefinition
-* ScalarTypeDefinition
+* **ScalarTypeDefinition**
 * ObjectTypeDefinition -> DONE
 * InterfaceTypeDefinition -> DONE
 * UnionTypeDefinition -> DONE
 * EnumTypeDefinition --> DONE
-* **InputObjectTypeDefinition**
+* InputObjectTypeDefinition --> DONE
 
 ## Resource
 * https://graphql.org/learn/schema

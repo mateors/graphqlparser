@@ -111,9 +111,6 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 	switch p.analyzeWhichDefinition() {
 
-	//case token.TYPE:
-	//return p.parseObjectDefinition()
-
 	case ast.OBJECT_DEFINITION:
 		return p.parseObjectDefinition()
 
@@ -129,14 +126,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.INPUT_OBJECT_DEFINITION:
 		return p.parseInputObjectDefinition()
 
-	// case token.IDENT: //,token.LBRACE, token.STRING
-
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
-
-	//case token.IDENT:
-	//return p.parseFieldDefinition()
 
 	default:
 		fmt.Println("unexpected", p.curToken.Type)
