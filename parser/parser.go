@@ -180,14 +180,10 @@ func (p *Parser) parseInputFieldsDefinition() []*ast.InputValueDefinition {
 
 		//starting with token.IDENT
 		ivd := p.parseInputValueDefinition()
-
-		if ivd != nil {
-			fields = append(fields, ivd)
+		if ivd == nil {
+			break
 		}
-
-		if p.curTokenIs(token.COMMA) {
-			p.nextToken()
-		}
+		fields = append(fields, ivd)
 	}
 	//last current token is token.RPAREN so next
 	p.nextToken()

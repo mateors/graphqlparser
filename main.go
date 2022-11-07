@@ -485,11 +485,11 @@ func main() {
 
 	input := `
 	"""
-	etst description
+	test description
 	"""
-	input Example {
+	input Example @skip(name: true, age: false) {
 		self: [Example!]!
-		value: String!
+		value: String! @skip(name: true, age: false)
 	}
 	`
 

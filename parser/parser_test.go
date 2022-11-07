@@ -123,3 +123,21 @@ enum Direction  @skip(name: true, age: false) {
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestInputObjectTypeDefinition(t *testing.T) {
+
+	input := `"""
+test description
+"""
+input Example {
+  self: [Example!]!
+  value: String!
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

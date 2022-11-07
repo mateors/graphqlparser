@@ -521,7 +521,7 @@ func (iod *InputObjectDefinition) String() string {
 	}, " ")
 
 	if iod.Description != nil {
-		desc := iod.Description.Value
+		desc := strings.TrimSpace(iod.Description.Value)
 		if desc != "" {
 			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)
