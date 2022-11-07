@@ -136,30 +136,23 @@ func (p *Parser) parseUnionDefinition() ast.Node { //?
 	if !p.expectToken(token.UNION) {
 		return nil
 	}
-
-	//fmt.Println("==", p.curToken.Type == token.IDENT) //SearchResult
 	name := p.parseName()
 	if name == nil {
 		p.addError("unionDefinition name error!")
 	}
-
 	ud.Name = name
 	ud.Directives = p.parseDirectives()
-	//fmt.Println("1>>parseUnionDefinition?", p.curToken, p.peekToken)
 	ud.UnionMemberTypes = p.parseUnionMemberTypes()
-	//fmt.Println("DONE")
 	return ud
 }
 
 func (p *Parser) parseUnionMemberTypes() []*ast.NamedType {
 
-	//fmt.Println("2>>parseUnionMemberTypes?", p.curToken, p.peekToken)
 	if !p.expectToken(token.ASSIGN) {
 		return nil
 	}
 
 	namedSlc := []*ast.NamedType{}
-	//p.nextToken() //
 	for {
 
 		named := p.parseNamed()

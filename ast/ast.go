@@ -672,7 +672,7 @@ func (ud *UnionDefinition) String() string {
 	}, " ")
 
 	if ud.Description != nil {
-		desc := ud.Description.Value
+		desc := strings.TrimSpace(ud.Description.Value)
 		if desc != "" {
 			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)
