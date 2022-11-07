@@ -485,6 +485,47 @@ func main() {
 
 	input := `
 	"""
+	Test description
+	"""
+	type Person implements Human @skip(name: true, age: false) {
+	id: ID!
+	length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+	oldField: String @deprecated(reason: "Use newField.")
+	}
+	
+	"""
+	test
+	"""
+	interface Image implements Resource & Node {
+	id: ID!
+	url: String
+	thumbnail: String
+	}
+
+	"""
+	test
+	"""
+	union SearchResult = Photo | Person
+
+	"""
+	description test
+	"""
+	enum Direction @skip(name: true, age: false) {
+		NORTH
+		EAST
+		SOUTH
+		WEST
+	}
+
+	"""
+	test description
+	"""
+	input Example @skip(name: true, age: false) {
+		self: [Example!]!
+		picture: Url = "https://mateors.com"
+	}
+	
+	"""
 	test
 	"""
 	scalar UUID @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")

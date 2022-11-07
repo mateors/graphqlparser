@@ -531,7 +531,7 @@ parseDocument::
 ```
 
 ### TypeDefinition
-* **ScalarTypeDefinition**
+* ScalarTypeDefinition -> DONE
 * ObjectTypeDefinition -> DONE
 * InterfaceTypeDefinition -> DONE
 * UnionTypeDefinition -> DONE

@@ -30,7 +30,7 @@ const (
 	ENUM_DEFINITION                = "EnumDefinition"          //
 	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //
 	INPUT_OBJECT_DEFINITION        = "InputObjectDefinition"   //
-	SCALAR_DEFINITION              = "ScalarDefinition"        //?
+	SCALAR_DEFINITION              = "ScalarDefinition"        //
 	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //
 	VARIABLE_DEFINITION            = "VariableDefinition"      //
 	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
