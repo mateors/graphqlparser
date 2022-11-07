@@ -567,7 +567,7 @@ func (evd *EnumValueDefinition) String() string {
 	}, " ")
 
 	if evd.Description != nil {
-		desc := evd.Description.Value
+		desc := evd.Description.Value //?
 		if desc != "" {
 			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)

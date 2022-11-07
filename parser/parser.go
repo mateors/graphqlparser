@@ -117,6 +117,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.UNION_DEFINITION:
 		return p.parseUnionDefinition()
 
+	case ast.ENUM_DEFINITION:
+		return p.parseEnumDefinition()
+
 	// case token.IDENT: //,token.LBRACE, token.STRING
 
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
@@ -131,6 +134,58 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseEnumDefinition() ast.Node {
+
+	ed := &ast.EnumDefinition{Kind: ast.ENUM_DEFINITION}
+	ed.Token = p.curToken
+	ed.Description = p.parseDescription()
+
+	if !p.expectToken(token.ENUM) {
+		return nil
+	}
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("enumDefinition name error!")
+	}
+	ed.Name = name
+	ed.Directives = p.parseDirectives()
+	ed.Values = p.parseEnumValuesDefinition()
+	return ed
+}
+
+func (p *Parser) parseEnumValuesDefinition() []*ast.EnumValueDefinition {
+
+	evals := []*ast.EnumValueDefinition{}
+	if !p.expectToken(token.LBRACE) {
+		return nil
+	}
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+		evd := p.parseEnumValueDefinition()
+		if evd == nil {
+			break
+		}
+		evals = append(evals, evd)
+	}
+	return evals
+}
+
+func (p *Parser) parseEnumValueDefinition() *ast.EnumValueDefinition {
+
+	evd := &ast.EnumValueDefinition{Kind: ast.ENUMVALUE_DEFINITION}
+	evd.Token = p.curToken
+	evd.Description = p.parseDescription()
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("enumValueDefinition name error!")
+		return nil
+	}
+	evd.Name = name
+	evd.Directives = p.parseDirectives()
+	return evd
 }
 
 func (p *Parser) parseUnionDefinition() ast.Node { //?

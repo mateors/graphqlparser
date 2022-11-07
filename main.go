@@ -485,7 +485,7 @@ func main() {
 
 	input := `
 	"""description test"""
-	enum Direction {
+	enum Direction @skip(name: true, age: false) {
 		NORTH
 		EAST
 		SOUTH
@@ -494,27 +494,27 @@ func main() {
 	`
 
 	lex := lexer.New(input)
-	// p := parser.New(lex)
-	// doc := p.ParseDocument()
+	p := parser.New(lex)
+	doc := p.ParseDocument()
 
-	// def := doc.Definitions[0]
-	// fmt.Println(def.String())
-	// fmt.Println("----")
-	// for i, def := range doc.Definitions {
-	// 	fmt.Println("*", i, def.GetKind(), def)
-	// }
-
-	for {
-		tok := lex.NextToken()
-		if tok.Type == token.EOF {
-			//fmt.Println("eof")
-			break
-		}
-		if tok.Literal == input[tok.Start:tok.End] {
-			fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
-		} else {
-			fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
-		}
+	def := doc.Definitions[0]
+	fmt.Println(def.String())
+	fmt.Println("----")
+	for i, def := range doc.Definitions {
+		fmt.Println("*", i, def.GetKind(), def)
 	}
+
+	// for {
+	// 	tok := lex.NextToken()
+	// 	if tok.Type == token.EOF {
+	// 		//fmt.Println("eof")
+	// 		break
+	// 	}
+	// 	if tok.Literal == input[tok.Start:tok.End] {
+	// 		fmt.Println(tok.Line, tok.Literal, tok.Type, tok.Start, tok.End)
+	// 	} else {
+	// 		fmt.Println("ERR", tok.Type, tok.Literal, len(tok.Literal), ">>", tok.Start, tok.End, "=", input[tok.Start:tok.End])
+	// 	}
+	// }
 
 }
