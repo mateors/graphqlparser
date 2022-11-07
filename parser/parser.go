@@ -82,6 +82,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 
 	} else if curToken == token.INTERFACE {
 		return ast.INTERFACE_DEFINITION
+
+	} else if p.isDescription() && peekToken == token.UNION {
+		return ast.UNION_DEFINITION
+
+	} else if curToken == token.UNION {
+		return ast.UNION_DEFINITION
 	}
 
 	return ast.UNKNOWN
@@ -121,7 +127,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 }
 
-func (p *Parser) parseUnionDefinition() ast.Node {
+func (p *Parser) parseUnionDefinition() ast.Node { //?
 
 	ud := &ast.UnionDefinition{Kind: ast.UNION_DEFINITION}
 	ud.Token = p.curToken
