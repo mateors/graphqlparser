@@ -534,8 +534,8 @@ parseDocument::
 * ScalarTypeDefinition
 * ObjectTypeDefinition -> DONE
 * InterfaceTypeDefinition -> DONE
-* **UnionTypeDefinition**
-* EnumTypeDefinition
+* UnionTypeDefinition -> DONE
+* **EnumTypeDefinition** ?
 * InputObjectTypeDefinition
 
 ## Resource
