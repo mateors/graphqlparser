@@ -153,8 +153,8 @@ func (p *Parser) parseUnionMemberTypes() []*ast.NamedType {
 	}
 
 	namedSlc := []*ast.NamedType{}
-	for {
 
+	for {
 		named := p.parseNamed()
 		if named != nil {
 			namedSlc = append(namedSlc, named)
@@ -659,6 +659,5 @@ func (p *Parser) parseDescription() *ast.StringValue {
 func (p *Parser) parseStringLiteral() *ast.StringValue {
 	cToken := p.curToken
 	p.nextToken()
-	fmt.Println(">>", p.curToken, p.peekToken)
 	return &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
 }
