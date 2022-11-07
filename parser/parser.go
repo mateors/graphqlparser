@@ -100,6 +100,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 
 	} else if curToken == token.INPUT {
 		return ast.INPUT_OBJECT_DEFINITION
+
+	} else if p.isDescription() && peekToken == token.SCALAR {
+		return ast.SCALAR_DEFINITION
+
+	} else if curToken == token.SCALAR {
+		return ast.SCALAR_DEFINITION
 	}
 
 	return ast.UNKNOWN
@@ -126,6 +132,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.INPUT_OBJECT_DEFINITION:
 		return p.parseInputObjectDefinition()
 
+	case ast.SCALAR_DEFINITION:
+		return p.parseScalarDefinition()
+
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
@@ -137,6 +146,25 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 }
 
+func (p *Parser) parseScalarDefinition() ast.Node {
+
+	scd := &ast.ScalarDefinition{Kind: ast.SCALAR_DEFINITION}
+	scd.Token = p.curToken
+	scd.Description = p.parseDescription()
+
+	if !p.expectToken(token.SCALAR) {
+		return nil
+	}
+	name := p.parseName()
+	if name == nil {
+		p.addError("scalarDefinition name error!")
+		return nil
+	}
+	scd.Name = name
+	scd.Directives = p.parseDirectives()
+	return scd
+}
+
 func (p *Parser) parseInputObjectDefinition() ast.Node {
 
 	inObj := &ast.InputObjectDefinition{Kind: ast.INPUT_OBJECT_DEFINITION}
@@ -146,17 +174,14 @@ func (p *Parser) parseInputObjectDefinition() ast.Node {
 	if !p.expectToken(token.INPUT) {
 		return nil
 	}
-
 	name := p.parseName()
 	if name == nil {
 		p.addError("inputObjectDefinition name error!")
 		return nil
 	}
 	inObj.Name = name
-
 	inObj.Directives = p.parseDirectives()
 	inObj.Fields = p.parseInputFieldsDefinition() //?
-
 	return inObj
 }
 
