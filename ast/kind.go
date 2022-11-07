@@ -25,8 +25,8 @@ const (
 	LIST_VALUE                     = "ListValue"               //
 	OBJECT_VALUE                   = "ObjectValue"             //
 	OBJECT_FIELD                   = "ObjectField"             //
-	INTERFACE_DEFINITION           = "InterfaceDefinition"     //?
-	UNION_DEFINITION               = "UnionDefinition"         //
+	INTERFACE_DEFINITION           = "InterfaceDefinition"     //
+	UNION_DEFINITION               = "UnionDefinition"         //?
 	ENUM_DEFINITION                = "EnumDefinition"          //
 	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //
 	INPUT_OBJECT_DEFINITION        = "InputObjectDefinition"   //

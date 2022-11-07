@@ -487,11 +487,7 @@ func main() {
 	"""
 	test
 	"""
-	interface Image implements Resource & Node @skip(cache: true, second: ok) {
-	  "test desc" id: ID!
-	  url: String
-	  thumbnail: String
-	}
+	union SearchResult = Photo | Person
 	`
 
 	//input := `# this is a comment`

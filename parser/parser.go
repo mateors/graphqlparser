@@ -102,6 +102,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.INTERFACE_DEFINITION:
 		return p.parseInterfaceDefinition()
 
+	case ast.UNION_DEFINITION:
+		return p.parseUnionDefinition()
+
 	// case token.IDENT: //,token.LBRACE, token.STRING
 
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
@@ -116,6 +119,28 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseUnionDefinition() ast.Node {
+
+	ud := &ast.UnionDefinition{Kind: ast.UNION_DEFINITION}
+	ud.Token = p.curToken
+	ud.Description = p.parseDescription()
+
+	if !p.expectToken(token.UNION) {
+		return nil
+	}
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("unionDefinition name error!")
+	}
+
+	ud.Name = name
+	ud.Directives = p.parseDirectives()
+	ud.UnionMemberTypes = nil
+
+	return ud
 }
 
 func (p *Parser) parseInterfaceDefinition() ast.Node {
