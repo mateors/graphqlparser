@@ -60,7 +60,7 @@ func (p *Parser) ParseDocument() *ast.Document {
 		if doc != nil {
 			document.Definitions = append(document.Definitions, doc)
 		}
-		fmt.Println("...")
+		//fmt.Println("...", p.errors)
 		p.nextToken()
 	}
 	return document
@@ -113,7 +113,7 @@ func (p *Parser) analyzeWhichDefinition() string {
 
 func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
-	fmt.Println("parseDocument>", p.curToken.Type, p.analyzeWhichDefinition())
+	//fmt.Println("parseDocument>", p.curToken.Type, p.analyzeWhichDefinition())
 
 	switch p.analyzeWhichDefinition() {
 
@@ -357,7 +357,7 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 		p.addError("objecDefinition fields parse error")
 	}
 	od.Fields = fields
-	fmt.Println("parseObjectDefinition->DONE", p.errors, len(p.errors))
+	//fmt.Println("parseObjectDefinition->DONE", p.errors, len(p.errors))
 	return od
 }
 
@@ -376,16 +376,12 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		fd := p.parseFieldDefinition()
 
 		if fd != nil {
-
 			fields = append(fields, fd)
-			//fmt.Println("<2><2>", fd, p.curToken, p.peekToken) //fd.Type
 			if fd.Type == nil {
 				fd = nil
 			}
 		}
-
 	}
-	//fmt.Println("@@", p.curToken, p.peekToken, len(fields))
 	return fields
 }
 

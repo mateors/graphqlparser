@@ -524,7 +524,7 @@ func main() {
 		self: [Example!]!
 		picture: Url = "https://mateors.com"
 	}
-	
+
 	"""
 	test
 	"""
@@ -535,11 +535,14 @@ func main() {
 	p := parser.New(lex)
 	doc := p.ParseDocument()
 
-	def := doc.Definitions[0]
-	fmt.Println(def.String())
-	fmt.Println("----")
+	//def := doc.Definitions[0]
+	//fmt.Println(def.String())
+	fmt.Println("---->", len(doc.Definitions))
+
 	for i, def := range doc.Definitions {
-		fmt.Println("*", i, def.GetKind(), def)
+
+		fmt.Println("*", i, def.GetKind())
+
 	}
 
 	// for {
