@@ -535,8 +535,8 @@ parseDocument::
 * ObjectTypeDefinition -> DONE
 * InterfaceTypeDefinition -> DONE
 * UnionTypeDefinition -> DONE
-* **EnumTypeDefinition** ?
-* InputObjectTypeDefinition
+* EnumTypeDefinition --> DONE
+* **InputObjectTypeDefinition**
 
 ## Resource
 * https://graphql.org/learn/schema
