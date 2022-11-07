@@ -60,7 +60,7 @@ func (p *Parser) ParseDocument() *ast.Document {
 		if doc != nil {
 			document.Definitions = append(document.Definitions, doc)
 		}
-		fmt.Println("...", doc)
+		fmt.Println("...")
 		p.nextToken()
 	}
 	return document

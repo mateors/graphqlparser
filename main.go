@@ -490,9 +490,6 @@ func main() {
 	union SearchResult = Photo | Person
 	`
 
-	//input := `# this is a comment`
-	//length(unit: LengthUnit) | length(unit: LengthUnit = METER)
-
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

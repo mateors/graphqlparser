@@ -79,7 +79,25 @@ thumbnail: String
 	p := New(lex)
 	doc := p.ParseDocument()
 	def := doc.Definitions[0]
-	
+
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+
+}
+
+func TestUnionTypeDefinition(t *testing.T) {
+
+	input := `"""
+test
+"""
+union SearchResult = Photo | Person`
+
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+
 	if def.String() != input {
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
