@@ -489,7 +489,7 @@ func main() {
 	"""
 	input Example @skip(name: true, age: false) {
 		self: [Example!]!
-		value: String! @skip(name: true, age: false)
+		picture: Url = "https://mateors.com"
 	}
 	`
 

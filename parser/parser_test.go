@@ -129,9 +129,9 @@ func TestInputObjectTypeDefinition(t *testing.T) {
 	input := `"""
 test description
 """
-input Example {
+input Example  @skip(name: true, age: false) {
   self: [Example!]!
-  value: String!
+  picture: Url = "https://mateors.com"
 }`
 	lex := lexer.New(input)
 	p := New(lex)
