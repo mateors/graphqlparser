@@ -487,8 +487,8 @@ func main() {
 	"""
 	test
 	"""
-	interface Image implements Resource & Node {
-	  id: ID!
+	interface Image implements Resource & Node @skip(cache: true, second: ok) {
+	  "test desc" id: ID!
 	  url: String
 	  thumbnail: String
 	}

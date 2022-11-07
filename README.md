@@ -532,9 +532,9 @@ parseDocument::
 
 ### TypeDefinition
 * ScalarTypeDefinition
-* ObjectTypeDefinition
-* **InterfaceTypeDefinition**
-* UnionTypeDefinition
+* ObjectTypeDefinition -> DONE
+* InterfaceTypeDefinition -> DONE
+* **UnionTypeDefinition**
 * EnumTypeDefinition
 * InputObjectTypeDefinition
 
