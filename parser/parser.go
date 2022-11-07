@@ -586,7 +586,7 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
 	inv.Type = ptype
 	inv.DefaultValue = p.parseDefaultValue()
-	inv.Directives = nil
+	inv.Directives = p.parseDirectives()
 	//last token is token.RPAREN = )
 	return inv
 }
