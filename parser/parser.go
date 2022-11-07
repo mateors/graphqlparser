@@ -126,6 +126,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.ENUM_DEFINITION:
 		return p.parseEnumDefinition()
 
+	case ast.INPUT_OBJECT_DEFINITION:
+		return p.parseInputObjectDefinition()
+
 	// case token.IDENT: //,token.LBRACE, token.STRING
 
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
@@ -140,6 +143,55 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseInputObjectDefinition() ast.Node {
+
+	inObj := &ast.InputObjectDefinition{Kind: ast.INPUT_OBJECT_DEFINITION}
+	inObj.Token = p.curToken
+	inObj.Description = p.parseDescription()
+
+	if !p.expectToken(token.INPUT) {
+		return nil
+	}
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("inputObjectDefinition name error!")
+		return nil
+	}
+	inObj.Name = name
+
+	inObj.Directives = p.parseDirectives()
+	inObj.Fields = p.parseInputFieldsDefinition() //?
+
+	return inObj
+}
+
+func (p *Parser) parseInputFieldsDefinition() []*ast.InputValueDefinition {
+
+	fields := []*ast.InputValueDefinition{}
+	if !p.curTokenIs(token.LBRACE) {
+		return nil
+	}
+
+	p.nextToken()
+	for !p.curTokenIs(token.RBRACE) {
+
+		//starting with token.IDENT
+		ivd := p.parseInputValueDefinition()
+
+		if ivd != nil {
+			fields = append(fields, ivd)
+		}
+
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+		}
+	}
+	//last current token is token.RPAREN so next
+	p.nextToken()
+	return fields
 }
 
 func (p *Parser) parseEnumDefinition() ast.Node {
