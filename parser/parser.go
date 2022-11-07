@@ -137,6 +137,7 @@ func (p *Parser) parseUnionDefinition() ast.Node { //?
 		return nil
 	}
 
+	//fmt.Println("==", p.curToken.Type == token.IDENT) //SearchResult
 	name := p.parseName()
 	if name == nil {
 		p.addError("unionDefinition name error!")
@@ -144,9 +145,35 @@ func (p *Parser) parseUnionDefinition() ast.Node { //?
 
 	ud.Name = name
 	ud.Directives = p.parseDirectives()
-	ud.UnionMemberTypes = nil
-
+	//fmt.Println("1>>parseUnionDefinition?", p.curToken, p.peekToken)
+	ud.UnionMemberTypes = p.parseUnionMemberTypes()
+	//fmt.Println("DONE")
 	return ud
+}
+
+func (p *Parser) parseUnionMemberTypes() []*ast.NamedType {
+
+	//fmt.Println("2>>parseUnionMemberTypes?", p.curToken, p.peekToken)
+	if !p.expectToken(token.ASSIGN) {
+		return nil
+	}
+
+	namedSlc := []*ast.NamedType{}
+	//p.nextToken() //
+	for {
+
+		named := p.parseNamed()
+		if named != nil {
+			namedSlc = append(namedSlc, named)
+		}
+		if named == nil {
+			break
+		}
+		if p.curTokenIs(token.PIPE) {
+			p.nextToken()
+		}
+	}
+	return namedSlc
 }
 
 func (p *Parser) parseInterfaceDefinition() ast.Node {
