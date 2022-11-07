@@ -484,7 +484,9 @@ func main() {
 	// `
 
 	input := `
-	"""description test"""
+	"""
+	description test
+	"""
 	enum Direction @skip(name: true, age: false) {
 		NORTH
 		EAST

@@ -103,3 +103,23 @@ union SearchResult = Photo | Person`
 	}
 
 }
+
+func TestEnumTypeDefinition(t *testing.T) {
+
+	input := `"""
+description test
+"""
+enum Direction  @skip(name: true, age: false) {
+  NORTH
+  EAST
+  SOUTH
+  WEST
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

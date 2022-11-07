@@ -605,7 +605,7 @@ func (ed *EnumDefinition) String() string {
 	}, " ")
 
 	if ed.Description != nil {
-		desc := ed.Description.Value
+		desc := strings.TrimSpace(ed.Description.Value)
 		if desc != "" {
 			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)

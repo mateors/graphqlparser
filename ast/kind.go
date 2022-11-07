@@ -26,9 +26,9 @@ const (
 	OBJECT_VALUE                   = "ObjectValue"             //
 	OBJECT_FIELD                   = "ObjectField"             //
 	INTERFACE_DEFINITION           = "InterfaceDefinition"     //
-	UNION_DEFINITION               = "UnionDefinition"         //?
-	ENUM_DEFINITION                = "EnumDefinition"          //
-	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //
+	UNION_DEFINITION               = "UnionDefinition"         //
+	ENUM_DEFINITION                = "EnumDefinition"          //?
+	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //?
 	INPUT_OBJECT_DEFINITION        = "InputObjectDefinition"   //
 	SCALAR_DEFINITION              = "ScalarDefinition"        //
 	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //
