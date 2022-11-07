@@ -88,6 +88,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 
 	} else if curToken == token.UNION {
 		return ast.UNION_DEFINITION
+
+	} else if p.isDescription() && peekToken == token.ENUM {
+		return ast.ENUM_DEFINITION
+
+	} else if curToken == token.ENUM {
+		return ast.ENUM_DEFINITION
 	}
 
 	return ast.UNKNOWN
