@@ -63,3 +63,25 @@ oldField: String @deprecated(reason: "Use newField.")
 	}
 
 }
+
+func TestInterfaceTypeDefinition(t *testing.T) {
+
+	input := `"""
+test
+"""
+interface Image implements Resource & Node {
+id: ID!
+url: String
+thumbnail: String
+}`
+
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+
+}
