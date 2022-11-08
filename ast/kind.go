@@ -36,6 +36,8 @@ const (
 	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
 	SCHEMA_DEFINITION              = "SchemaDefinition"        //
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
-	UNKNOWN                        = "Unknown"
+
+	UNKNOWN = "Unknown"
+	QUERY   = "query"
 	//TypeExtensionDefinition
 )

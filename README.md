@@ -538,6 +538,10 @@ parseDocument::
 * EnumTypeDefinition --> DONE
 * InputObjectTypeDefinition --> DONE
 
+### ExecutableDefinition
+* **OperationDefinition**
+* FragmentDefinition
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries

@@ -106,6 +106,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 
 	} else if curToken == token.SCALAR {
 		return ast.SCALAR_DEFINITION
+
+	} else if p.isDescription() && peekToken == token.QUERY {
+		return ast.OPERATION_DEFINITION
+
+	} else if curToken == token.QUERY {
+		return ast.OPERATION_DEFINITION
 	}
 
 	return ast.UNKNOWN
@@ -135,6 +141,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.SCALAR_DEFINITION:
 		return p.parseScalarDefinition()
 
+	case ast.OPERATION_DEFINITION:
+		return p.parseOperationDefinition()
+
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
@@ -143,6 +152,12 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		fmt.Println("unexpected", p.curToken.Type)
 		return nil //&ast.OperationDefinition{}
 	}
+
+}
+
+func (p *Parser) parseOperationDefinition() ast.Node {
+
+	return nil
 
 }
 
