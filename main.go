@@ -486,7 +486,7 @@ func main() {
 	input := `
 	query GetBooksAndAuthors {
 
-	 books {
+	 books(id: 4) {
 	  title
 	 }
 	  

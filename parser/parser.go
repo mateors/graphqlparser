@@ -170,8 +170,9 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		p.addError("operationDefinition name error!")
 	}
 	opDef.Name = name
-	opDef.VariablesDefinition = p.parseVariablesDefinition()
-	opDef.Directives = p.parseDirectives()
+	opDef.VariablesDefinition = nil //p.parseVariablesDefinition() //VariableDefinitions
+	fmt.Println("opDef.VariablesDefinition", name, opDef.VariablesDefinition)
+	opDef.Directives = nil //p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
 	return opDef
 }
@@ -226,6 +227,9 @@ func (p *Parser) parseField() *ast.Field {
 	}
 	field.Name = name //mandatory
 	field.Arguments = p.parseArguments()
+
+	fmt.Println("afterArguments", p.curToken)
+
 	field.Directives = p.parseDirectives()
 	field.SelectionSet = p.parseSelectionSet()
 	return field
@@ -244,7 +248,23 @@ func (p *Parser) parseAlias() *ast.Name {
 
 func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 
+	fmt.Println("?", p.curToken, p.peekToken)
+	if !p.curTokenIs(token.LPAREN) {
+		return nil
+	}
+	p.nextToken()
+
+	for !p.curTokenIs(token.RPAREN) {
+
+		fmt.Println(">>", p.curToken, p.peekToken)
+		p.nextToken()
+
+	}
+
 	//TODO
+	fmt.Println("parseVariablesDefinition", p.curToken, p.peekToken)
+	//p.nextToken()
+
 	return nil
 
 }
@@ -561,6 +581,10 @@ func (p *Parser) parseArguments() []*ast.Argument {
 		if arg == nil {
 			break
 		}
+	}
+
+	if p.curTokenIs(token.RPAREN) { //updated
+		p.nextToken()
 	}
 	return args
 }
