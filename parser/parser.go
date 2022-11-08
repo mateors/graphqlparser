@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/mateors/graphqlparser/ast"
 	"github.com/mateors/graphqlparser/lexer"
@@ -157,6 +158,62 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseOperationDefinition() ast.Node {
 
+	opDef := &ast.OperationDefinition{Kind: ast.OPERATION_DEFINITION}
+	opDef.Token = p.curToken
+
+	if p.curTokenIs(token.QUERY) {
+		opDef.OperationType = ast.QUERY
+		p.nextToken()
+	}
+
+	name := p.parseName()
+	if name == nil {
+		p.addError("operationDefinition name error!")
+	}
+	opDef.Name = name
+
+	opDef.VariablesDefinition = p.parseVariablesDefinition()
+	opDef.Directives = p.parseDirectives()
+	opDef.SelectionSet = p.parseSelectionSet()
+
+	fmt.Println("??", opDef.Name, opDef.OperationType, p.curToken, p.peekToken)
+	os.Exit(2)
+
+	return opDef
+
+}
+
+func (p *Parser) parseSelectionSet() *ast.SelectionSet {
+
+	//TODO
+	if !p.curTokenIs(token.LBRACE) {
+		return nil
+	}
+	p.nextToken()
+
+	selSet := &ast.SelectionSet{Kind: ast.SELECTION_SET}
+	selSet.Token = p.curToken
+	selSet.Selections = p.parseSelection()
+	return selSet
+
+}
+
+func (p *Parser) parseSelection() []ast.Selection {
+
+	return nil
+
+}
+
+func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
+
+	//TODO
+	return nil
+
+}
+
+func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
+
+	//TODO
 	return nil
 
 }
