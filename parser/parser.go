@@ -170,15 +170,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		p.addError("operationDefinition name error!")
 	}
 	opDef.Name = name
-
 	opDef.VariablesDefinition = p.parseVariablesDefinition()
 	opDef.Directives = p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
-
-	//fmt.Println("??", opDef.Name, opDef.OperationType, p.curToken, p.peekToken)
-
 	return opDef
-
 }
 
 func (p *Parser) parseSelectionSet() *ast.SelectionSet {
@@ -187,23 +182,18 @@ func (p *Parser) parseSelectionSet() *ast.SelectionSet {
 	if !p.curTokenIs(token.LBRACE) {
 		return nil
 	}
-
 	selSet := &ast.SelectionSet{Kind: ast.SELECTION_SET}
 	selSet.Token = p.curToken
 	selSet.Selections = p.parseSelection()
-
 	//fmt.Println("parseSelectionSet>", p.curToken, p.peekToken)
 	return selSet
-
 }
 
 func (p *Parser) parseSelection() []ast.Selection {
 
-	if !p.curTokenIs(token.LBRACE) {
+	if !p.expectToken(token.LBRACE) {
 		return nil
 	}
-	p.nextToken() // {
-
 	selections := []ast.Selection{}
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
@@ -213,7 +203,6 @@ func (p *Parser) parseSelection() []ast.Selection {
 			selections = append(selections, field)
 		}
 		//fmt.Println("FIELD-->", field.Name, "==>", p.curToken)
-
 	}
 
 	if p.curTokenIs(token.RBRACE) {
@@ -221,7 +210,6 @@ func (p *Parser) parseSelection() []ast.Selection {
 	}
 	//fmt.Println("##", p.curToken.Literal, p.peekToken.Type)
 	return selections
-
 }
 
 func (p *Parser) parseField() *ast.Field {
