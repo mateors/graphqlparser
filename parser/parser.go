@@ -178,14 +178,12 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 
 func (p *Parser) parseSelectionSet() *ast.SelectionSet {
 
-	//TODO
 	if !p.curTokenIs(token.LBRACE) {
 		return nil
 	}
 	selSet := &ast.SelectionSet{Kind: ast.SELECTION_SET}
 	selSet.Token = p.curToken
 	selSet.Selections = p.parseSelection()
-	//fmt.Println("parseSelectionSet>", p.curToken, p.peekToken)
 	return selSet
 }
 
@@ -202,19 +200,18 @@ func (p *Parser) parseSelection() []ast.Selection {
 		if field != nil {
 			selections = append(selections, field)
 		}
+		//TODO
 		//fmt.Println("FIELD-->", field.Name, "==>", p.curToken)
 	}
 
 	if p.curTokenIs(token.RBRACE) {
 		p.nextToken() // }
 	}
-	//fmt.Println("##", p.curToken.Literal, p.peekToken.Type)
 	return selections
 }
 
 func (p *Parser) parseField() *ast.Field {
 
-	//fmt.Println("parseField>>", p.curToken, p.peekToken)
 	if !p.curTokenIs(token.IDENT) {
 		return nil
 	}
@@ -231,14 +228,12 @@ func (p *Parser) parseField() *ast.Field {
 	field.Arguments = p.parseArguments()
 	field.Directives = p.parseDirectives()
 	field.SelectionSet = p.parseSelectionSet()
-	//fmt.Println("<-->", field, p.curToken.Type, p.peekToken.Type)
 	return field
 }
 
 func (p *Parser) parseAlias() *ast.Name {
 
 	if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.COLON) {
-		//fmt.Println("ALIAS", p.curToken, p.peekToken)
 		name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
 		p.nextToken() //IDENT
 		p.nextToken() //:
