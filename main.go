@@ -486,13 +486,13 @@ func main() {
 	input := `
 	query GetBooksAndAuthors {
 
-	  books {
-		  title
-	  }
+	 books {
+	  title
+	 }
 	  
-	  authors {
-	 	 name
-	  }
+	 authors {
+	  name
+	 }
 
 	}
 	`
@@ -501,8 +501,8 @@ func main() {
 	p := parser.New(lex)
 	doc := p.ParseDocument()
 
-	//def := doc.Definitions[0]
-	//fmt.Println(def.String())
+	def := doc.Definitions[0]
+	fmt.Println(def.String())
 	fmt.Println("---->", len(doc.Definitions))
 
 	for i, def := range doc.Definitions {

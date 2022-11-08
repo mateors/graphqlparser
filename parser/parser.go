@@ -3,7 +3,6 @@ package parser
 import (
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/mateors/graphqlparser/ast"
 	"github.com/mateors/graphqlparser/lexer"
@@ -176,8 +175,7 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	opDef.Directives = p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
 
-	fmt.Println("??", opDef.Name, opDef.OperationType, p.curToken, p.peekToken)
-	os.Exit(2)
+	//fmt.Println("??", opDef.Name, opDef.OperationType, p.curToken, p.peekToken)
 
 	return opDef
 
@@ -189,19 +187,76 @@ func (p *Parser) parseSelectionSet() *ast.SelectionSet {
 	if !p.curTokenIs(token.LBRACE) {
 		return nil
 	}
-	p.nextToken()
 
 	selSet := &ast.SelectionSet{Kind: ast.SELECTION_SET}
 	selSet.Token = p.curToken
 	selSet.Selections = p.parseSelection()
+
+	//fmt.Println("parseSelectionSet>", p.curToken, p.peekToken)
 	return selSet
 
 }
 
 func (p *Parser) parseSelection() []ast.Selection {
 
-	return nil
+	if !p.curTokenIs(token.LBRACE) {
+		return nil
+	}
+	p.nextToken() // {
 
+	selections := []ast.Selection{}
+
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+
+		field := p.parseField()
+		if field != nil {
+			selections = append(selections, field)
+		}
+		//fmt.Println("FIELD-->", field.Name, "==>", p.curToken)
+
+	}
+
+	if p.curTokenIs(token.RBRACE) {
+		p.nextToken() // }
+	}
+	//fmt.Println("##", p.curToken.Literal, p.peekToken.Type)
+	return selections
+
+}
+
+func (p *Parser) parseField() *ast.Field {
+
+	//fmt.Println("parseField>>", p.curToken, p.peekToken)
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	field := &ast.Field{Kind: ast.FIELD}
+	field.Token = p.curToken
+	field.Alias = p.parseAlias()
+
+	name := p.parseName()
+	if name == nil {
+		fmt.Println("*nil*", p.curToken, p.peekToken)
+		return nil
+	}
+	field.Name = name //mandatory
+	field.Arguments = p.parseArguments()
+	field.Directives = p.parseDirectives()
+	field.SelectionSet = p.parseSelectionSet()
+	//fmt.Println("<-->", field, p.curToken.Type, p.peekToken.Type)
+	return field
+}
+
+func (p *Parser) parseAlias() *ast.Name {
+
+	if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.COLON) {
+		//fmt.Println("ALIAS", p.curToken, p.peekToken)
+		name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
+		p.nextToken() //IDENT
+		p.nextToken() //:
+		return name
+	}
+	return nil
 }
 
 func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
