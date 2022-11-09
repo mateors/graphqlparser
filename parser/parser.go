@@ -170,9 +170,8 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		p.addError("operationDefinition name error!")
 	}
 	opDef.Name = name
-	opDef.VariablesDefinition = p.parseVariablesDefinition() //VariableDefinitions
-	fmt.Println("opDef.VariablesDefinition", name, opDef.VariablesDefinition, p.errors)
-	opDef.Directives = nil //p.parseDirectives()
+	opDef.VariablesDefinition = p.parseVariablesDefinition()
+	opDef.Directives = p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
 	return opDef
 }

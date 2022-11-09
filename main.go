@@ -483,8 +483,10 @@ func main() {
 	// }
 	// `
 
+	// ($name: String = "Mostain")
+	// (name: String = "Mostain")
 	input := `
-	query GetBooksAndAuthors($name: String = "Mostain") {
+	query GetBooksAndAuthors @skip(cache: true) {
 
 	 books(id: 4) {
 	  title
