@@ -159,12 +159,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 
 	opDef := &ast.OperationDefinition{Kind: ast.OPERATION_DEFINITION}
 	opDef.Token = p.curToken
-
 	if p.curTokenIs(token.QUERY) {
 		opDef.OperationType = ast.QUERY
 		p.nextToken()
 	}
-
 	name := p.parseName()
 	if name == nil {
 		p.addError("operationDefinition name error!")
@@ -193,17 +191,13 @@ func (p *Parser) parseSelection() []ast.Selection {
 		return nil
 	}
 	selections := []ast.Selection{}
-
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
 		field := p.parseField()
 		if field != nil {
 			selections = append(selections, field)
 		}
-		//TODO
-		//fmt.Println("FIELD-->", field.Name, "==>", p.curToken)
 	}
-
 	if p.curTokenIs(token.RBRACE) {
 		p.nextToken() // }
 	}
@@ -221,14 +215,11 @@ func (p *Parser) parseField() *ast.Field {
 
 	name := p.parseName()
 	if name == nil {
-		fmt.Println("*nil*", p.curToken, p.peekToken)
+		p.addError("parseField name error!")
 		return nil
 	}
 	field.Name = name //mandatory
 	field.Arguments = p.parseArguments()
-
-	fmt.Println("afterArguments", p.curToken)
-
 	field.Directives = p.parseDirectives()
 	field.SelectionSet = p.parseSelectionSet()
 	return field
