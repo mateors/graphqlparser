@@ -11,9 +11,9 @@ import (
 )
 
 // returns lower-case ch iff ch is ASCII letter
-func lower(ch byte) byte {
-	return ('a' - 'A') | ch
-}
+// func lower(ch byte) byte {
+// 	return ('a' - 'A') | ch
+// }
 
 type Lift struct {
 	Name string
@@ -491,16 +491,19 @@ func main() {
 		profiles(handles: ["zuck", "coca-cola"]) {
 			
 		  handle
+
 		  ... on User {
 			friends {
 			  count
 			}
 		  }
+		  
 		  ... on Page {
 			likers {
 			  count
 			}
 		  }
+
 		}
 	  }`
 

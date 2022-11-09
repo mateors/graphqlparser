@@ -282,8 +282,10 @@ func (p *Parser) parseField() *ast.Field {
 		p.addError("parseField name error!")
 		return nil
 	}
-	field.Name = name //mandatory
-	field.Arguments = p.parseArguments()
+	field.Name = name                    //mandatory
+	field.Arguments = p.parseArguments() //?
+
+	fmt.Println("field.Arguments:", field.Arguments)
 	field.Directives = p.parseDirectives()
 	field.SelectionSet = p.parseSelectionSet()
 	return field
@@ -655,9 +657,9 @@ func (p *Parser) parseDirective() *ast.Directive {
 	return directive
 }
 
-func (p *Parser) parseArguments() []*ast.Argument {
+func (p *Parser) parseArguments() []*ast.Argument { //?
 
-	fmt.Println("parseArguments>>", p.curToken, p.peekToken)
+	//fmt.Println("parseArguments>>", p.curToken, p.peekToken)
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
@@ -666,7 +668,10 @@ func (p *Parser) parseArguments() []*ast.Argument {
 
 	for !p.curTokenIs(token.RPAREN) {
 
-		arg := p.parseArgument()
+		arg := p.parseArgument() //???
+		if arg == nil {
+			break
+		}
 		if arg.Name == nil {
 			p.addError("parseArgument Name missing")
 			arg = nil
@@ -677,9 +682,6 @@ func (p *Parser) parseArguments() []*ast.Argument {
 		}
 		if arg != nil {
 			args = append(args, arg)
-		}
-		if arg == nil {
-			break
 		}
 	}
 
@@ -898,14 +900,33 @@ func (p *Parser) parseValueLiteral() ast.Value {
 func (p *Parser) parseList() *ast.ListValue {
 
 	cToken := p.curToken
-	fmt.Println("parseList", p.curToken, p.peekToken)
-
+	if !p.expectToken(token.LBRACKET) {
+		return nil
+	}
+	//fmt.Println("parseList", p.curToken, p.peekToken)
 	listVal := &ast.ListValue{Kind: ast.LIST_VALUE}
 	listVal.Token = cToken
 
 	vals := []ast.Value{}
-	listVal.Values = vals
 
+	for !p.curTokenIs(token.RBRACKET) && !p.curTokenIs(token.EOF) {
+
+		val := p.parseValueLiteral()
+		if val != nil {
+			vals = append(vals, val)
+		}
+		if p.curTokenIs(token.COMMA) {
+			//fmt.Println("COMMA FOUND")
+			p.nextToken()
+		}
+	}
+
+	if p.curTokenIs(token.RBRACKET) {
+		//fmt.Println("RBRACKET FOUND")
+		p.nextToken()
+	}
+	//fmt.Println("###", len(vals), p.curToken, p.peekToken)
+	listVal.Values = vals
 	return listVal
 }
 
