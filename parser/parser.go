@@ -185,23 +185,45 @@ func (p *Parser) parseSelectionSet() *ast.SelectionSet {
 	return selSet
 }
 
-func (p *Parser) parseSelection() []ast.Selection {
+func (p *Parser) parseSelection() []ast.Selection { //?
 
+	//TODO
 	if !p.expectToken(token.LBRACE) {
 		return nil
 	}
 	selections := []ast.Selection{}
+
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
 		field := p.parseField()
 		if field != nil {
 			selections = append(selections, field)
 		}
+
+		//TODO FragmentSpread
+		fragSpd := p.parseFragmentSpread()
+		if fragSpd != nil {
+			selections = append(selections, fragSpd)
+		}
+
+		//TODO InlineFragment
 	}
+
 	if p.curTokenIs(token.RBRACE) {
 		p.nextToken() // }
 	}
 	return selections
+}
+
+func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
+
+	fmt.Println("parseFragmentSpread", p.curToken, p.peekToken)
+	if p.curTokenIs(token.SPREAD) {
+		fmt.Println("SPREAD found")
+	}
+	frags := &ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD}
+	return frags
+
 }
 
 func (p *Parser) parseField() *ast.Field {

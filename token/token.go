@@ -32,7 +32,7 @@ const (
 	BOOLEAN      //Boolean
 	ID           //ID
 	NULL         //null
-	VARIADIC     //...
+	SPREAD       //...
 
 	TYPE         //KEYWORDS
 	RETURN       //KEYWORDS
@@ -94,7 +94,7 @@ var tokenDescription = map[TokenType]string{
 	BOOLEAN:      "BOOLEAN", //Boolean
 	ID:           "ID",
 	NULL:         "NULL",
-	VARIADIC:     "...",
+	SPREAD:       "...",          //VARIADIC|SPREAD
 	TYPE:         "TYPE",         //KEYWORDS
 	RETURN:       "RETURN",       //KEYWORDS
 	QUERY:        "QUERY",        //KEYWORDS
@@ -145,7 +145,7 @@ var keywords = map[string]TokenType{
 	//"Boolean":      BOOLEAN,
 	//"ID":           ID,
 	//"null": NULL,
-	//"...":  VARIADIC, //SPREAD
+	"...": SPREAD, //VARIADIC
 }
 
 func LookupIdent(ident string) TokenType {

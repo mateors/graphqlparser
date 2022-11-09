@@ -525,6 +525,7 @@ func TestOperationFragmentSpread(t *testing.T) {
 			},
 
 			SelectionSet: &SelectionSet{Kind: SELECTION_SET, Selections: []Selection{
+				
 				&Field{
 					Kind: FIELD,
 					Name: &Name{Kind: NAME, Value: "friends"},

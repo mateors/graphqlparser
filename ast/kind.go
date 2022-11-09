@@ -10,7 +10,7 @@ const (
 	NAME                           = "Name"                    //
 	FIELD                          = "Field"                   //
 	SELECTION_SET                  = "SelectionSet"            //
-	FRAGMENT_SPREAD                = "FragmentSpread"          //
+	FRAGMENT_SPREAD                = "FragmentSpread"          //?
 	INLINE_FRAGMENT                = "InlineFragment"          //
 	NAMED_TYPE                     = "NamedType"               //
 	LIST_TYPE                      = "ListType"                //
