@@ -280,22 +280,26 @@ func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 	if !p.curTokenIs(token.DOLLAR) {
 		return nil
 	}
-
 	svar := &ast.VariableDefinition{Kind: ast.VARIABLE_DEFINITION}
 	svar.Token = p.curToken
-	svar.Variable = p.parseVariable()
-
-	if !p.expectToken(token.COLON) {
+	pvar := p.parseVariable()
+	if pvar == nil {
+		p.addError("parseVariableDefinition variable error!")
 		return nil
 	}
+	svar.Variable = pvar
 
+	if !p.expectToken(token.COLON) {
+		p.addError("parseVariableDefinition colon missing error!")
+		return nil
+	}
 	ttype := p.parseType()
 	if ttype == nil {
 		p.addError("parseVariableDefinition Type error!")
 		return nil
 		//p.nextToken() //if we still want to proceed
 	}
-	svar.Type = ttype //p.parseType()
+	svar.Type = ttype
 	svar.DefaultValue = p.parseDefaultValue()
 	svar.Directives = p.parseDirectives()
 	return svar
