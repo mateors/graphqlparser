@@ -248,11 +248,6 @@ func (p *Parser) parseAlias() *ast.Name {
 
 func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 
-	//fmt.Println("?", p.curToken, p.peekToken)
-	// if !p.curTokenIs(token.LPAREN) {
-	// 	return nil
-	// }
-	// p.nextToken() // (
 	if !p.expectToken(token.LPAREN) {
 		return nil
 	}
@@ -274,7 +269,6 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 			vars = append(vars, vard)
 		}
 	}
-	//fmt.Println("parseVariablesDefinition", p.curToken, p.peekToken)
 	if p.curTokenIs(token.RPAREN) {
 		p.nextToken()
 	}
