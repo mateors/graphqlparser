@@ -217,14 +217,19 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 
 func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
 
-	fmt.Println("parseFragmentSpread", p.curToken, p.peekToken)
-	if p.curTokenIs(token.SPREAD) {
-		fmt.Println("SPREAD found")
-		p.nextToken()
+	if !p.expectToken(token.SPREAD) {
+		return nil
 	}
 	frags := &ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD}
+	frags.Token = p.curToken
+	name := p.parseName()
+	if name == nil {
+		p.addError("parseFragmentSpread FragmentName error!")
+		return nil //
+	}
+	frags.FragmentName = name
+	frags.Directives = p.parseDirectives()
 	return frags
-
 }
 
 func (p *Parser) parseField() *ast.Field {
