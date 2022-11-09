@@ -256,30 +256,27 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 
 	vars := []*ast.VariableDefinition{}
 
-	for !p.curTokenIs(token.RPAREN) {
+	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
 
-		//fmt.Println(">>", p.curToken, p.peekToken)
 		vard := p.parseVariableDefinition()
+		if vard == nil {
+			break
+		}
 		if vard.Variable == nil {
 			vard = nil
 		}
 		if vard.Type == nil {
 			vard = nil
 		}
-		if vard == nil {
-			break
+		if vard != nil {
+			vars = append(vars, vard)
 		}
-		vars = append(vars, vard)
 	}
-
-	//TODO
-	fmt.Println("parseVariablesDefinition", p.curToken, p.peekToken)
+	//fmt.Println("parseVariablesDefinition", p.curToken, p.peekToken)
 	if p.curTokenIs(token.RPAREN) {
 		p.nextToken()
 	}
-
 	return vars
-
 }
 
 func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {

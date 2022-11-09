@@ -484,7 +484,7 @@ func main() {
 	// `
 
 	input := `
-	query GetBooksAndAuthors($name: String = "Mostain) {
+	query GetBooksAndAuthors($name: String = "Mostain") {
 
 	 books(id: 4) {
 	  title
@@ -494,8 +494,7 @@ func main() {
 	  name
 	 }
 
-	}
-	`
+	}`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
