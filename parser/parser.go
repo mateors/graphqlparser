@@ -258,15 +258,18 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 
 	for !p.curTokenIs(token.RPAREN) {
 
-		fmt.Println(">>", p.curToken, p.peekToken)
+		//fmt.Println(">>", p.curToken, p.peekToken)
 		vard := p.parseVariableDefinition()
-		if vard != nil {
-			vars = append(vars, vard)
+		if vard.Variable == nil {
+			vard = nil
+		}
+		if vard.Type == nil {
+			vard = nil
 		}
 		if vard == nil {
 			break
 		}
-
+		vars = append(vars, vard)
 	}
 
 	//TODO
@@ -282,7 +285,6 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 
 	if !p.curTokenIs(token.DOLLAR) {
-		fmt.Println("DOLLAR")
 		return nil
 	}
 
@@ -290,21 +292,14 @@ func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 	svar.Token = p.curToken
 	svar.Variable = p.parseVariable()
 
-	if !p.curTokenIs(token.COLON) {
+	if !p.expectToken(token.COLON) {
 		return nil
 	}
-	p.nextToken()
 
 	svar.Type = p.parseType()
-
-	fmt.Println("svar.Type>", svar.Type)
-
 	svar.DefaultValue = p.parseDefaultValue()
 	svar.Directives = p.parseDirectives()
-
-	//TODO
 	return svar
-
 }
 
 func (p *Parser) parseVariable() *ast.Variable {
@@ -925,7 +920,6 @@ func (p *Parser) parseName() *ast.Name {
 //Instead of error we return nil
 func (p *Parser) parseType() (ttype ast.Type) { //????
 
-	fmt.Println("parseType", p.curToken, p.peekToken)
 	cToken := p.curToken
 	switch p.curToken.Type {
 	case token.LBRACKET: //[

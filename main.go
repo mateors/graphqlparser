@@ -495,8 +495,6 @@ func main() {
 	 }
 
 	}
-
-	
 	`
 
 	lex := lexer.New(input)
