@@ -539,8 +539,14 @@ parseDocument::
 * InputObjectTypeDefinition --> DONE
 
 ### ExecutableDefinition
-* **OperationDefinition**
+* OperationDefinition ->
 * FragmentDefinition
+
+### SelectionSet
+ * Selection
+	1. Field -> DONE
+	2. **FragmentSpread**
+	3. InlineFragment
 
 ## Resource
 * https://graphql.org/learn/schema

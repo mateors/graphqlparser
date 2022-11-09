@@ -486,17 +486,20 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 	input := `
-	query GetBooksAndAuthors($name: String = "Mostain")  @skip(cache: true) {
-
-	 books(id: 4) {
-	  title
-	 }
-	  
-	 authors {
-	  name
-	 }
-
-	}`
+	query noFragments {
+		user(id: 4) {
+		  friends(first: 10) {
+			id
+			name
+			profilePic(size: 50)
+		  }
+		  mutualFriends(first: 10) {
+			id
+			name
+			profilePic(size: 50)
+		  }
+		}
+	  }`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
