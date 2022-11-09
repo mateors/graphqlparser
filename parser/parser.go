@@ -170,7 +170,7 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		p.addError("operationDefinition name error!")
 	}
 	opDef.Name = name
-	opDef.VariablesDefinition = nil //p.parseVariablesDefinition() //VariableDefinitions
+	opDef.VariablesDefinition = p.parseVariablesDefinition() //VariableDefinitions
 	fmt.Println("opDef.VariablesDefinition", name, opDef.VariablesDefinition)
 	opDef.Directives = nil //p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
@@ -252,28 +252,75 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
-	p.nextToken()
+	p.nextToken() // (
+
+	vars := []*ast.VariableDefinition{}
 
 	for !p.curTokenIs(token.RPAREN) {
 
 		fmt.Println(">>", p.curToken, p.peekToken)
-		p.nextToken()
+		vard := p.parseVariableDefinition()
+		if vard != nil {
+			vars = append(vars, vard)
+		}
+		if vard == nil {
+			break
+		}
 
 	}
 
 	//TODO
 	fmt.Println("parseVariablesDefinition", p.curToken, p.peekToken)
-	//p.nextToken()
+	if p.curTokenIs(token.RPAREN) {
+		p.nextToken()
+	}
 
-	return nil
+	return vars
 
 }
 
 func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 
-	//TODO
-	return nil
+	if !p.curTokenIs(token.DOLLAR) {
+		fmt.Println("DOLLAR")
+		return nil
+	}
 
+	svar := &ast.VariableDefinition{Kind: ast.VARIABLE_DEFINITION}
+	svar.Token = p.curToken
+	svar.Variable = p.parseVariable()
+
+	if !p.curTokenIs(token.COLON) {
+		return nil
+	}
+	p.nextToken()
+
+	svar.Type = p.parseType()
+
+	fmt.Println("svar.Type>", svar.Type)
+
+	svar.DefaultValue = p.parseDefaultValue()
+	svar.Directives = p.parseDirectives()
+
+	//TODO
+	return svar
+
+}
+
+func (p *Parser) parseVariable() *ast.Variable {
+
+	fmt.Println("parseVariable", p.curToken, p.peekToken)
+	if !p.expectToken(token.DOLLAR) {
+		return nil
+	}
+	v := &ast.Variable{Kind: ast.VARIABLE}
+	v.Token = p.curToken
+	name := p.parseName()
+	if name == nil {
+		return nil
+	}
+	v.Name = name
+	return v
 }
 
 func (p *Parser) parseScalarDefinition() ast.Node {
@@ -878,6 +925,7 @@ func (p *Parser) parseName() *ast.Name {
 //Instead of error we return nil
 func (p *Parser) parseType() (ttype ast.Type) { //????
 
+	fmt.Println("parseType", p.curToken, p.peekToken)
 	cToken := p.curToken
 	switch p.curToken.Type {
 	case token.LBRACKET: //[
