@@ -138,7 +138,7 @@ var keywords = map[string]TokenType{
 	"union":        UNION,        //
 	"implements":   IMPLEMENTS,
 	//"return":       RETURN,
-	//"on":           ON,
+	"on": ON,
 	//"Int":          INT,
 	//"Float":        FLOAT,
 	//"String":       STRING,//??

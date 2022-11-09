@@ -200,19 +200,55 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 			selections = append(selections, field)
 		}
 
-		//TODO FragmentSpread
 		fragSpd := p.parseFragmentSpread()
 		if fragSpd != nil {
 			selections = append(selections, fragSpd)
 		}
 
 		//TODO InlineFragment
+		// inlineFrg := p.parseInlineFragment()
+		// if inlineFrg != nil {
+		// 	selections = append(selections, inlineFrg)
+		// }
 	}
 
 	if p.curTokenIs(token.RBRACE) {
 		p.nextToken() // }
 	}
 	return selections
+}
+
+func (p *Parser) parseInlineFragment() *ast.InlineFragment {
+
+	cToken := p.curToken
+	fmt.Println("parseInlineFragment", p.curToken, p.peekToken)
+	if !p.curTokenIs(token.SPREAD) {
+		return nil
+	}
+	inlineFrg := &ast.InlineFragment{Kind: ast.INLINE_FRAGMENT}
+	inlineFrg.Token = cToken
+	inlineFrg.TypeCondition = p.parseTypeCondition()
+	inlineFrg.Directives = p.parseDirectives()
+	inlineFrg.SelectionSet = p.parseSelectionSet()
+	return inlineFrg
+}
+
+func (p *Parser) parseTypeCondition() *ast.NamedType {
+
+	fmt.Println("parseTypeCondition", p.curToken, p.peekToken)
+	cToken := p.curToken
+	if !p.expectToken(token.ON) {
+		return nil
+	}
+	tc := &ast.NamedType{Kind: ast.NAMED_TYPE}
+	tc.Token = cToken
+	name := p.parseName()
+	if name == nil {
+		p.addError("parseTypeCondition name error!")
+		return nil
+	}
+	tc.Name = name
+	return tc
 }
 
 func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
@@ -621,11 +657,13 @@ func (p *Parser) parseDirective() *ast.Directive {
 
 func (p *Parser) parseArguments() []*ast.Argument {
 
+	fmt.Println("parseArguments>>", p.curToken, p.peekToken)
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
 	args := []*ast.Argument{}
 	p.nextToken() //-> (
+
 	for !p.curTokenIs(token.RPAREN) {
 
 		arg := p.parseArgument()
@@ -663,7 +701,14 @@ func (p *Parser) parseArgument() *ast.Argument {
 	if p.curTokenIs(token.COLON) {
 		p.nextToken()
 	}
-	arg.Value = p.parseValueLiteral() //return nil if missing
+
+	val := p.parseValueLiteral()
+	fmt.Println("arg.Value", val)
+	if val == nil {
+		p.addError("parseArgument value error!")
+		return nil
+	}
+	arg.Value = val
 	if p.curTokenIs(token.COMMA) {
 		p.nextToken()
 	}
@@ -809,6 +854,7 @@ func (p *Parser) parseDefaultValue() ast.Value {
 
 func (p *Parser) parseValueLiteral() ast.Value {
 
+	//TODO
 	cToken := p.curToken
 	var value ast.Value
 
@@ -839,12 +885,28 @@ func (p *Parser) parseValueLiteral() ast.Value {
 
 	} else if cToken.Type == token.LBRACKET {
 		//parseList
+		value = p.parseList()
 
 	} else if cToken.Type == token.LBRACE {
 		//parseObject
+
 	}
 	p.nextToken()
 	return value
+}
+
+func (p *Parser) parseList() *ast.ListValue {
+
+	cToken := p.curToken
+	fmt.Println("parseList", p.curToken, p.peekToken)
+
+	listVal := &ast.ListValue{Kind: ast.LIST_VALUE}
+	listVal.Token = cToken
+
+	vals := []ast.Value{}
+	listVal.Values = vals
+
+	return listVal
 }
 
 // func (p *Parser) parseTypeSystemDefinition() ast.Node { //ast.TypeSystemDefinition

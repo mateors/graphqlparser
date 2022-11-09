@@ -486,16 +486,23 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 	input := `
-	query withFragments {
-		user(id: 4) {
-		  friends(first: 10) {
-			...friendFields
+	  query inlineFragmentTyping {
+		
+		profiles(handles: ["zuck", "coca-cola"]) {
+			
+		  handle
+		  ... on User {
+			friends {
+			  count
+			}
 		  }
-		  mutualFriends(first: 10) {
-			...friendFields
+		  ... on Page {
+			likers {
+			  count
+			}
 		  }
 		}
-	}`
+	  }`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
