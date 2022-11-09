@@ -156,3 +156,22 @@ scalar UUID  @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")`
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestOperationTypeDefinition(t *testing.T) {
+
+	input := `query GetBooksAndAuthors($name: String = "Mostain")  @skip(cache: true) {
+  books(id: 4) {
+    title
+  }
+  authors {
+    name
+  }
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

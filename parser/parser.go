@@ -297,7 +297,6 @@ func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 
 func (p *Parser) parseVariable() *ast.Variable {
 
-	fmt.Println("parseVariable", p.curToken, p.peekToken)
 	if !p.expectToken(token.DOLLAR) {
 		return nil
 	}
