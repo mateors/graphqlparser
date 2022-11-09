@@ -220,6 +220,7 @@ func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
 	fmt.Println("parseFragmentSpread", p.curToken, p.peekToken)
 	if p.curTokenIs(token.SPREAD) {
 		fmt.Println("SPREAD found")
+		p.nextToken()
 	}
 	frags := &ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD}
 	return frags

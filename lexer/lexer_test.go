@@ -104,7 +104,7 @@ func TestNextToken(t *testing.T) {
 		{token.BANG, "!"},
 		{token.RBRACE, "}"},
 
-		{token.VARIADIC, "..."},
+		{token.SPREAD, "..."},
 		{token.ON, "on"},
 		{token.IDENT, "Droid"},
 		{token.LBRACE, "{"},
@@ -129,7 +129,7 @@ func TestNextToken(t *testing.T) {
 		{token.RPAREN, ")"},
 		{token.LBRACE, "{"},
 		{token.IDENT, "__typename"},
-		{token.VARIADIC, "..."},
+		{token.SPREAD, "..."},
 		{token.ON, "on"},
 		{token.IDENT, "Human"},
 		{token.LBRACE, "{"},
