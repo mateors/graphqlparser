@@ -171,7 +171,7 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	}
 	opDef.Name = name
 	opDef.VariablesDefinition = p.parseVariablesDefinition() //VariableDefinitions
-	fmt.Println("opDef.VariablesDefinition", name, opDef.VariablesDefinition)
+	fmt.Println("opDef.VariablesDefinition", name, opDef.VariablesDefinition, p.errors)
 	opDef.Directives = nil //p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
 	return opDef
@@ -248,12 +248,14 @@ func (p *Parser) parseAlias() *ast.Name {
 
 func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 
-	fmt.Println("?", p.curToken, p.peekToken)
-	if !p.curTokenIs(token.LPAREN) {
+	//fmt.Println("?", p.curToken, p.peekToken)
+	// if !p.curTokenIs(token.LPAREN) {
+	// 	return nil
+	// }
+	// p.nextToken() // (
+	if !p.expectToken(token.LPAREN) {
 		return nil
 	}
-	p.nextToken() // (
-
 	vars := []*ast.VariableDefinition{}
 
 	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
@@ -293,7 +295,13 @@ func (p *Parser) parseVariableDefinition() *ast.VariableDefinition {
 		return nil
 	}
 
-	svar.Type = p.parseType()
+	ttype := p.parseType()
+	if ttype == nil {
+		p.addError("parseVariableDefinition Type error!")
+		return nil
+		//p.nextToken() //if we still want to proceed
+	}
+	svar.Type = ttype //p.parseType()
 	svar.DefaultValue = p.parseDefaultValue()
 	svar.Directives = p.parseDirectives()
 	return svar
