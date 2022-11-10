@@ -226,14 +226,10 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 func (p *Parser) parseInlineFragment() *ast.InlineFragment {
 
 	cToken := p.curToken
-	fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
 	if p.curTokenIs(token.SPREAD) { //&& p.peekTokenIs(token.ON)
-
-		//fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
 		if !p.expectToken(token.SPREAD) {
 			return nil
 		}
-		//fmt.Println("parseInlineFragment2>>", p.curToken, p.peekToken)
 		inlineFrg := &ast.InlineFragment{Kind: ast.INLINE_FRAGMENT}
 		inlineFrg.Token = cToken
 		inlineFrg.TypeCondition = p.parseTypeCondition()
