@@ -280,3 +280,19 @@ func TestInputObjectLiteralValue(t *testing.T) { //OperationTypeDefinition
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestFragmentDefinition(t *testing.T) { //OperationTypeDefinition
+
+	input := `fragment friendFields on User {
+  id
+  name
+  profilePic(size: 50)
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

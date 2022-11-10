@@ -490,8 +490,8 @@ func main() {
 	fragment friendFields on User {
 		id
 		name
-		profilePic(size: 50)
-	}`
+		...standardProfilePic
+	  }`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)

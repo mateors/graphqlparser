@@ -540,7 +540,7 @@ parseDocument::
 
 ### ExecutableDefinition
 * OperationDefinition -> DONE
-* **FragmentDefinition** 
+* FragmentDefinition -> DONE
 
 ### SelectionSet
  * Selection
@@ -548,8 +548,7 @@ parseDocument::
 	2. FragmentSpread -> DONE
 	3. InlineFragment -> DONE
 
-### Query shorthand
-
+### Query shorthand -> Done
 
 ## Resource
 * https://graphql.org/learn/schema
