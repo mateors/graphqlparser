@@ -179,7 +179,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 
 func (p *Parser) parseDirectiveDefinition() ast.Node {
 
-	fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
+	//fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
 	dird := &ast.DirectiveDefinition{Kind: ast.DIRECTIVE_DEFINITION}
 	dird.Token = p.curToken
 	dird.Description = p.parseDescription()
@@ -191,7 +191,6 @@ func (p *Parser) parseDirectiveDefinition() ast.Node {
 		return nil
 	}
 
-	fmt.Println(">>", p.curToken, p.peekToken)
 	dird.Name = p.parseName()
 	dird.Arguments = p.parseInputFieldsDefinition() //InputValueDefinition
 
@@ -208,7 +207,26 @@ func (p *Parser) parseDirectiveDefinition() ast.Node {
 
 func (p *Parser) parseLocations() []*ast.Name {
 
-	return nil
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	locations := []*ast.Name{}
+	for {
+		if p.curTokenIs(token.PIPE) {
+			p.nextToken()
+		}
+		name := p.parseName()
+		if name != nil {
+			locations = append(locations, name)
+		}
+		if p.curTokenIs(token.PIPE) {
+			p.nextToken()
+		}
+		if name == nil {
+			break
+		}
+	}
+	return locations
 }
 
 func (p *Parser) parseFragmentDefinition() ast.Node {

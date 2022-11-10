@@ -486,8 +486,7 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `directive @example on FIELD`
-
+	input := `directive @example on FIELD_DEFINITION | ARGUMENT_DEFINITION`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
@@ -496,8 +495,8 @@ func main() {
 	fmt.Println(def.String())
 	fmt.Println("---->", len(doc.Definitions))
 	for i, def := range doc.Definitions {
-		odef, isOk := def.(*ast.OperationDefinition)
-		fmt.Println("*", i, def.GetKind(), isOk, odef.OperationType)
+		//odef, isOk := def.(*ast.OperationDefinition)
+		fmt.Println("*", i, def.GetKind())
 	}
 
 	// for {
