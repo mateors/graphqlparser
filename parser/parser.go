@@ -113,6 +113,9 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.LBRACE {
 		return ast.OPERATION_DEFINITION
 
+	} else if curToken == token.FRAGMENT {
+		return ast.FRAGMENT_DEFINITION
+
 	}
 
 	return ast.UNKNOWN
@@ -145,6 +148,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.OPERATION_DEFINITION:
 		return p.parseOperationDefinition()
 
+	case ast.FRAGMENT_DEFINITION:
+		return p.parseFragmentDefinition()
+
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
@@ -154,6 +160,23 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseFragmentDefinition() ast.Node {
+
+	//fmt.Println("parseFragmentDefinition", p.curToken, p.peekToken)
+	if !p.expectToken(token.FRAGMENT) {
+		return nil
+	}
+	frg := &ast.FragmentDefinition{Kind: ast.FRAGMENT_DEFINITION}
+	frg.Token = p.curToken
+	frg.Operation = ""
+
+	frg.FragmentName = p.parseName()
+	frg.TypeCondition = p.parseTypeCondition()
+	frg.Directives = p.parseDirectives()
+	frg.SelectionSet = p.parseSelectionSet()
+	return frg
 }
 
 func (p *Parser) parseOperationDefinition() ast.Node {

@@ -11,7 +11,7 @@ const (
 	FIELD                          = "Field"                   //
 	SELECTION_SET                  = "SelectionSet"            //
 	FRAGMENT_SPREAD                = "FragmentSpread"          //
-	INLINE_FRAGMENT                = "InlineFragment"          //?
+	INLINE_FRAGMENT                = "InlineFragment"          //
 	NAMED_TYPE                     = "NamedType"               //
 	LIST_TYPE                      = "ListType"                //
 	NONNULL_TYPE                   = "NonNullType"             //
@@ -33,7 +33,7 @@ const (
 	SCALAR_DEFINITION              = "ScalarDefinition"        //
 	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //
 	VARIABLE_DEFINITION            = "VariableDefinition"      //
-	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
+	FRAGMENT_DEFINITION            = "FragmentDefinition"      //?
 	SCHEMA_DEFINITION              = "SchemaDefinition"        //
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
 

@@ -487,8 +487,10 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	{
-		nearestThing(location: { lon: 12.43, lat: -53.211 })
+	fragment friendFields on User {
+		id
+		name
+		profilePic(size: 50)
 	}`
 
 	lex := lexer.New(input)
