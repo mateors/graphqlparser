@@ -901,8 +901,7 @@ func (p *Parser) parseValueLiteral() ast.Value {
 	} else if cToken.Type == token.LBRACE {
 		//TODO
 		//parseObject
-
-		fmt.Println("OBJECT", p.curToken, p.peekToken)
+		//fmt.Println("OBJECT", p.curToken, p.peekToken)
 		value = p.parseObjectValue()
 
 	}
@@ -913,22 +912,22 @@ func (p *Parser) parseValueLiteral() ast.Value {
 func (p *Parser) parseObjectValue() *ast.ObjectValue {
 
 	cToken := p.curToken
-	if !p.curTokenIs(token.LBRACE) {
+	if !p.expectToken(token.LBRACE) {
 		return nil
 	}
-	p.nextToken() //{
-
 	obj := &ast.ObjectValue{Kind: ast.OBJECT_VALUE}
 	obj.Token = cToken
 	obj.Fields = p.parseObjectFields()
-
 	return obj
 }
 
 func (p *Parser) parseObjectFields() []*ast.ObjectField {
 
-	objFlds := []*ast.ObjectField{}
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
 
+	objFlds := []*ast.ObjectField{}
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
 		objfld := p.parseObjectField()
@@ -942,8 +941,6 @@ func (p *Parser) parseObjectFields() []*ast.ObjectField {
 			break
 		}
 	}
-
-	//fmt.Println("#3#", p.curToken, p.peekToken)
 	return objFlds
 }
 
