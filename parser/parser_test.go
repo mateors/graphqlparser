@@ -175,3 +175,29 @@ func TestOperationTypeDefinition(t *testing.T) {
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestInlineFragment(t *testing.T) {
+
+	input := `query inlineFragmentTyping  @skip(cache: true) {
+  profiles(handles: ["zuck", "coca-cola"]) {
+    handle
+    ... on User {
+      friends {
+        count
+      }
+    }
+    ... on Page {
+      likers {
+        count
+      }
+    }
+  }
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

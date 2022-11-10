@@ -487,7 +487,7 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	  query inlineFragmentTyping {
+	  query inlineFragmentTyping @skip(cache: true) {
 		
 		profiles(handles: ["zuck", "coca-cola"]) {
 			
