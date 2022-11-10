@@ -6,25 +6,25 @@ const (
 	EOF
 
 	//DELIMETERS
-	BANG       // !
-	COMMA      // ,
-	COLON      // :
-	DOT        // .
-	DOLLAR     // $
-	AT         // @
-	HASH       //#
-	AMP        // &
-	SEMICOLON  // ;
-	LPAREN     // (
-	RPAREN     // )
-	LBRACE     // {
-	RBRACE     // }
-	LBRACKET   // [
-	RBRACKET   // ]
-	UNDERSCORE // _
-	PIPE       // |
-
+	BANG         // !
+	COMMA        // ,
+	COLON        // :
+	DOT          // .
+	DOLLAR       // $
+	AT           // @
+	HASH         //#
+	AMP          // &
+	SEMICOLON    // ;
+	LPAREN       // (
+	RPAREN       // )
+	LBRACE       // {
+	RBRACE       // }
+	LBRACKET     // [
+	RBRACKET     // ]
+	UNDERSCORE   // _
+	PIPE         // |
 	IDENT        //VARIABLES,IDENTIFIER
+	MINUS        // -
 	INT          //IDENTIFIER
 	FLOAT        //Float
 	STRING       //String
@@ -87,6 +87,7 @@ var tokenDescription = map[TokenType]string{
 	UNDERSCORE:   "_",     //DELIMETERS
 	PIPE:         "|",     //DELIMETERS
 	IDENT:        "IDENT", //VARIABLES,IDENTIFIER
+	MINUS:        "-",     //MINUS
 	INT:          "INT",
 	FLOAT:        "FLOAT",
 	STRING:       "STRING",
@@ -137,15 +138,15 @@ var keywords = map[string]TokenType{
 	"interface":    INTERFACE,    //
 	"union":        UNION,        //
 	"implements":   IMPLEMENTS,
+	"on":           ON,
+	"...":          SPREAD, //VARIADIC
 	//"return":       RETURN,
-	"on": ON,
 	//"Int":          INT,
 	//"Float":        FLOAT,
 	//"String":       STRING,//??
 	//"Boolean":      BOOLEAN,
 	//"ID":           ID,
 	//"null": NULL,
-	"...": SPREAD, //VARIADIC
 }
 
 func LookupIdent(ident string) TokenType {

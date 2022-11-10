@@ -34,6 +34,9 @@ func (l *Lexer) NextToken() token.Token {
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch, l.line, l.position, l.position+1)
 
+	case '-':
+		tok = newToken(token.MINUS, l.ch, l.line, l.position, l.position+1)
+
 	case '{':
 		tok = newToken(token.LBRACE, l.ch, l.line, l.position, l.position+1)
 
