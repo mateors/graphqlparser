@@ -485,6 +485,7 @@ func main() {
 
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
+
 	input := `
 	  query inlineFragmentTyping {
 		

@@ -205,11 +205,15 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 			selections = append(selections, fragSpd)
 		}
 
-		//TODO InlineFragment
-		// inlineFrg := p.parseInlineFragment()
-		// if inlineFrg != nil {
-		// 	selections = append(selections, inlineFrg)
-		// }
+		inlineFrg := p.parseInlineFragment()
+		if inlineFrg != nil {
+			selections = append(selections, inlineFrg)
+		}
+
+		if field == nil && fragSpd == nil && inlineFrg == nil {
+			fmt.Println("ALL ARE NIL SO BREAK NOW")
+			break
+		}
 	}
 
 	if p.curTokenIs(token.RBRACE) {
@@ -221,21 +225,27 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 func (p *Parser) parseInlineFragment() *ast.InlineFragment {
 
 	cToken := p.curToken
-	fmt.Println("parseInlineFragment", p.curToken, p.peekToken)
-	if !p.curTokenIs(token.SPREAD) {
-		return nil
+	//fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
+	if p.curTokenIs(token.SPREAD) && p.peekTokenIs(token.ON) {
+
+		//fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
+		if !p.expectToken(token.SPREAD) {
+			return nil
+		}
+		//fmt.Println("parseInlineFragment2>>", p.curToken, p.peekToken)
+		inlineFrg := &ast.InlineFragment{Kind: ast.INLINE_FRAGMENT}
+		inlineFrg.Token = cToken
+		inlineFrg.TypeCondition = p.parseTypeCondition()
+		inlineFrg.Directives = p.parseDirectives()
+		inlineFrg.SelectionSet = p.parseSelectionSet()
+		return inlineFrg
 	}
-	inlineFrg := &ast.InlineFragment{Kind: ast.INLINE_FRAGMENT}
-	inlineFrg.Token = cToken
-	inlineFrg.TypeCondition = p.parseTypeCondition()
-	inlineFrg.Directives = p.parseDirectives()
-	inlineFrg.SelectionSet = p.parseSelectionSet()
-	return inlineFrg
+	return nil
 }
 
 func (p *Parser) parseTypeCondition() *ast.NamedType {
 
-	fmt.Println("parseTypeCondition", p.curToken, p.peekToken)
+	//fmt.Println("parseTypeCondition", p.curToken, p.peekToken)
 	cToken := p.curToken
 	if !p.expectToken(token.ON) {
 		return nil
@@ -253,19 +263,22 @@ func (p *Parser) parseTypeCondition() *ast.NamedType {
 
 func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
 
-	if !p.expectToken(token.SPREAD) {
-		return nil
+	//fmt.Println("parseFragmentSpread", p.curToken, p.peekToken)
+	if p.curTokenIs(token.SPREAD) && p.peekTokenIs(token.IDENT) {
+
+		p.nextToken() //...
+		frags := &ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD}
+		frags.Token = p.curToken
+		name := p.parseName()
+		if name == nil {
+			p.addError("parseFragmentSpread FragmentName error!")
+			return nil //
+		}
+		frags.FragmentName = name
+		frags.Directives = p.parseDirectives()
+		return frags
 	}
-	frags := &ast.FragmentSpread{Kind: ast.FRAGMENT_SPREAD}
-	frags.Token = p.curToken
-	name := p.parseName()
-	if name == nil {
-		p.addError("parseFragmentSpread FragmentName error!")
-		return nil //
-	}
-	frags.FragmentName = name
-	frags.Directives = p.parseDirectives()
-	return frags
+	return nil
 }
 
 func (p *Parser) parseField() *ast.Field {
@@ -285,7 +298,7 @@ func (p *Parser) parseField() *ast.Field {
 	field.Name = name                    //mandatory
 	field.Arguments = p.parseArguments() //?
 
-	fmt.Println("field.Arguments:", field.Arguments)
+	//fmt.Println("field.Arguments:", field.Arguments)
 	field.Directives = p.parseDirectives()
 	field.SelectionSet = p.parseSelectionSet()
 	return field
@@ -696,16 +709,13 @@ func (p *Parser) parseArgument() *ast.Argument {
 	if !p.curTokenIs(token.IDENT) {
 		return nil
 	}
-
 	arg := &ast.Argument{Kind: ast.ARGUMENT, Token: p.curToken}
 	arg.Name = p.parseName()
-
 	if p.curTokenIs(token.COLON) {
 		p.nextToken()
 	}
 
 	val := p.parseValueLiteral()
-	fmt.Println("arg.Value", val)
 	if val == nil {
 		p.addError("parseArgument value error!")
 		return nil
