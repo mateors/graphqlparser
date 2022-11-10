@@ -548,6 +548,8 @@ parseDocument::
 	2. FragmentSpread -> DONE
 	3. InlineFragment -> DONE
 
+### Query shorthand
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries

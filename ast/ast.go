@@ -121,14 +121,17 @@ func (dd *OperationDefinition) GetSelectionSet() *SelectionSet {
 func (dd *OperationDefinition) String() string {
 
 	op := dd.OperationType
-	name := fmt.Sprintf("%v", dd.Name)
+	var name string = fmt.Sprintf("%v", dd.Name)
+	if dd.Name == nil {
+		name = ""
+	}
 	varDefs := wrap("(", join(toSliceString(dd.VariablesDefinition), ", "), ")")
 	directives := join(toSliceString(dd.Directives), " ")
 	selectionSet := fmt.Sprintf("%v", dd.SelectionSet)
 	// Anonymous queries with no directives or variable definitions can use
 	// the query short form.
 	str := ""
-	if name == "" && directives == "" && varDefs == "" && op == OperationTypeQuery {
+	if name == "" && directives == "" && varDefs == "" && op == OperationTypeQuery { //Query shorthand
 		str = selectionSet
 	} else {
 		str = join([]string{

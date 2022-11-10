@@ -487,14 +487,12 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	query withFragments {
+	{
 		user(id: 4) {
-		  friends(first: 10) {
-			...friendFields
-		  }
-		  mutualFriends(first: 10) {
-			...friendFields
-		  }
+			id
+			name
+			smallPic: profilePic(size: 64)
+			bigPic: profilePic(size: 1024)
 		}
 	}`
 

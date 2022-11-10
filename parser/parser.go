@@ -107,11 +107,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.SCALAR {
 		return ast.SCALAR_DEFINITION
 
-	} else if p.isDescription() && peekToken == token.QUERY {
-		return ast.OPERATION_DEFINITION
-
 	} else if curToken == token.QUERY {
 		return ast.OPERATION_DEFINITION
+
+	} else if curToken == token.LBRACE {
+		return ast.OPERATION_DEFINITION
+
 	}
 
 	return ast.UNKNOWN
