@@ -927,10 +927,25 @@ func (p *Parser) parseObjectValue() *ast.ObjectValue {
 
 func (p *Parser) parseObjectFields() []*ast.ObjectField {
 
-	return nil
+	objFlds := []*ast.ObjectField{}
+
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+
+		objfld := p.parseObjectField()
+		if objfld != nil {
+			objFlds = append(objFlds, objfld)
+		}
+		if objfld == nil {
+			break
+		}
+	}
+
+	//fmt.Println("#3#", p.curToken, p.peekToken)
+	return objFlds
 }
 
 func (p *Parser) parseObjectField() *ast.ObjectField {
+
 	return nil
 }
 
