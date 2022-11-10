@@ -486,7 +486,9 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `directive @example on FIELD_DEFINITION | ARGUMENT_DEFINITION`
+	input := `directive @deprecated(
+		reason: String = "No longer supported"
+	  ) on FIELD_DEFINITION | ENUM_VALUE`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

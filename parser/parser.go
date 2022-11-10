@@ -192,7 +192,7 @@ func (p *Parser) parseDirectiveDefinition() ast.Node {
 	}
 
 	dird.Name = p.parseName()
-	dird.Arguments = p.parseInputFieldsDefinition() //InputValueDefinition
+	dird.Arguments = p.parseArgumentDefinition()
 
 	if p.curTokenIs(token.REPEATABLE) {
 		p.nextToken()

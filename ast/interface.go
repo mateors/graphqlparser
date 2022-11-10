@@ -29,7 +29,7 @@ type TypeSystemDefinition interface {
 	GetSelectionSet() *SelectionSet
 }
 
-var _ TypeSystemDefinition = (*SchemaDefinition)(nil)
+var _ TypeSystemDefinition = (*SchemaDefinition)(nil) //
 var _ TypeSystemDefinition = (TypeDefinition)(nil)
 var _ TypeSystemDefinition = (*DirectiveDefinition)(nil)
 
