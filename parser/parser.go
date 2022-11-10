@@ -954,10 +954,12 @@ func (p *Parser) parseObjectField() *ast.ObjectField {
 	objfld.Token = cToken
 	objfld.Name = p.parseName()
 	if !p.expectToken(token.COLON) {
+		p.addError("parseObjectField colon missing!")
 		return nil
 	}
 	objfld.Value = p.parseValueLiteral()
 	if objfld.Name == nil || objfld.Value == nil {
+		p.addError("parseObjectField name or value nil")
 		return nil
 	}
 	return objfld
