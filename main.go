@@ -488,7 +488,7 @@ func main() {
 
 	input := `
 	{
-		nearestThing(location: { lon: 12.43, lat: -53.211 })
+		nearestThing(location: { lon: 12.43, lat: 53.211 })
 	}`
 
 	lex := lexer.New(input)

@@ -935,6 +935,9 @@ func (p *Parser) parseObjectFields() []*ast.ObjectField {
 		if objfld != nil {
 			objFlds = append(objFlds, objfld)
 		}
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+		}
 		if objfld == nil {
 			break
 		}
@@ -946,7 +949,21 @@ func (p *Parser) parseObjectFields() []*ast.ObjectField {
 
 func (p *Parser) parseObjectField() *ast.ObjectField {
 
-	return nil
+	cToken := p.curToken
+	if !p.curTokenIs(token.IDENT) {
+		return nil
+	}
+	objfld := &ast.ObjectField{Kind: ast.OBJECT_FIELD}
+	objfld.Token = cToken
+	objfld.Name = p.parseName()
+	if !p.expectToken(token.COLON) {
+		return nil
+	}
+	objfld.Value = p.parseValueLiteral()
+	if objfld.Name == nil || objfld.Value == nil {
+		return nil
+	}
+	return objfld
 }
 
 func (p *Parser) parseList() *ast.ListValue {
