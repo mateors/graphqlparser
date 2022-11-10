@@ -113,6 +113,9 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.MUTATION {
 		return ast.OPERATION_DEFINITION
 
+	} else if curToken == token.SUBSCRIPTION {
+		return ast.OPERATION_DEFINITION
+
 	} else if curToken == token.LBRACE {
 		return ast.OPERATION_DEFINITION
 
@@ -192,6 +195,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	}
 	if p.curTokenIs(token.MUTATION) {
 		opDef.OperationType = ast.MUTATION
+		p.nextToken()
+	}
+	if p.curTokenIs(token.SUBSCRIPTION) {
+		opDef.OperationType = ast.SUBSCRIPTION
 		p.nextToken()
 	}
 	name := p.parseName()

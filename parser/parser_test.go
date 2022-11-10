@@ -314,3 +314,21 @@ func TestMutationOperationDefinition(t *testing.T) { //OperationTypeDefinition
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestSubscriptionOperationDefinition(t *testing.T) { //OperationTypeDefinition
+
+	input := `subscription sub {
+  newMessage {
+    body
+    sender
+  }
+  ...newMessageFields
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

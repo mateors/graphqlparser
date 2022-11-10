@@ -487,13 +487,13 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	mutation {
-		likeStory(storyID: 12345) {
-		  story {
-			likeCount
-		  }
+	subscription sub {
+		newMessage {
+		  body
+		  sender
 		}
-	}`
+		...newMessageFields
+	  }`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
@@ -503,7 +503,8 @@ func main() {
 	fmt.Println(def.String())
 	fmt.Println("---->", len(doc.Definitions))
 	for i, def := range doc.Definitions {
-		fmt.Println("*", i, def.GetKind())
+		odef, isOk := def.(*ast.OperationDefinition)
+		fmt.Println("*", i, def.GetKind(), isOk, odef.OperationType)
 	}
 
 	// for {

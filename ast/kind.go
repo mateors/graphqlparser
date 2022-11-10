@@ -37,8 +37,9 @@ const (
 	SCHEMA_DEFINITION              = "SchemaDefinition"        //
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
 
-	UNKNOWN  = "Unknown"
-	QUERY    = "query"
-	MUTATION = "mutation"
+	UNKNOWN      = "Unknown"
+	QUERY        = "query"
+	MUTATION     = "mutation"
+	SUBSCRIPTION = "subscription"
 	//TypeExtensionDefinition
 )
