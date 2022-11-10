@@ -176,6 +176,27 @@ func TestOperationTypeDefinition(t *testing.T) {
 	}
 }
 
+func TestFragmentSpread(t *testing.T) {
+
+	input := `query withFragments {
+  user(id: 4) {
+    friends(first: 10) {
+      ...friendFields
+    }
+    mutualFriends(first: 10) {
+      ...friendFields
+    }
+  }
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}
+
 func TestInlineFragment(t *testing.T) {
 
 	input := `query inlineFragmentTyping  @skip(cache: true) {
