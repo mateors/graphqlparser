@@ -529,6 +529,10 @@ parseDocument::
 				parseArgumentDefinition
 					parseInputValueDefinition
 ```
+### TypeSystemDefinition
+* SchemaDefinition
+* TypeDefinition -> DONE
+* DirectiveDefinition
 
 ### TypeDefinition
 * ScalarTypeDefinition -> DONE

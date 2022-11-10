@@ -281,12 +281,30 @@ func TestInputObjectLiteralValue(t *testing.T) { //OperationTypeDefinition
 	}
 }
 
-func TestFragmentDefinition(t *testing.T) { //OperationTypeDefinition
+func TestFragmentDefinition(t *testing.T) {
 
 	input := `fragment friendFields on User {
   id
   name
   profilePic(size: 50)
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}
+
+func TestMutationOperationDefinition(t *testing.T) { //OperationTypeDefinition
+
+	input := `mutation {
+  likeStory(storyID: 12345) {
+    story {
+      likeCount
+    }
+  }
 }`
 	lex := lexer.New(input)
 	p := New(lex)

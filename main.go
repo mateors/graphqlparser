@@ -487,11 +487,13 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	fragment friendFields on User {
-		id
-		name
-		...standardProfilePic
-	  }`
+	mutation {
+		likeStory(storyID: 12345) {
+		  story {
+			likeCount
+		  }
+		}
+	}`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)

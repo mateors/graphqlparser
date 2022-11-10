@@ -110,6 +110,9 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.QUERY {
 		return ast.OPERATION_DEFINITION
 
+	} else if curToken == token.MUTATION {
+		return ast.OPERATION_DEFINITION
+
 	} else if curToken == token.LBRACE {
 		return ast.OPERATION_DEFINITION
 
@@ -146,7 +149,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return p.parseScalarDefinition()
 
 	case ast.OPERATION_DEFINITION:
-		return p.parseOperationDefinition()
+		return p.parseOperationDefinition() //
 
 	case ast.FRAGMENT_DEFINITION:
 		return p.parseFragmentDefinition()
@@ -185,6 +188,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	opDef.Token = p.curToken
 	if p.curTokenIs(token.QUERY) {
 		opDef.OperationType = ast.QUERY
+		p.nextToken()
+	}
+	if p.curTokenIs(token.MUTATION) {
+		opDef.OperationType = ast.MUTATION
 		p.nextToken()
 	}
 	name := p.parseName()
