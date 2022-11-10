@@ -332,3 +332,15 @@ func TestSubscriptionOperationDefinition(t *testing.T) { //OperationTypeDefiniti
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestDirectiveDefinition(t *testing.T) { //DirectiveDefinition
+
+	input := `directive @example on FIELD_DEFINITION | ARGUMENT_DEFINITION`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}
