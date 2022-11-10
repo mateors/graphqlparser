@@ -893,18 +893,45 @@ func (p *Parser) parseValueLiteral() ast.Value {
 		//value = p.parseStringLiteral()
 
 	} else if cToken.Type == token.LBRACKET {
-		//parseList
 		value = p.parseList()
 
 	} else if cToken.Type == token.DOLLAR {
 		value = p.parseVariable()
 
 	} else if cToken.Type == token.LBRACE {
+		//TODO
 		//parseObject
+
+		fmt.Println("OBJECT", p.curToken, p.peekToken)
+		value = p.parseObjectValue()
 
 	}
 	p.nextToken()
 	return value
+}
+
+func (p *Parser) parseObjectValue() *ast.ObjectValue {
+
+	cToken := p.curToken
+	if !p.curTokenIs(token.LBRACE) {
+		return nil
+	}
+	p.nextToken() //{
+
+	obj := &ast.ObjectValue{Kind: ast.OBJECT_VALUE}
+	obj.Token = cToken
+	obj.Fields = p.parseObjectFields()
+
+	return obj
+}
+
+func (p *Parser) parseObjectFields() []*ast.ObjectField {
+
+	return nil
+}
+
+func (p *Parser) parseObjectField() *ast.ObjectField {
+	return nil
 }
 
 func (p *Parser) parseList() *ast.ListValue {

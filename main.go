@@ -487,16 +487,8 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	query inlineFragmentNoType($expandedInfo: Boolean) {
-		user(handle: "zuck") {
-		  id
-		  name
-		  ... @include(if: $expandedInfo) {
-			firstName
-			lastName
-			birthday
-		  }
-		}
+	{
+		nearestThing(location: { lon: 12.43, lat: -53.211 })
 	}`
 
 	lex := lexer.New(input)
