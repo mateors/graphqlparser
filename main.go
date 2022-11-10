@@ -488,11 +488,17 @@ func main() {
 
 	input := `
 	{
-		user(id: 4) {
-			id
+		me {
+		  id
+		  firstName
+		  lastName
+		  birthday {
+			month
+			day
+		  }
+		  friends {
 			name
-			smallPic: profilePic(size: 64)
-			bigPic: profilePic(size: 1024)
+		  }
 		}
 	}`
 

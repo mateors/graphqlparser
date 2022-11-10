@@ -241,3 +241,28 @@ func TestQueryShortHand(t *testing.T) { //OperationTypeDefinition
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestFields(t *testing.T) { //OperationTypeDefinition
+
+	input := `{
+  me {
+    id
+    firstName
+    lastName
+    birthday {
+      month
+      day
+    }
+    friends {
+      name
+    }
+  }
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}
