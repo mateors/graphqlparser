@@ -52,6 +52,7 @@ const (
 	IMPLEMENTS   //KEYWORDS
 	UNION        //KEYWORDS
 	DIRECTIVE    //KEYWORDS @
+	REPEATABLE   //repeatable
 
 )
 
@@ -114,6 +115,7 @@ var tokenDescription = map[TokenType]string{
 	IMPLEMENTS:   "IMPLEMENTS",   //KEYWORDS
 	UNION:        "UNION",        //KEYWORDS
 	DIRECTIVE:    "DIRECTIVE",    //KEYWORDS @
+	REPEATABLE:   "REPEATABLE",   //repeatable
 }
 
 func Name(tokType TokenType) string {
@@ -140,6 +142,7 @@ var keywords = map[string]TokenType{
 	"implements":   IMPLEMENTS,
 	"on":           ON,
 	"...":          SPREAD, //VARIADIC
+	"repeatable":   REPEATABLE,
 	//"return":       RETURN,
 	//"Int":          INT,
 	//"Float":        FLOAT,

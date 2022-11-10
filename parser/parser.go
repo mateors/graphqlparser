@@ -107,6 +107,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.SCALAR {
 		return ast.SCALAR_DEFINITION
 
+	} else if p.isDescription() && peekToken == token.DIRECTIVE {
+		return ast.DIRECTIVE_DEFINITION
+
+	} else if curToken == token.DIRECTIVE {
+		return ast.DIRECTIVE_DEFINITION
+
 	} else if curToken == token.QUERY {
 		return ast.OPERATION_DEFINITION
 
@@ -157,6 +163,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.FRAGMENT_DEFINITION:
 		return p.parseFragmentDefinition()
 
+	case ast.DIRECTIVE_DEFINITION:
+		return p.parseDirectiveDefinition()
+
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
@@ -166,6 +175,40 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseDirectiveDefinition() ast.Node {
+
+	fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
+	dird := &ast.DirectiveDefinition{Kind: ast.DIRECTIVE_DEFINITION}
+	dird.Token = p.curToken
+	dird.Description = p.parseDescription()
+
+	if !p.expectToken(token.DIRECTIVE) {
+		return nil
+	}
+	if !p.expectToken(token.AT) {
+		return nil
+	}
+
+	fmt.Println(">>", p.curToken, p.peekToken)
+	dird.Name = p.parseName()
+	dird.Arguments = p.parseInputFieldsDefinition() //InputValueDefinition
+
+	if p.curTokenIs(token.REPEATABLE) {
+		p.nextToken()
+	}
+
+	if !p.expectToken(token.ON) {
+		return nil
+	}
+	dird.Locations = p.parseLocations()
+	return dird
+}
+
+func (p *Parser) parseLocations() []*ast.Name {
+
+	return nil
 }
 
 func (p *Parser) parseFragmentDefinition() ast.Node {

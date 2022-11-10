@@ -532,7 +532,7 @@ parseDocument::
 ### TypeSystemDefinition
 * SchemaDefinition
 * TypeDefinition -> DONE
-* DirectiveDefinition
+* **DirectiveDefinition**
 
 ### TypeDefinition
 * ScalarTypeDefinition -> DONE

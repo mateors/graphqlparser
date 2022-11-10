@@ -486,14 +486,7 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `
-	subscription sub {
-		newMessage {
-		  body
-		  sender
-		}
-		...newMessageFields
-	  }`
+	input := `directive @example on FIELD`
 
 	lex := lexer.New(input)
 	p := parser.New(lex)
