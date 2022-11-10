@@ -226,8 +226,8 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 func (p *Parser) parseInlineFragment() *ast.InlineFragment {
 
 	cToken := p.curToken
-	//fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
-	if p.curTokenIs(token.SPREAD) && p.peekTokenIs(token.ON) {
+	fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
+	if p.curTokenIs(token.SPREAD) { //&& p.peekTokenIs(token.ON)
 
 		//fmt.Println("parseInlineFragment1", p.curToken, p.peekToken)
 		if !p.expectToken(token.SPREAD) {
@@ -899,6 +899,9 @@ func (p *Parser) parseValueLiteral() ast.Value {
 	} else if cToken.Type == token.LBRACKET {
 		//parseList
 		value = p.parseList()
+
+	} else if cToken.Type == token.DOLLAR {
+		value = p.parseVariable()
 
 	} else if cToken.Type == token.LBRACE {
 		//parseObject

@@ -487,17 +487,14 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	{
-		me {
+	query inlineFragmentNoType($expandedInfo: Boolean) {
+		user(handle: "zuck") {
 		  id
-		  firstName
-		  lastName
-		  birthday {
-			month
-			day
-		  }
-		  friends {
-			name
+		  name
+		  ... @include(if: $expandedInfo) {
+			firstName
+			lastName
+			birthday
 		  }
 		}
 	}`
