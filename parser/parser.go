@@ -867,7 +867,16 @@ func (p *Parser) parseValueLiteral() ast.Value {
 	cToken := p.curToken
 	var value ast.Value
 
-	if cToken.Type == token.IDENT {
+	if cToken.Type == token.MINUS {
+		p.nextToken() //-
+		if p.curTokenIs(token.FLOAT) {
+			value = &ast.FloatValue{Kind: ast.FLOAT_VALUE, Token: cToken, Value: "-" + p.curToken.Literal}
+		}
+		if p.curTokenIs(token.INT) {
+			value = &ast.IntValue{Kind: ast.INT_VALUE, Token: cToken, Value: "-" + p.curToken.Literal}
+		}
+
+	} else if cToken.Type == token.IDENT {
 
 		if cToken.Literal == "true" {
 			value = &ast.BooleanValue{Kind: ast.BOOLEAN_VALUE, Token: cToken, Value: true}
@@ -890,7 +899,6 @@ func (p *Parser) parseValueLiteral() ast.Value {
 
 	} else if cToken.Type == token.STRING {
 		value = &ast.StringValue{Kind: ast.STRING_VALUE, Token: cToken, Value: cToken.Literal}
-		//value = p.parseStringLiteral()
 
 	} else if cToken.Type == token.LBRACKET {
 		value = p.parseList()
@@ -899,11 +907,7 @@ func (p *Parser) parseValueLiteral() ast.Value {
 		value = p.parseVariable()
 
 	} else if cToken.Type == token.LBRACE {
-		//TODO
-		//parseObject
-		//fmt.Println("OBJECT", p.curToken, p.peekToken)
 		value = p.parseObjectValue()
-
 	}
 	p.nextToken()
 	return value
