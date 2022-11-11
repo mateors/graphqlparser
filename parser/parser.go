@@ -974,7 +974,7 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 
 	name := p.parseName()
 	if name == nil {
-		p.addError("parseFieldDefinition.parseName type missing")
+		p.addError("parseFieldDefinition.parseName fd.Name missing!")
 		return nil
 	}
 
@@ -1230,6 +1230,9 @@ func (p *Parser) peekTokenIs(t token.TokenType) bool {
 func (p *Parser) peekTokenIsKeyword() bool {
 	return token.IsKeyword(p.peekToken.Literal)
 }
+func (p *Parser) curTokenIsKeyword() bool {
+	return token.IsKeyword(p.curToken.Literal)
+}
 
 func (p *Parser) peekError(t token.TokenType) {
 	msg := fmt.Sprintf("expected next token to be %v, got %v instead", t, p.peekToken.Type)
@@ -1276,13 +1279,13 @@ func (p *Parser) expectToken(t token.TokenType) bool {
 // Converts a name lex token into a name parse node.
 func (p *Parser) parseName() *ast.Name {
 
-	if !p.curTokenIs(token.IDENT) {
-		p.addError("parseName identifier missing")
-		return nil
+	if p.curTokenIs(token.IDENT) || p.curTokenIsKeyword() {
+		name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
+		p.nextToken()
+		return name
 	}
-	name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
-	p.nextToken()
-	return name
+	p.addError("parseName identifier missing")
+	return nil
 }
 
 /**
