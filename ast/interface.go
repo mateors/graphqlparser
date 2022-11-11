@@ -74,7 +74,7 @@ func (sd *SchemaDefinition) String() string {
 	}, " ")
 
 	if sd.Description != nil {
-		desc := sd.Description.Value
+		desc := strings.TrimSpace(sd.Description.Value)
 		if desc != "" {
 			desc = join([]string{`"""`, desc, `"""`}, "\n")
 			str = fmt.Sprintf("%s\n%s", desc, str)

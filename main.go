@@ -486,9 +486,12 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `directive @deprecated(
-		reason: String = "No longer supported"
-	  ) on FIELD_DEFINITION | ENUM_VALUE`
+	input := `"""
+	A simple GraphQL schema which is well described.
+	"""
+	schema {
+	  query: Query
+	}`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

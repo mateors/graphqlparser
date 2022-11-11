@@ -113,6 +113,12 @@ func (p *Parser) analyzeWhichDefinition() string {
 	} else if curToken == token.DIRECTIVE {
 		return ast.DIRECTIVE_DEFINITION
 
+	} else if p.isDescription() && peekToken == token.SCHEMA {
+		return ast.SCHEMA_DEFINITION
+
+	} else if curToken == token.SCHEMA {
+		return ast.SCHEMA_DEFINITION
+
 	} else if curToken == token.QUERY {
 		return ast.OPERATION_DEFINITION
 
@@ -166,6 +172,9 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	case ast.DIRECTIVE_DEFINITION:
 		return p.parseDirectiveDefinition()
 
+	case ast.SCHEMA_DEFINITION:
+		return p.parseSchemaDefinition()
+
 	// 	fmt.Println("tokenDefinitionFns->", p.curToken.Type)
 	// 	parseFunc := p.tokenDefinitionFns[p.curToken.Type]
 	// 	return parseFunc()
@@ -175,6 +184,85 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 		return nil //&ast.OperationDefinition{}
 	}
 
+}
+
+func (p *Parser) parseSchemaDefinition() ast.Node {
+
+	//fmt.Println("parseSchemaDefinition:", p.curToken, p.peekToken)
+	schema := &ast.SchemaDefinition{Kind: ast.SCHEMA_DEFINITION}
+	schema.Token = p.curToken
+	schema.Description = p.parseDescription()
+
+	if !p.expectToken(token.SCHEMA) {
+		return nil
+	}
+	schema.Directives = p.parseDirectives()
+	schema.OperationTypes = p.parseRootOperationTypes()
+	return schema
+}
+
+func (p *Parser) parseRootOperationTypes() []*ast.RootOperationTypeDefinition {
+
+	//fmt.Println("parseRootOperationTypes", p.curToken, p.peekToken)
+	roTypes := []*ast.RootOperationTypeDefinition{}
+
+	if !p.expectToken(token.LBRACE) {
+		return nil
+	}
+
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+
+		roType := p.parseRootOperationTypeDefinition()
+		if roType == nil {
+			break
+		}
+		roTypes = append(roTypes, roType)
+	}
+
+	if p.curTokenIs(token.RBRACE) {
+		p.nextToken()
+	}
+	return roTypes
+}
+
+func (p *Parser) parseRootOperationTypeDefinition() *ast.RootOperationTypeDefinition {
+
+	//fmt.Println("parseRootOperationTypeDefinition", p.curToken, p.peekToken)
+	cToken := p.curToken
+	if !checkOperationType(cToken.Literal) {
+		return nil
+	}
+	roType := &ast.RootOperationTypeDefinition{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION}
+	//var operationType string
+	if cToken.Literal == ast.QUERY {
+		roType.OperationType = ast.QUERY
+
+	} else if cToken.Literal == ast.MUTATION {
+		roType.OperationType = ast.MUTATION
+
+	} else if cToken.Literal == ast.SUBSCRIPTION {
+		roType.OperationType = ast.SUBSCRIPTION
+	}
+
+	if !checkOperationType(roType.OperationType) {
+		p.addError("rootOperationTypeDefinition operationType error!")
+		return nil
+	}
+	p.nextToken()
+	roType.Token = cToken
+
+	if !p.expectToken(token.COLON) {
+		return nil
+	}
+	roType.NamedType = p.parseNamed()
+	return roType
+}
+
+func checkOperationType(operationType string) bool {
+	if operationType == ast.QUERY || operationType == ast.MUTATION || operationType == ast.SUBSCRIPTION {
+		return true
+	}
+	return false
 }
 
 func (p *Parser) parseDirectiveDefinition() ast.Node {

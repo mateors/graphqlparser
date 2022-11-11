@@ -31,10 +31,10 @@ const (
 	ENUMVALUE_DEFINITION           = "EnumValueDefinition"     //
 	INPUT_OBJECT_DEFINITION        = "InputObjectDefinition"   //
 	SCALAR_DEFINITION              = "ScalarDefinition"        //
-	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //?
+	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //
 	VARIABLE_DEFINITION            = "VariableDefinition"      //
 	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
-	SCHEMA_DEFINITION              = "SchemaDefinition"        //
+	SCHEMA_DEFINITION              = "SchemaDefinition"        //?
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
 
 	UNKNOWN      = "Unknown"
