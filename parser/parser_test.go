@@ -352,6 +352,8 @@ A simple GraphQL schema which is well described.
 """
 schema {
   query: Query
+  mutation: Mutation
+  subscription: Subscription
 }`
 	lex := lexer.New(input)
 	p := New(lex)

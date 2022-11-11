@@ -491,6 +491,8 @@ func main() {
 	"""
 	schema {
 	  query: Query
+	  mutation: Mutation
+	  subscription: Subscription
 	}`
 	lex := lexer.New(input)
 	p := parser.New(lex)

@@ -60,7 +60,7 @@ func (p *Parser) ParseDocument() *ast.Document {
 		if doc != nil {
 			document.Definitions = append(document.Definitions, doc)
 		}
-		//fmt.Println("...", p.errors)
+		fmt.Println("...", p.errors)
 		p.nextToken()
 	}
 	return document
@@ -216,7 +216,9 @@ func (p *Parser) parseRootOperationTypes() []*ast.RootOperationTypeDefinition {
 		if roType == nil {
 			break
 		}
-		roTypes = append(roTypes, roType)
+		if roType != nil {
+			roTypes = append(roTypes, roType)
+		}
 	}
 
 	if p.curTokenIs(token.RBRACE) {
@@ -229,36 +231,44 @@ func (p *Parser) parseRootOperationTypeDefinition() *ast.RootOperationTypeDefini
 
 	//fmt.Println("parseRootOperationTypeDefinition", p.curToken, p.peekToken)
 	cToken := p.curToken
-	if !checkOperationType(cToken.Literal) {
-		return nil
-	}
-	roType := &ast.RootOperationTypeDefinition{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION}
-	//var operationType string
-	if cToken.Literal == ast.QUERY {
-		roType.OperationType = ast.QUERY
-
-	} else if cToken.Literal == ast.MUTATION {
-		roType.OperationType = ast.MUTATION
-
-	} else if cToken.Literal == ast.SUBSCRIPTION {
-		roType.OperationType = ast.SUBSCRIPTION
-	}
-
-	if !checkOperationType(roType.OperationType) {
+	ivot := isValidOperationType(cToken.Literal)
+	if !ivot {
 		p.addError("rootOperationTypeDefinition operationType error!")
-		return nil
+		//no return because we want to proceed
 	}
-	p.nextToken()
+
+	roType := &ast.RootOperationTypeDefinition{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION}
+	roType.OperationType = tokenToOperationType(cToken)
+
+	p.nextToken() //query | mutation | subscription
 	roType.Token = cToken
 
 	if !p.expectToken(token.COLON) {
+		p.addError("rootOperationTypeDefinition colon missing error!")
 		return nil
 	}
 	roType.NamedType = p.parseNamed()
+	if !ivot {
+		return nil
+	}
 	return roType
 }
 
-func checkOperationType(operationType string) bool {
+func tokenToOperationType(cToken token.Token) string {
+
+	if cToken.Literal == ast.QUERY {
+		return ast.QUERY
+
+	} else if cToken.Literal == ast.MUTATION {
+		return ast.MUTATION
+
+	} else if cToken.Literal == ast.SUBSCRIPTION {
+		return ast.SUBSCRIPTION
+	}
+	return "unknown"
+}
+
+func isValidOperationType(operationType string) bool {
 	if operationType == ast.QUERY || operationType == ast.MUTATION || operationType == ast.SUBSCRIPTION {
 		return true
 	}
