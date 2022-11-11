@@ -256,16 +256,16 @@ func (p *Parser) parseRootOperationTypeDefinition() *ast.RootOperationTypeDefini
 
 func tokenToOperationType(cToken token.Token) string {
 
-	if cToken.Literal == ast.QUERY {
+	switch cToken.Literal {
+	case ast.QUERY:
 		return ast.QUERY
-
-	} else if cToken.Literal == ast.MUTATION {
+	case ast.MUTATION:
 		return ast.MUTATION
-
-	} else if cToken.Literal == ast.SUBSCRIPTION {
+	case ast.SUBSCRIPTION:
 		return ast.SUBSCRIPTION
+	default:
+		return "unknown"
 	}
-	return "unknown"
 }
 
 func isValidOperationType(operationType string) bool {
