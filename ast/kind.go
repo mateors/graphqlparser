@@ -34,7 +34,7 @@ const (
 	DIRECTIVE_DEFINITION           = "DirectiveDefinition"     //
 	VARIABLE_DEFINITION            = "VariableDefinition"      //
 	FRAGMENT_DEFINITION            = "FragmentDefinition"      //
-	SCHEMA_DEFINITION              = "SchemaDefinition"        //?
+	SCHEMA_DEFINITION              = "SchemaDefinition"        //
 	ROOT_OPERATION_TYPE_DEFINITION = "OperationTypeDefinition" //
 
 	UNKNOWN      = "Unknown"

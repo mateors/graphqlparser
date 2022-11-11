@@ -234,7 +234,7 @@ func (p *Parser) parseRootOperationTypeDefinition() *ast.RootOperationTypeDefini
 	ivot := isValidOperationType(cToken.Literal)
 	if !ivot {
 		p.addError("rootOperationTypeDefinition operationType error!")
-		//no return because we want to proceed
+		//no return because we want to proceed but return nil at the end
 	}
 
 	roType := &ast.RootOperationTypeDefinition{Kind: ast.ROOT_OPERATION_TYPE_DEFINITION}
@@ -249,7 +249,7 @@ func (p *Parser) parseRootOperationTypeDefinition() *ast.RootOperationTypeDefini
 	}
 	roType.NamedType = p.parseNamed()
 	if !ivot {
-		return nil
+		return nil //follow line 237 reason
 	}
 	return roType
 }
