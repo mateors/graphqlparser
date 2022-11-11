@@ -650,6 +650,18 @@ enum __DirectiveLocation {
 }
 ```
 
+
+### TypeSystemExtensionDocument
+* TypeSystemDefinitionOrExtension [list] -> Partially done
+
+### TypeSystemDefinitionOrExtension
+* TypeSystemDefinition -> DONE
+* TypeSystemExtension
+
+### TypeSystemExtension
+* SchemaExtension
+* TypeExtension
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries

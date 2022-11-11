@@ -486,14 +486,12 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `"""
-	A simple GraphQL schema which is well described.
-	"""
-	schema {
-	  query: Query
-	  mutation: Mutation
-	  subscription: Subscription
-	}`
+	input := `type __InputValue {
+		name: String!
+		description: String
+		type: __Type!
+		defaultValue: String
+	  }`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

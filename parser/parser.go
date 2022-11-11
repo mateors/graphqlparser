@@ -768,7 +768,7 @@ func (p *Parser) parseInterfaceDefinition() ast.Node {
 
 func (p *Parser) parseObjectDefinition() ast.Node {
 
-	//fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
+	fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
@@ -816,6 +816,9 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 			if fd.Type == nil {
 				fd = nil
 			}
+		}
+		if fd == nil {
+			break
 		}
 	}
 	return fields
