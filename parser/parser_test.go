@@ -344,3 +344,20 @@ func TestDirectiveDefinition(t *testing.T) { //DirectiveDefinition
 		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
 	}
 }
+
+func TestSchemaDefinition(t *testing.T) { //DirectiveDefinition
+
+	input := `"""
+A simple GraphQL schema which is well described.
+"""
+schema {
+  query: Query
+}`
+	lex := lexer.New(input)
+	p := New(lex)
+	doc := p.ParseDocument()
+	def := doc.Definitions[0]
+	if def.String() != input {
+		t.Errorf("wrong output,expected=%q, got=%q", input, def.String())
+	}
+}

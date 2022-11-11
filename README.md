@@ -530,7 +530,7 @@ parseDocument::
 					parseInputValueDefinition
 ```
 ### TypeSystemDefinition
-* **SchemaDefinition**
+* SchemaDefinition -> DONE
 * TypeDefinition -> DONE
 * DirectiveDefinition -> DONE
 
