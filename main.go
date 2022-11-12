@@ -487,25 +487,41 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	type Query {
-		human(id: ID!): Human
+	type Question{
+		id: String!
+		question_text: String!
+		pub_date: String!
+		choices: [Choice]
+	  }
+
+	  type Choice{
+		id: String!
+		question: Question!
+		question_id: String!
+		choice_text: String!
 	  }
 	  
-	  type Human {
-		name: String
-		appearsIn: [Episode]
-		starships: [Starship]
+	  type Query {
+		questions: [Question]!
+		choices: [Choice]!
 	  }
 	  
-	  enum Episode {
-		NEWHOPE
-		EMPIRE
-		JEDI
+	  input QuestionInput {
+		question_text: String!
+		pub_date: String!
 	  }
 	  
-	  type Starship {
-		name: String
-	  }`
+	  input ChoiceInput {
+		question_id: String!
+		choice_text: String!
+	  }
+	  
+	  type Mutation {
+		createQuestion(input: QuestionInput!): Question!
+		createChoice(input: ChoiceInput): Choice!
+	  }
+
+	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

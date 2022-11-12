@@ -806,17 +806,15 @@ func (p *Parser) parseObjectDefinition() ast.Node {
 
 func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working not finished yet
 
-	//check if return nil
 	if !p.expectToken(token.LBRACE) { //expecting {
 		return nil
 	}
-
 	fields := []*ast.FieldDefinition{}
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 
 		//starting with token.IDENT
-		fd := p.parseFieldDefinition()
+		fd := p.parseFieldDefinition() //?
 
 		if fd != nil {
 			fields = append(fields, fd)
@@ -827,6 +825,7 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		// if fd == nil {
 		// 	break
 		// }
+		//fmt.Println(">>", fd, p.curToken, p.peekToken)
 	}
 	return fields
 }
@@ -865,13 +864,7 @@ func (p *Parser) parseDirective() *ast.Directive {
 
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
-	//fmt.Println("directive.Name", directive.Name, p.curToken, p.peekToken)
 	directive.Arguments = p.parseArguments()
-	//fmt.Println("afterArgs", directive.Arguments, len(directive.Arguments), p.curToken, p.peekToken)
-
-	// if !p.curTokenIs(token.LBRACE) {
-	// 	p.nextToken() //--> )
-	// }
 	return directive
 }
 
@@ -973,9 +966,12 @@ func (p *Parser) parseNamed() *ast.NamedType {
 	return named
 }
 
-func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
+func (p *Parser) parseFieldDefinition() *ast.FieldDefinition {
 
-	//fmt.Println("fieldDefinition", p.curToken) //starting with token.IDENT
+	//fmt.Println("fieldDefinitionSTART", p.curToken, p.peekToken) //starting with token.IDENT
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() && !p.isDescription() {
+		return nil
+	}
 	fd := &ast.FieldDefinition{}
 	fd.Kind = ast.FIELD_DEFINITION
 	fd.Token = p.curToken
@@ -1007,10 +1003,10 @@ func (p *Parser) parseFieldDefinition() *ast.FieldDefinition { //??
 
 func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 
-	args := []*ast.InputValueDefinition{}
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
+	args := []*ast.InputValueDefinition{}
 	p.nextToken() // (
 	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
 
@@ -1027,14 +1023,17 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 		}
 	}
 	//last current token is token.RPAREN so next
-	p.nextToken()
+	if p.curTokenIs(token.RPAREN) {
+		p.nextToken() // )
+	}
 	return args
 }
 
 func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 
 	//fmt.Println("parseInputValueDefinition", p.curToken, p.peekToken)
-	if !p.curTokenIs(token.IDENT) && !p.isDescription() {
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() && !p.isDescription() {
+		//fmt.Println("**cnil", p.curToken, p.peekToken)
 		return nil
 	}
 
@@ -1042,13 +1041,12 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	inv.Token = p.curToken
 	inv.Description = p.parseDescription()
 
-	//current token.IDENT
+	//current token.IDENT or keyword
 	name := p.parseName()
 	if name == nil {
 		return nil
 	}
 	inv.Name = name
-	//fmt.Println("*name", name, p.curToken, p.peekToken)
 	if !p.expectToken(token.COLON) {
 		p.tokenError(token.COLON)
 		return nil
