@@ -487,12 +487,25 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
-		createReview(episode: $ep, review: $review) {
-		  stars
-		  commentary
-		}
-	}`
+	type Query {
+		human(id: ID!): Human
+	  }
+	  
+	  type Human {
+		name: String
+		appearsIn: [Episode]
+		starships: [Starship]
+	  }
+	  
+	  enum Episode {
+		NEWHOPE
+		EMPIRE
+		JEDI
+	  }
+	  
+	  type Starship {
+		name: String
+	  }`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

@@ -662,6 +662,18 @@ enum __DirectiveLocation {
 * SchemaExtension
 * TypeExtension
 
+## Execution
+You can think of each field in a GraphQL query as a function or method of the previous type which returns the next type. In fact, this is exactly how GraphQL works. `Each field on each type is backed by a function called the resolver` which is provided by the GraphQL server developer. When a field is executed, the corresponding resolver is called to produce the next value.
+
+If a field produces a scalar value like a string or number, then the execution completes. However if a field produces an object value then the query will contain another selection of fields which apply to that object. This continues until scalar values are reached. GraphQL queries always end at scalar values.
+
+## Root fields & resolvers
+A resolver function receives four arguments:
+1. obj
+2. args
+3. context
+4. info
+
 ## Resource
 * https://graphql.org/learn/schema
 * https://graphql.org/learn/queries
@@ -671,3 +683,4 @@ enum __DirectiveLocation {
 * https://www.howtographql.com/basics/3-big-picture
 * https://www.apollographql.com/docs/apollo-server/schema/directives
 * http://snowtooth.herokuapp.com
+* [Build a GraphQL Server](https://www.youtube.com/playlist?list=PLillGF-RfqbYZty73_PHBqKRDnv7ikh68)
