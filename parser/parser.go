@@ -534,6 +534,9 @@ func (p *Parser) parseVariablesDefinition() []*ast.VariableDefinition {
 		if vard != nil {
 			vars = append(vars, vard)
 		}
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+		}
 	}
 	if p.curTokenIs(token.RPAREN) {
 		p.nextToken()

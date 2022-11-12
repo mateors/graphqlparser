@@ -487,24 +487,12 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	{
-		search(text: "an") {
-		  __typename
-		  ... on Human {
-			name
-			height
-		  }
-		  ... on Droid {
-			name
-			primaryFunction
-		  }
-		  ... on Starship {
-			name
-			length
-		  }
+	mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
+		createReview(episode: $ep, review: $review) {
+		  stars
+		  commentary
 		}
-	  }
-	  `
+	}`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
