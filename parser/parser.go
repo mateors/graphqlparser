@@ -277,7 +277,7 @@ func isValidOperationType(operationType string) bool {
 
 func (p *Parser) parseDirectiveDefinition() ast.Node {
 
-	fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
+	//fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
 	dird := &ast.DirectiveDefinition{Kind: ast.DIRECTIVE_DEFINITION}
 	dird.Token = p.curToken
 	dird.Description = p.parseDescription()
@@ -291,7 +291,7 @@ func (p *Parser) parseDirectiveDefinition() ast.Node {
 
 	dird.Name = p.parseName()
 	dird.Arguments = p.parseArgumentDefinition() //?
-	fmt.Println(">>", dird.Name, dird.Arguments, p.curToken, p.peekToken)
+	//fmt.Println(">>", dird.Name, dird.Arguments, p.curToken, p.peekToken)
 
 	if p.curTokenIs(token.REPEATABLE) {
 		p.nextToken()
@@ -769,7 +769,7 @@ func (p *Parser) parseInterfaceDefinition() ast.Node {
 
 func (p *Parser) parseObjectDefinition() ast.Node {
 
-	fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
+	//fmt.Println("parseObjectDefinition->START", p.curToken) //starting from first token
 	od := &ast.ObjectDefinition{Kind: ast.OBJECT_DEFINITION}
 	od.Token = p.curToken
 	od.Description = p.parseDescription()
@@ -827,13 +827,9 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
-	fmt.Println("")
-	fmt.Println("parseDirectives START->", p.curToken, p.peekToken)
 	if !p.curTokenIs(token.AT) {
-		fmt.Println("*nil", p.curToken, p.peekToken)
 		return nil
 	}
-	fmt.Println("--")
 	dirs := make([]*ast.Directive, 0)
 	for !p.curTokenIs(token.LBRACE) && !p.curTokenIs(token.EOF) {
 
@@ -841,13 +837,10 @@ func (p *Parser) parseDirectives() []*ast.Directive {
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
-		fmt.Println("directive->", directive, p.curToken, p.peekToken)
 		if directive == nil {
 			break
 		}
 	}
-	fmt.Println("parseDirectives END->", p.curToken, p.peekToken)
-	fmt.Println("")
 	return dirs
 }
 
@@ -866,9 +859,9 @@ func (p *Parser) parseDirective() *ast.Directive {
 
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
-	fmt.Println("directive.Name", directive.Name, p.curToken, p.peekToken)
+	//fmt.Println("directive.Name", directive.Name, p.curToken, p.peekToken)
 	directive.Arguments = p.parseArguments()
-	fmt.Println("afterArgs", directive.Arguments, len(directive.Arguments), p.curToken, p.peekToken)
+	//fmt.Println("afterArgs", directive.Arguments, len(directive.Arguments), p.curToken, p.peekToken)
 
 	// if !p.curTokenIs(token.LBRACE) {
 	// 	p.nextToken() //--> )
@@ -1300,7 +1293,6 @@ func (p *Parser) parseName() *ast.Name {
 		p.nextToken()
 		return name
 	}
-	p.addError("parseName identifier missing")
 	return nil
 	//fmt.Println(">", p.curToken, p.peekToken)
 	// if !p.curTokenIs(token.IDENT) {
