@@ -277,7 +277,7 @@ func isValidOperationType(operationType string) bool {
 
 func (p *Parser) parseDirectiveDefinition() ast.Node {
 
-	//fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
+	fmt.Println("parseDirectiveDefinition", p.curToken, p.peekToken)
 	dird := &ast.DirectiveDefinition{Kind: ast.DIRECTIVE_DEFINITION}
 	dird.Token = p.curToken
 	dird.Description = p.parseDescription()
@@ -290,7 +290,8 @@ func (p *Parser) parseDirectiveDefinition() ast.Node {
 	}
 
 	dird.Name = p.parseName()
-	dird.Arguments = p.parseArgumentDefinition()
+	dird.Arguments = p.parseArgumentDefinition() //?
+	fmt.Println(">>", dird.Name, dird.Arguments, p.curToken, p.peekToken)
 
 	if p.curTokenIs(token.REPEATABLE) {
 		p.nextToken()
@@ -817,29 +818,36 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 				fd = nil
 			}
 		}
-		if fd == nil {
-			break
-		}
+		// if fd == nil {
+		// 	break
+		// }
 	}
 	return fields
 }
 
 func (p *Parser) parseDirectives() []*ast.Directive {
 
+	fmt.Println("")
+	fmt.Println("parseDirectives START->", p.curToken, p.peekToken)
 	if !p.curTokenIs(token.AT) {
+		fmt.Println("*nil", p.curToken, p.peekToken)
 		return nil
 	}
+	fmt.Println("--")
 	dirs := make([]*ast.Directive, 0)
-	for !p.curTokenIs(token.LBRACE) {
+	for !p.curTokenIs(token.LBRACE) && !p.curTokenIs(token.EOF) {
 
 		directive := p.parseDirective()
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
+		fmt.Println("directive->", directive, p.curToken, p.peekToken)
 		if directive == nil {
 			break
 		}
 	}
+	fmt.Println("parseDirectives END->", p.curToken, p.peekToken)
+	fmt.Println("")
 	return dirs
 }
 
@@ -858,11 +866,13 @@ func (p *Parser) parseDirective() *ast.Directive {
 
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
+	fmt.Println("directive.Name", directive.Name, p.curToken, p.peekToken)
 	directive.Arguments = p.parseArguments()
+	fmt.Println("afterArgs", directive.Arguments, len(directive.Arguments), p.curToken, p.peekToken)
 
-	if !p.curTokenIs(token.LBRACE) {
-		p.nextToken() //--> )
-	}
+	// if !p.curTokenIs(token.LBRACE) {
+	// 	p.nextToken() //--> )
+	// }
 	return directive
 }
 
@@ -1002,19 +1012,19 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 	if !p.curTokenIs(token.LPAREN) {
 		return nil
 	}
-
-	p.nextToken()
-	for !p.curTokenIs(token.RPAREN) {
+	p.nextToken() // (
+	for !p.curTokenIs(token.RPAREN) && !p.curTokenIs(token.EOF) {
 
 		//starting with token.IDENT
 		ivd := p.parseInputValueDefinition()
-
 		if ivd != nil {
 			args = append(args, ivd)
 		}
-
 		if p.curTokenIs(token.COMMA) {
 			p.nextToken()
+		}
+		if ivd == nil {
+			break
 		}
 	}
 	//last current token is token.RPAREN so next
@@ -1023,6 +1033,11 @@ func (p *Parser) parseArgumentDefinition() []*ast.InputValueDefinition {
 }
 
 func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
+
+	//fmt.Println("parseInputValueDefinition", p.curToken, p.peekToken)
+	if !p.curTokenIs(token.IDENT) && !p.isDescription() {
+		return nil
+	}
 
 	inv := &ast.InputValueDefinition{Kind: ast.INPUT_VALUE_DEFINITION}
 	inv.Token = p.curToken
@@ -1034,7 +1049,7 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 		return nil
 	}
 	inv.Name = name
-
+	//fmt.Println("*name", name, p.curToken, p.peekToken)
 	if !p.expectToken(token.COLON) {
 		p.tokenError(token.COLON)
 		return nil
@@ -1050,6 +1065,7 @@ func (p *Parser) parseInputValueDefinition() *ast.InputValueDefinition {
 	inv.DefaultValue = p.parseDefaultValue()
 	inv.Directives = p.parseDirectives()
 	//last token is token.RPAREN = )
+	//fmt.Println("*adir", p.curToken, p.peekToken)
 	return inv
 }
 
@@ -1286,6 +1302,14 @@ func (p *Parser) parseName() *ast.Name {
 	}
 	p.addError("parseName identifier missing")
 	return nil
+	//fmt.Println(">", p.curToken, p.peekToken)
+	// if !p.curTokenIs(token.IDENT) {
+	// 	p.addError("parseName identifier missing")
+	// 	return nil
+	// }
+	// name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
+	// p.nextToken()
+	// return name
 }
 
 /**

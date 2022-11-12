@@ -486,12 +486,12 @@ func main() {
 	// ($name: String = "Mostain")
 	// (name: String = "Mostain")
 
-	input := `type __InputValue {
-		name: String!
-		description: String
-		type: __Type!
-		defaultValue: String
-	  }`
+	input := `
+	directive @withDeprecatedArgs(
+		deprecatedArg: String @deprecated(reason: "Use newArg")
+		anewArg: String
+	  ) on FIELD
+	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
