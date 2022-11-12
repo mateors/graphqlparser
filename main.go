@@ -487,40 +487,10 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	type Question{
-		id: String!
-		question_text: String!
-		pub_date: String!
-		choices: [Choice]
+	type Query {
+		character(id:ID!): Character
+		characters(cliqueType:CliqueType!): [Character!]
 	  }
-
-	  type Choice{
-		id: String!
-		question: Question!
-		question_id: String!
-		choice_text: String!
-	  }
-	  
-	  type Query {
-		questions: [Question]!
-		choices: [Choice]!
-	  }
-	  
-	  input QuestionInput {
-		question_text: String!
-		pub_date: String!
-	  }
-	  
-	  input ChoiceInput {
-		question_id: String!
-		choice_text: String!
-	  }
-	  
-	  type Mutation {
-		createQuestion(input: QuestionInput!): Question!
-		createChoice(input: ChoiceInput): Choice!
-	  }
-
 	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)

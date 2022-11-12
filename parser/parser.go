@@ -364,9 +364,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 
 	name := p.parseName()
 	if name == nil {
-		if opDef.OperationType != "" {
-			p.addError("operationDefinition name error!")
-		}
+		//if opDef.OperationType != "" {
+		//p.addError("operationDefinition name error!")
+		//}
+		//log.Println("optional*-> operation name is missing")
 	}
 	opDef.Name = name
 	opDef.VariablesDefinition = p.parseVariablesDefinition()
@@ -503,7 +504,8 @@ func (p *Parser) parseField() *ast.Field {
 
 func (p *Parser) parseAlias() *ast.Name {
 
-	if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.COLON) {
+	//fmt.Println("====?ALIAS", p.curToken, p.peekToken)
+	if (p.curTokenIs(token.IDENT) || p.curTokenIsKeyword()) && p.peekTokenIs(token.COLON) {
 		name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
 		p.nextToken() //IDENT
 		p.nextToken() //:
@@ -904,7 +906,7 @@ func (p *Parser) parseArguments() []*ast.Argument { //?
 
 func (p *Parser) parseArgument() *ast.Argument {
 
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
 		return nil
 	}
 	arg := &ast.Argument{Kind: ast.ARGUMENT, Token: p.curToken}
