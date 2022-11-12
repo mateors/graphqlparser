@@ -487,10 +487,23 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	directive @withDeprecatedArgs(
-		deprecatedArg: String @deprecated(reason: "Use newArg")
-		anewArg: String
-	  ) on FIELD
+	{
+		search(text: "an") {
+		  __typename
+		  ... on Human {
+			name
+			height
+		  }
+		  ... on Droid {
+			name
+			primaryFunction
+		  }
+		  ... on Starship {
+			name
+			length
+		  }
+		}
+	  }
 	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)

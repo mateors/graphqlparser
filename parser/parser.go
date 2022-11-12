@@ -361,9 +361,12 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		opDef.OperationType = ast.SUBSCRIPTION
 		p.nextToken()
 	}
+
 	name := p.parseName()
 	if name == nil {
-		p.addError("operationDefinition name error!")
+		if opDef.OperationType != "" {
+			p.addError("operationDefinition name error!")
+		}
 	}
 	opDef.Name = name
 	opDef.VariablesDefinition = p.parseVariablesDefinition()
