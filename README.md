@@ -683,5 +683,7 @@ A resolver function receives four arguments:
 * https://www.howtographql.com/basics/3-big-picture
 * https://www.apollographql.com/docs/apollo-server/schema/directives
 * http://snowtooth.herokuapp.com
+* https://studio.apollographql.com/sandbox/explorer
 * [Build a GraphQL Server](https://www.youtube.com/playlist?list=PLillGF-RfqbYZty73_PHBqKRDnv7ikh68)
 * [what-is-graphql-and-how-is-it-implemented-in-golang](https://medium.com/tunaiku-tech/what-is-graphql-and-how-is-it-implemented-in-golang-b2e7649529f1)
+* [Apollo Tutorials](https://www.apollographql.com/tutorials/lift-off-part1/schema-definition-language-sdl)
