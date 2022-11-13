@@ -180,7 +180,7 @@ func (p *Parser) parseDocument() ast.Node { //ast.Definition
 	// 	return parseFunc()
 
 	default:
-		fmt.Println("unexpected", p.curToken.Type)
+		fmt.Println("unexpected", p.curToken.Type, p.curToken.Literal)
 		return nil //&ast.OperationDefinition{}
 	}
 
@@ -347,6 +347,7 @@ func (p *Parser) parseFragmentDefinition() ast.Node {
 
 func (p *Parser) parseOperationDefinition() ast.Node {
 
+	fmt.Println("parseOperationDefinition START", p.curToken, p.peekToken)
 	opDef := &ast.OperationDefinition{Kind: ast.OPERATION_DEFINITION}
 	opDef.Token = p.curToken
 	if p.curTokenIs(token.QUERY) {
@@ -373,6 +374,7 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	opDef.VariablesDefinition = p.parseVariablesDefinition()
 	opDef.Directives = p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
+	fmt.Println("END", p.curToken, p.peekToken)
 	return opDef
 }
 
