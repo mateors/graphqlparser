@@ -487,19 +487,10 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	query entity($id: ID!, $userId: ID!) {
-		entity(id: $id, userId: $userId) {
-		  __typename
-		  ... on Entity {
-			id
-			name
-		  }
-		  ... on BaseError {
-			message
-		  }
-		}
-	  }
-	  `
+	type Post @underDevelopment(since: "2012-07-12") @schema(schema: "internal") @oauth(scopes: ["read_posts"]) {
+		title: String!
+		comments: [Comment]
+	}`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()

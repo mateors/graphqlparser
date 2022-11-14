@@ -486,7 +486,7 @@ func (p *Parser) parseFragmentSpread() *ast.FragmentSpread {
 
 func (p *Parser) parseField() *ast.Field {
 
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IDENT) { // && !p.curTokenIsKeyword() shows error ??
 		return nil
 	}
 	field := &ast.Field{Kind: ast.FIELD}
@@ -855,29 +855,33 @@ func (p *Parser) parseDirectives() []*ast.Directive {
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
+		fmt.Println(">>", directive, p.curToken, p.peekToken)
 		if directive == nil {
 			break
 		}
 	}
+	//os.Exit(2)
 	return dirs
 }
 
 func (p *Parser) parseDirective() *ast.Directive {
 
+	fmt.Println("parseDirectiveSTART", p.curToken, p.peekToken)
 	if !p.expectToken(token.AT) {
 		return nil
 	}
 	// if p.curTokenIs(token.LBRACE) {
 	// 	return nil
 	// }
-	if !p.curTokenIs(token.IDENT) {
-		p.tokenError(token.AT)
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
+		p.tokenError(token.IDENT)
 		return nil
 	}
 
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
 	directive.Arguments = p.parseArguments()
+	fmt.Println("parseDirectiveEND", p.curToken, p.peekToken)
 	return directive
 }
 
@@ -966,7 +970,7 @@ func (p *Parser) parseImplementInterfaces() []*ast.NamedType {
 func (p *Parser) parseNamed() *ast.NamedType {
 
 	//expecting current token is token.IDENT
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
 		return nil
 	}
 	named := &ast.NamedType{Kind: ast.NAMED_TYPE}
@@ -1152,7 +1156,7 @@ func (p *Parser) parseObjectValue() *ast.ObjectValue {
 
 func (p *Parser) parseObjectFields() []*ast.ObjectField {
 
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
 		return nil
 	}
 
@@ -1176,7 +1180,7 @@ func (p *Parser) parseObjectFields() []*ast.ObjectField {
 func (p *Parser) parseObjectField() *ast.ObjectField {
 
 	cToken := p.curToken
-	if !p.curTokenIs(token.IDENT) {
+	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
 		return nil
 	}
 	objfld := &ast.ObjectField{Kind: ast.OBJECT_FIELD}
