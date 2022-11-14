@@ -487,37 +487,26 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	query jazzCatStatus {
-		Lift(id: "jazz-cat") {
-			name
-			night
-			elevationGain
-			trailAccess {
-				name
-				difficulty
-			}
-		}
-	} 
-	mutation closeLift($lift: ID!) {
-		setLiftStatus(id: $lift, status: CLOSED ) {
-		...liftStatus
-		}
-	} 
-	fragment liftStatus on Lift {
-		name
-		status
+	"""
+	Test description
+	"""
+	type Person implements Human @skip(name:true, age:false) {
+		id: ID!
+		age: []!
+		length("Yes" unit: LengthUnit = METER, "No" corner: Int = 50): Float
+		oldField: String @deprecated(reason: "Use newField.")
 	}
 	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
 
-	def := doc.Definitions[0]
-	fmt.Println(def.String())
+	//def := doc.Definitions[0]
+	//fmt.Println(def.String())
 	fmt.Println("---->", len(doc.Definitions))
 	for i, def := range doc.Definitions {
 		//odef, isOk := def.(*ast.OperationDefinition)
-		fmt.Println("*", i, def.GetKind())
+		fmt.Println("*", i, def.GetKind(), doc.Definitions[i])
 	}
 
 	// for {

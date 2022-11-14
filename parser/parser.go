@@ -56,12 +56,14 @@ func (p *Parser) ParseDocument() *ast.Document {
 	document.Definitions = []ast.Node{}
 
 	for p.curToken.Type != token.EOF {
+
 		doc := p.parseDocument()
 		if doc != nil {
 			document.Definitions = append(document.Definitions, doc)
 		}
 		fmt.Println("...", p.errors)
-		p.nextToken()
+		fmt.Println("!!!", p.curToken, p.peekToken)
+		//p.nextToken()
 	}
 	return document
 }
@@ -330,7 +332,7 @@ func (p *Parser) parseLocations() []*ast.Name {
 
 func (p *Parser) parseFragmentDefinition() ast.Node {
 
-	//fmt.Println("parseFragmentDefinition", p.curToken, p.peekToken)
+	fmt.Println("parseFragmentDefinitionSTART", p.curToken, p.peekToken)
 	if !p.expectToken(token.FRAGMENT) {
 		return nil
 	}
@@ -342,6 +344,7 @@ func (p *Parser) parseFragmentDefinition() ast.Node {
 	frg.TypeCondition = p.parseTypeCondition()
 	frg.Directives = p.parseDirectives()
 	frg.SelectionSet = p.parseSelectionSet()
+	fmt.Println("END-->", p.curToken, p.peekToken)
 	return frg
 }
 
@@ -830,6 +833,9 @@ func (p *Parser) parseFieldsDefinition() []*ast.FieldDefinition { //???? working
 		// 	break
 		// }
 		//fmt.Println(">>", fd, p.curToken, p.peekToken)
+	}
+	if p.curTokenIs(token.RBRACE) {
+		p.nextToken()
 	}
 	return fields
 }
