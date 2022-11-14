@@ -73,7 +73,7 @@ func (p *Parser) analyzeWhichDefinition() string {
 	curToken := p.curToken.Type
 	peekToken := p.peekToken.Type
 
-	if (curToken == token.BLOCK_STRING || curToken == token.STRING) && peekToken == token.TYPE {
+	if p.isDescription() && peekToken == token.TYPE {
 		return ast.OBJECT_DEFINITION
 
 	} else if curToken == token.TYPE {
@@ -1288,7 +1288,7 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 }
 
 func (p *Parser) isDescription() bool {
-	if p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.STRING) {
+	if p.curTokenIs(token.BLOCK_STRING) || p.curTokenIs(token.STRING) || p.curTokenIs(token.HASH) {
 		return true
 	}
 	return false

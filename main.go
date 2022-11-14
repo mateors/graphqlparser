@@ -487,14 +487,10 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	"""
-	description test
-	"""
-	enum Direction  @skip(name: true, age: false) {
-	  NORTH
-	  EAST
-	  SOUTH
-	  WEST
+	#A library has a branch and books
+	type Library {
+	  branch: String!
+	  books: [Book!]
 	}
 	  `
 	lex := lexer.New(input)
