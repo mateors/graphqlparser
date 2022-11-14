@@ -487,11 +487,18 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	#A library has a branch and books
-	type Library {
-	  branch: String!
-	  books: [Book!]
-	}
+	query entity($id: ID!, $userId: ID!) {
+		entity(id: $id, userId: $userId) {
+		  __typename
+		  ... on Entity {
+			id
+			name
+		  }
+		  ... on BaseError {
+			message
+		  }
+		}
+	  }
 	  `
 	lex := lexer.New(input)
 	p := parser.New(lex)

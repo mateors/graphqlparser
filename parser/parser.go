@@ -62,7 +62,7 @@ func (p *Parser) ParseDocument() *ast.Document {
 			document.Definitions = append(document.Definitions, doc)
 		}
 		fmt.Println("...", p.errors)
-		fmt.Println("!!!", p.curToken, p.peekToken)
+		//fmt.Println("!!!", p.curToken, p.peekToken)
 		//p.nextToken()
 	}
 	return document
@@ -350,7 +350,7 @@ func (p *Parser) parseFragmentDefinition() ast.Node {
 
 func (p *Parser) parseOperationDefinition() ast.Node {
 
-	fmt.Println("parseOperationDefinition START", p.curToken, p.peekToken)
+	//fmt.Println("parseOperationDefinition START", p.curToken, p.peekToken)
 	opDef := &ast.OperationDefinition{Kind: ast.OPERATION_DEFINITION}
 	opDef.Token = p.curToken
 	if p.curTokenIs(token.QUERY) {
@@ -377,7 +377,7 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 	opDef.VariablesDefinition = p.parseVariablesDefinition()
 	opDef.Directives = p.parseDirectives()
 	opDef.SelectionSet = p.parseSelectionSet()
-	fmt.Println("END", p.curToken, p.peekToken)
+	//fmt.Println("END", p.curToken, p.peekToken)
 	return opDef
 }
 
