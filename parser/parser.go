@@ -1315,14 +1315,6 @@ func (p *Parser) parseName() *ast.Name {
 		return name
 	}
 	return nil
-	//fmt.Println(">", p.curToken, p.peekToken)
-	// if !p.curTokenIs(token.IDENT) {
-	// 	p.addError("parseName identifier missing")
-	// 	return nil
-	// }
-	// name := &ast.Name{Kind: ast.NAME, Token: p.curToken, Value: p.curToken.Literal}
-	// p.nextToken()
-	// return name
 }
 
 /**
