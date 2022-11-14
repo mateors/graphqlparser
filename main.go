@@ -487,7 +487,10 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
-	type Post @underDevelopment(since: "2012-07-12") @schema(schema: "internal") @oauth(scopes: ["read_posts"]) {
+	type Post 
+	@underDevelopment(since: "2012-07-12") 
+	@schema(schema: "internal") 
+	@oauth(scopes: ["read_posts"]) {
 		title: String!
 		comments: [Comment]
 	}`

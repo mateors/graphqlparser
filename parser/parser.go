@@ -855,24 +855,18 @@ func (p *Parser) parseDirectives() []*ast.Directive {
 		if directive != nil {
 			dirs = append(dirs, directive)
 		}
-		fmt.Println(">>", directive, p.curToken, p.peekToken)
 		if directive == nil {
 			break
 		}
 	}
-	//os.Exit(2)
 	return dirs
 }
 
 func (p *Parser) parseDirective() *ast.Directive {
 
-	fmt.Println("parseDirectiveSTART", p.curToken, p.peekToken)
 	if !p.expectToken(token.AT) {
 		return nil
 	}
-	// if p.curTokenIs(token.LBRACE) {
-	// 	return nil
-	// }
 	if !p.curTokenIs(token.IDENT) && !p.curTokenIsKeyword() {
 		p.tokenError(token.IDENT)
 		return nil
@@ -881,7 +875,6 @@ func (p *Parser) parseDirective() *ast.Directive {
 	directive := &ast.Directive{Kind: ast.DIRECTIVE, Token: p.curToken}
 	directive.Name = p.parseName()
 	directive.Arguments = p.parseArguments()
-	fmt.Println("parseDirectiveEND", p.curToken, p.peekToken)
 	return directive
 }
 
