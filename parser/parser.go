@@ -690,6 +690,9 @@ func (p *Parser) parseEnumValuesDefinition() []*ast.EnumValueDefinition {
 		}
 		evals = append(evals, evd)
 	}
+	if p.curTokenIs(token.RBRACE) {
+		p.nextToken()
+	}
 	return evals
 }
 
