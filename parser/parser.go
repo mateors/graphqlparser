@@ -421,6 +421,10 @@ func (p *Parser) parseSelection() []ast.Selection { //?
 			fmt.Println("ALL ARE NIL SO BREAK NOW")
 			break
 		}
+
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+		}
 	}
 
 	if p.curTokenIs(token.RBRACE) {
