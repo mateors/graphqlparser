@@ -366,6 +366,10 @@ func (p *Parser) parseOperationDefinition() ast.Node {
 		p.nextToken()
 	}
 
+	if opDef.OperationType == "" {
+		opDef.OperationType = ast.QUERY
+	}
+
 	name := p.parseName()
 	if name == nil {
 		//if opDef.OperationType != "" {

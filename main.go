@@ -559,7 +559,28 @@ func main() {
 	fmt.Println("---->", len(doc.Definitions))
 	for i, def := range doc.Definitions {
 		//odef, isOk := def.(*ast.OperationDefinition)
-		fmt.Println("*", i, def.GetKind(), doc.Definitions[i])
+
+		switch obj := def.(type) {
+
+		case *ast.ObjectDefinition:
+			fmt.Println(i, obj.GetKind(), obj.GetOperation(), obj.String())
+
+		case *ast.OperationDefinition:
+			//opObj := def.(*ast.OperationDefinition)
+			//fmt.Println(i, obj.GetKind(), obj.OperationType, obj.String())
+			sel := obj.GetSelectionSet()
+			//fmt.Println(i, sel.Selections)
+			for _, ssel := range sel.Selections {
+				//fmt.Println(ssel.GetKind())
+				switch sitem := ssel.(type) {
+
+				case *ast.Field:
+					fmt.Println(">>", sitem.Name, obj.GetOperation(), sitem.Arguments, sitem.SelectionSet)
+				}
+			}
+
+		}
+		//fmt.Println("*", i, def.GetKind(), doc.Definitions[i])
 	}
 
 	// for {
