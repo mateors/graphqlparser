@@ -487,11 +487,69 @@ func main() {
 	// (name: String = "Mostain")
 
 	input := `
+	type Query{
+		product(id: Int): Product
+		list: [Product]
+	}
+	   
+	type Mutation{
+		 create(name: String!, info: String, price: Float!): Product
+		 update(id: Int, name: String, info: String, price: Float): Product
+		 delete(id: Int): Product
+	}
+	   
+	type Product{
+		id: Int
+		name: String
+		info: String
+		price: Float
+	}
+	   
 	{
 		product(id:1){
-		  name,info,price
+			name
+			info
+			price
 		}
-	}`
+	}
+
+	{
+		list {
+			id
+			name
+			info
+			price
+		}
+	}
+
+	mutation {
+		create(name:"Coca Kola",info:"Coca Kola is a soft drink", price:1.99){
+			id
+			name
+			info
+			price
+		}
+	}
+
+	mutation {
+		update(id:1,price:3.95){
+			id
+			name
+			info
+			price
+		}
+	}
+
+	mutation {
+		delete(id:1){
+			id
+			name
+			info
+			price
+		}
+	}
+
+	`
 	lex := lexer.New(input)
 	p := parser.New(lex)
 	doc := p.ParseDocument()
