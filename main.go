@@ -468,7 +468,26 @@ func manualParseObjectDefinition() {
 	}
 }
 
+func dmap() {
+
+	d1 := map[string][]map[string]string{
+		"Query":    {{"product": "Product"}},
+		"Mutation": {{"create": "Product"}, {"update": "Product"}},
+	}
+
+	d2 := map[string]map[string]string{
+		"Query":    {"product": "Product"},
+		"Mutation": {"create": "Product", "update": "Product", "delete": "Product"},
+		"Product":  {"id": "Int", "name": "String", "info": "String", "price": "Float"},
+	}
+
+	fmt.Println(d1)
+	fmt.Println(d2)
+}
 func main() {
+
+	dmap()
+	os.Exit(2)
 
 	// input := `
 	// """test"""
