@@ -470,10 +470,10 @@ func manualParseObjectDefinition() {
 
 func dmap() {
 
-	d1 := map[string][]map[string]string{
-		"Query":    {{"product": "Product"}},
-		"Mutation": {{"create": "Product"}, {"update": "Product"}},
-	}
+	// d1 := map[string][]map[string]string{
+	// 	"Query":    {{"product": "Product"}},
+	// 	"Mutation": {{"create": "Product"}, {"update": "Product"}},
+	// }
 
 	d2 := map[string]map[string]string{
 		"Query":    {"product": "Product"},
@@ -481,13 +481,13 @@ func dmap() {
 		"Product":  {"id": "Int", "name": "String", "info": "String", "price": "Float"},
 	}
 
-	fmt.Println(d1)
+	//fmt.Println(d1)
 	fmt.Println(d2)
 }
 func main() {
 
-	dmap()
-	os.Exit(2)
+	//dmap()
+	//os.Exit(2)
 
 	// input := `
 	// """test"""
@@ -582,7 +582,7 @@ func main() {
 		switch obj := def.(type) {
 
 		case *ast.ObjectDefinition:
-			fmt.Println(i, obj.GetKind(), obj.GetOperation(), obj.String())
+			fmt.Println(i, "==>", obj.GetKind(), obj.GetOperation(), obj.String())
 
 		case *ast.OperationDefinition:
 			//opObj := def.(*ast.OperationDefinition)
